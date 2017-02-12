@@ -13,7 +13,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -28,6 +27,9 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
         setContentView(R.layout.activity_lookup_dictionary);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // enable external storage
+        Helper.verifyStoragePermissions(this);
 
         mWebView = (WebView) findViewById(R.id.activity_lookup_dictionary_webview);
         /// Enable Javascript
@@ -83,6 +85,8 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
                 return true;
             case R.id.action_save:
                 //TODO
+                //mWebView.loadUrl("javascript:document.getElementsByClassName('laba')[0].click()");
+                //DatasetRecord.parseDataset(this);
                 return true;
         }
 

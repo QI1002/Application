@@ -1,6 +1,8 @@
 package io.github.qi1002.ilearn;
 
 import java.io.File;
+import java.util.ArrayList;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -25,6 +27,12 @@ public class DatasetRecord {
     static final String ATTR_NAME = "n";
     static final String ATTR_LOOKUP_CNT = "c";
     static final String ATTR_TIMESTAMP = "t";
+    static private ArrayList<DatasetRecord> dataset = new ArrayList<DatasetRecord>();
+
+    public static ArrayList<DatasetRecord> getDataset()
+    {
+        return dataset;
+    }
 
     public static void parseDataset(Context context) {
 
@@ -42,6 +50,7 @@ public class DatasetRecord {
                 record.name = element.getAttributeNode(ATTR_NAME).getValue();
                 record.lookup_cnt = Integer.parseInt(element.getAttributeNode(ATTR_LOOKUP_CNT).getValue());
                 record.timestamp = Double.parseDouble(element.getAttributeNode(ATTR_TIMESTAMP).getValue());
+                dataset.add(record);
                 Log.d("Test", "name = " + record.name + " count = " + record.lookup_cnt + " stamp = " + new java.util.Date((long)record.timestamp));
             }
         }

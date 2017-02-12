@@ -24,3 +24,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO11: reduce timestamp to second unit
 //TODO12: write the execution steps  like 1) emulator with sdcard 2) adb push data.xml 3) ...
 //TODO13: copy data.xml to external storage from github
+//TODO14: how to transverse all dataset in exam and practice
+//TODO15: wait pronunciation  the word then next (when javascript is executed)
+//TODO16: there is the next and show button in practice dataset and we can hidden webshow in default.
+//TODO17: install apk from qi1002.github.io
+

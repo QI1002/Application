@@ -49,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
                 launchActivity(PronunciationExamActivity.class);
             }
         });
+
+        // enable external storage
+        Helper.verifyStoragePermissions(this);
+        // read dataset in default
+        DatasetRecord.parseDataset(this);
     }
 
     private void launchActivity(Class<?> cls) {

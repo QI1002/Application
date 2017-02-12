@@ -18,8 +18,10 @@ import android.widget.TextView;
 
 public class LookupDictionaryActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
 
-    private WebView mWebView;
-    private EditText mLookupWord;
+    private WebView mWebView = null;
+    private EditText mLookupWord = null;
+    private boolean saveToXML = true;
+    private Menu contextMenu = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,17 +30,14 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // enable external storage
-        Helper.verifyStoragePermissions(this);
-
-        mWebView = (WebView) findViewById(R.id.activity_lookup_dictionary_webview);
+        mWebView = (WebView) findViewById(R.id.lookup_dictionary_webview);
         /// Enable Javascript
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-
-        mWebView.loadUrl("http://tw.ichacha.net/m/");
         // Force links and redirects to open in the WebView instead of in a browser
         mWebView.setWebViewClient(new WebViewClient());
+
+        mWebView.loadUrl("http://tw.ichacha.net/m/");
 
         mLookupWord = (EditText) findViewById(R.id.lookup_dictionary);
         mLookupWord.setOnEditorActionListener(this);
@@ -59,6 +58,9 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_lookup_dictionary, menu);
+        contextMenu = menu;
+        // update menu item "save"
+        updateSaveOption();
         return true;
     }
 
@@ -84,9 +86,9 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
                     mWebView.goForward();
                 return true;
             case R.id.action_save:
+                saveToXML = !saveToXML;
                 //TODO
-                //mWebView.loadUrl("javascript:document.getElementsByClassName('laba')[0].click()");
-                //DatasetRecord.parseDataset(this);
+                updateSaveOption();
                 return true;
         }
 
@@ -113,5 +115,11 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
 
     private void focusWebView() {
         mWebView.requestFocus();
+    }
+
+    private void updateSaveOption() {
+        MenuItem saveItem = contextMenu.findItem(R.id.action_save);
+        saveItem.setCheckable(true);
+        saveItem.setChecked(saveToXML);
     }
 }

@@ -27,7 +27,7 @@
             android:imeOptions="actionDone"
             android:inputType="text" />
         <WebView
-            android:id="@+id/activity_lookup_dictionary_webview"
+            android:id="@+id/lookup_dictionary_webview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">iLearn</string>
+    <string name="action_return">Return</string>
+    <string name="action_next">Next</string>
+    <string name="action_back">Back</string>
+    <string name="action_save">Save to Dataset</string>
 </resources>

@@ -16,11 +16,14 @@ import java.util.ArrayList;
 
 public class PracticeDatasetActivity extends AppCompatActivity {
 
+    private String currentPractice = "";
     private WebView mWebView = null;
     private TextView mWordLabel = null;
     private Menu contextMenu = null;
     private int practice_index = 0;
     private ArrayList<DatasetRecord> practice_dataset = null;
+    private boolean bPlayVoiceDone = true;
+    private boolean bLoadPageDone = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +36,22 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         /// Enable Javascript
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(this), "app");
         // Force links and redirects to open in the WebView instead of in a browser
         mWebView.setWebViewClient(new WebViewClient() {
             //refer: http://stackoverflow.com/questions/6199717/how-can-i-know-that-my-webview-is-loaded-100
             @Override
             public void onPageFinished(WebView view, String url) {
-                Log.d("PageFinish", "URL done " + url);
-                view.loadUrl("javascript:document.getElementsByClassName('laba')[0].click()");
+                bLoadPageDone = true;
+                bPlayVoiceDone = false;
+                Log.d("PracticeInfo", "URL done " + url);
+                view.loadUrl("javascript:(function() { document.getElementsByClassName('laba')[0].click(); app.voiceDone('" + currentPractice + "' ); })()");
+            }
+
+            @Override
+            public void onLoadResource(WebView view, String url) {
+                if (url.endsWith(".mp3"))
+                    Log.d("PracticeInfo", "Resource done " + url);
             }
         });
 
@@ -75,7 +87,11 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_next:
-                practiceWord();
+                if (!bPlayVoiceDone || !bLoadPageDone) {
+                    Log.d("PracticeInfo", "Next not yet");
+                }else {
+                    practiceWord();
+                }
                 return true;
             case R.id.action_show:
                 mWebView.setVisibility(View.VISIBLE);
@@ -86,14 +102,17 @@ public class PracticeDatasetActivity extends AppCompatActivity {
     }
 
     private void practiceWord() {
+        bLoadPageDone = false;
         practice_index++;
         DatasetRecord record = practice_dataset.get(practice_index);
         mWebView.setVisibility(View.INVISIBLE);
         mWebView.loadUrl("http://tw.ichacha.net/m/" + record.name + ".html");
         mWordLabel.setText("Practice data: " + record.name);
+        currentPractice = record.name;
     }
 
     private void focusWebView() {
         mWebView.requestFocus();
     }
+    public void setVoiceDone(boolean value) { bPlayVoiceDone = value; }
 }

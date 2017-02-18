@@ -55,7 +55,7 @@ public class DatasetRecord {
             }
         }
         catch (Exception e) {
-            Helper.MessageBox(context, e.toString());
+            Helper.MessageBox(context, e.getLocalizedMessage());
         }
     }
 }

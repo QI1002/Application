@@ -10,7 +10,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -36,6 +35,7 @@ public class DatasetRecord {
     // download dataset XML
     private static final int BUFFER_SIZE = 4096;
     private static final String dataset_filename = "data.xml";
+    private static final String output_filename = "output.xml";
     private static boolean bInitialized = false;
 
     // XML node names
@@ -63,8 +63,10 @@ public class DatasetRecord {
     public static void initialDataset(Context context) {
         if (!DatasetRecord.checkFile(dataset_filename))
             DatasetRecord.downloadDataset(context, "https://raw.githubusercontent.com/QI1002/qi1002.github.io/master/data/" + dataset_filename, dataset_filename);
-        else
+        else {
             DatasetRecord.parseDataset(context, dataset_filename);
+            //DatasetRecord.writeDataset(context, output_filename);
+        }
     }
 
     public static void downloadDataset(Context context, final String urllink, final String filename) {
@@ -99,7 +101,7 @@ public class DatasetRecord {
             Log.d("DownloadDataset", "download url: " + url + " to " + filename + " beginning");
 
             /* Open a connection to that URL. */
-            HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
+            URLConnection urlConn = url.openConnection();
 
             /* Define InputStreams to read from the URLConnection. */
             InputStream inputStream = urlConn.getInputStream();
@@ -146,6 +148,42 @@ public class DatasetRecord {
             }
 
             bInitialized = true;
+        }
+        catch (Exception e) {
+            Helper.MessageBox(context, e.getLocalizedMessage());
+        }
+    }
+
+    public static void writeDataset(Context context, String outputfile) {
+
+        NumberFormat nf = DecimalFormat.getInstance();
+        nf.setMaximumFractionDigits(2);
+        nf.setGroupingUsed(false);
+
+        try {
+            File filename = new File(Environment.getExternalStorageDirectory(), outputfile);
+            FileOutputStream fileos = new FileOutputStream(filename);
+            XmlSerializer xmlSerializer = Xml.newSerializer();
+            xmlSerializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
+            StringWriter writer = new StringWriter();
+            xmlSerializer.setOutput(writer);
+            xmlSerializer.startDocument("UTF-8", true);
+            xmlSerializer.startTag(null, "collection");
+            for (int i = 0; i<dataset.size(); i++)
+            {
+                DatasetRecord record = dataset.get(i);
+                xmlSerializer.startTag(null, "w");
+                xmlSerializer.attribute(null, "n", record.name);
+                xmlSerializer.attribute(null, "c", String.valueOf(record.lookup_cnt));
+                xmlSerializer.attribute(null, "t", nf.format(record.timestamp));
+                xmlSerializer.endTag(null, "w");
+            }
+
+            xmlSerializer.endTag(null, "collection");
+            xmlSerializer.endDocument();
+            xmlSerializer.flush();
+            fileos.write(writer.toString().getBytes());
+            fileos.close();
         }
         catch (Exception e) {
             Helper.MessageBox(context, e.getLocalizedMessage());

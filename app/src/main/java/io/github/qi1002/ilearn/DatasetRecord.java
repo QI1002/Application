@@ -1,26 +1,42 @@
 package io.github.qi1002.ilearn;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xmlpull.v1.XmlSerializer;
 
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+import android.util.Xml;
 
 /**
  * Created by QI on 2017/2/12.
  */
 public class DatasetRecord {
+    // real data fields
     public String name;
     public int lookup_cnt;
     public double timestamp;
+
+    // download dataset XML
+    private static final int BUFFER_SIZE = 4096;
+    private static final String dataset_filename = "data.xml";
+    private static boolean bInitialized = false;
 
     // XML node names
     static final String NODE_WORD = "w";
@@ -34,12 +50,87 @@ public class DatasetRecord {
         return dataset;
     }
 
-    public static void parseDataset(Context context) {
+    public static boolean isInitialized() {
+        return bInitialized;
+    }
+
+    public static boolean checkFile(String filename)
+    {
+        File file = new File(Environment.getExternalStorageDirectory(), filename);
+        return file.exists();
+    }
+
+    public static void initialDataset(Context context) {
+        if (!DatasetRecord.checkFile(dataset_filename))
+            DatasetRecord.downloadDataset(context, "https://raw.githubusercontent.com/QI1002/qi1002.github.io/master/data/" + dataset_filename, dataset_filename);
+        else
+            DatasetRecord.parseDataset(context, dataset_filename);
+    }
+
+    public static void downloadDataset(Context context, final String urllink, final String filename) {
+
+        // avoid NetworkOnMainThreadException ( not use http download in UI thread)
+        final Object[] arguments = { urllink,  filename };
+        Thread downloadThread = new Thread(new DataPassThread(context, arguments) {
+            @Override
+            public void run() {
+                try {
+                    assert((inner_arguments != null) && (inner_arguments.length == 2));
+                    String urllink = (String)inner_arguments[0];
+                    String filename = (String)inner_arguments[1];
+                    downloadDatasetImpl(inner_context, urllink, filename);
+                    DatasetRecord.parseDataset(inner_context, filename);
+                } catch (Exception e) {
+                    Helper.MessageBox(inner_context, e.getLocalizedMessage());
+                }
+            }
+        });
+
+        downloadThread.start();
+    }
+
+    private static void downloadDatasetImpl(Context context, String urllink, String filename)
+    {
+        try {
+            URL url = new URL(urllink);
+            File file = new File(Environment.getExternalStorageDirectory(), filename);
+
+            long startTime = System.currentTimeMillis();
+            Log.d("DownloadDataset", "download url: " + url + " to " + filename + " beginning");
+
+            /* Open a connection to that URL. */
+            HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
+
+            /* Define InputStreams to read from the URLConnection. */
+            InputStream inputStream = urlConn.getInputStream();
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            int bytesRead = -1;
+            byte[] buffer = new byte[BUFFER_SIZE];
+            /* Read bytes to the Buffer until there is nothing more to read(-1). */
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            outputStream.flush();
+            outputStream.close();
+            inputStream.close();
+
+            Log.d("DownloadDataset", "download ready in "
+                    + ((System.currentTimeMillis() - startTime) / 1000)
+                    + " sec");
+        }
+        catch (Exception e) {
+            Helper.MessageBox(context, e.getLocalizedMessage());
+        }
+    }
+
+    public static void parseDataset(Context context, String inputfile) {
 
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            File filename = new File(Environment.getExternalStorageDirectory(), "data.xml");
+            File filename = new File(Environment.getExternalStorageDirectory(), inputfile);
             Document doc = db.parse(filename);
             doc.getDocumentElement().normalize();
 
@@ -53,6 +144,8 @@ public class DatasetRecord {
                 dataset.add(record);
                 Log.d("Test", "name = " + record.name + " count = " + record.lookup_cnt + " stamp = " + new java.util.Date((long)record.timestamp));
             }
+
+            bInitialized = true;
         }
         catch (Exception e) {
             Helper.MessageBox(context, e.getLocalizedMessage());

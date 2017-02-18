@@ -94,7 +94,11 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.action_show:
-                mWebView.setVisibility(View.VISIBLE);
+                if (!bLoadPageDone) {
+                    Log.d("PracticeInfo", "Show not yet");
+                }else {
+                    mWebView.setVisibility(View.VISIBLE);
+                }
                 return true;
         }
 

@@ -11,7 +11,6 @@ import android.webkit.JavascriptInterface;
 public class WebViewJavaScriptInterface{
 
     private Context context;
-    private String currentPractice = "";
     private final long waitVoicePlayTime = 3000;
 
     /*
@@ -28,23 +27,24 @@ public class WebViewJavaScriptInterface{
     @JavascriptInterface
     public void voiceDone(String message){
 
-        currentPractice = message;
-
-        Thread sleepActivity = new Thread(new Runnable() {
+        final Object[] arguments = { message };
+        Thread sleepThread = new Thread(new DataPassThread(context, arguments) {
             @Override
             public void run() {
                 try {
+                    assert((inner_arguments != null) && (inner_arguments.length == 1));
+                    String message = (String)inner_arguments[0];
                     Thread.sleep(waitVoicePlayTime);
-                    PracticeDatasetActivity activity = (PracticeDatasetActivity)context;
+                    PracticeDatasetActivity activity = (PracticeDatasetActivity)inner_context;
                     activity.setVoiceDone(true);
-                    Log.d("PracticeInfo", "Voice play done " + currentPractice);
+                    Log.d("PracticeInfo", "Voice play done " + message);
                 } catch (Exception e) {
-                    Helper.MessageBox(context, e.getLocalizedMessage());;
+                    Helper.MessageBox(inner_context, e.getLocalizedMessage());
                 }
             }
         });
 
-        sleepActivity.start();
-        Log.d("PracticeInfo", "Voice done " + currentPractice);
+        sleepThread.start();
+        Log.d("PracticeInfo", "Voice done " + message);
     }
 }

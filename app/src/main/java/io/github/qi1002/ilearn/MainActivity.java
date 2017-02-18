@@ -3,6 +3,7 @@ package io.github.qi1002.ilearn;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -52,13 +53,18 @@ public class MainActivity extends AppCompatActivity {
 
         // enable external storage
         Helper.verifyStoragePermissions(this);
-        // read dataset in default
-        DatasetRecord.parseDataset(this);
+
+        // initialize dataset in default
+        DatasetRecord.initialDataset(this);
     }
 
     private void launchActivity(Class<?> cls) {
-        Intent intent = new Intent(this, cls);
-        startActivity(intent);
+        if (DatasetRecord.isInitialized()) {
+            Intent intent = new Intent(this, cls);
+            startActivity(intent);
+        } else {
+            Helper.MessageBox(this, "dataset is not initialized yet");
+        }
     }
 }
 

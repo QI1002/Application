@@ -11,6 +11,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         super(Application.class);
     }
 }
+//TODO00: how to do blocking wait in UI thread smartly.
 //TODO01: use style for mainActivity button
 //TODO02: change button color
 //TODO03: solve the different jdkName issue in app/app.iml
@@ -19,12 +20,13 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO06: use app action bar with edit ?
 //TODO07: add app icon.png in drawable (refer facedetection contextmenu way)
 //TODO08: add datsaset and teacherbase ( support save or not ... in lookup dictionary
-//TODO09: define the dataset location in android and github
-//TODO10: more field in dataset XML like mean_score, listen_score, class, ...
-//TODO11: reduce timestamp to second unit
-//TODO12: write the execution steps  like 1) emulator with sdcard 2) adb push data.xml 3) ...
-//TODO13: copy data.xml to external storage from github
-//TODO14: how to transverse all dataset in exam and practice
-//TODO15: there is the next and show button in practice dataset and we can hidden webshow in default.
-//TODO16: install apk from qi1002.github.io
+//TODO09: more field in dataset XML like mean_score, listen_score, class, ...
+//TODO10: reduce timestamp to second unit
+//TODO11: how to transverse all dataset in exam and practice
+//TODO12: there is the next and show button in practice dataset and we can hidden webshow in default.
+//TODO13: install apk from qi1002.github.io
+//TODO14: add settings page (download dataset link, default enumator way ...)
+//TODO15: About page
+//TODO16: wait voiceplay or dataset initialized options (debug)
+//TODO17: update qi1002.github.io
 

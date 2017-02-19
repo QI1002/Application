@@ -47,10 +47,16 @@ public class DatasetRecord {
     static final String ATTR_LOOKUP_CNT = "c";
     static final String ATTR_TIMESTAMP = "t";
     static private ArrayList<DatasetRecord> dataset = new ArrayList<DatasetRecord>();
+    static private IDictionaryProvider teachbase = new IchachaProvider();
 
     public static ArrayList<DatasetRecord> getDataset()
     {
         return dataset;
+    }
+
+    public static IDictionaryProvider getTeachBase()
+    {
+        return teachbase;
     }
 
     public static boolean isInitialized() {

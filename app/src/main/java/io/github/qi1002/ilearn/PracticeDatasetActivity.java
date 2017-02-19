@@ -46,7 +46,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                 bLoadPageDone = true;
                 bPlayVoiceDone = false;
                 Log.d("PracticeInfo", "URL done " + url);
-                view.loadUrl("javascript:(function() { document.getElementsByClassName('laba')[0].click(); app.voiceDone('" + currentPractice + "' ); })()");
+                view.loadUrl(DatasetRecord.getTeachBase().getWordVoiceLink(currentPractice));
             }
 
             @Override
@@ -113,7 +113,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         DatasetRecord record = datasetEnumerate.getCurrent();
         datasetEnumerate.moveNext();
         mWebView.setVisibility(View.INVISIBLE);
-        mWebView.loadUrl("http://tw.ichacha.net/m/" + record.name + ".html");
+        mWebView.loadUrl(DatasetRecord.getTeachBase().getWordMeanLink(record.name));
         mWordLabel.setText("Practice data: " + record.name);
         currentPractice = record.name;
     }

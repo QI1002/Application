@@ -1,7 +1,5 @@
 package io.github.qi1002.ilearn;
 
-import java.util.ArrayList;
-
 /**
  * Created by QI on 2017/2/18.
  */

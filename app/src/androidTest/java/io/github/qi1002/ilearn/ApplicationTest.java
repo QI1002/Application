@@ -19,10 +19,10 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO05: add git in android studio Unregistered VCSroot
 //TODO06: use app action bar with edit ?
 //TODO07: add app icon.png in drawable (refer facedetection contextmenu way)
-//TODO08: add datsaset and teacherbase ( support save or not ... in lookup dictionary
+//TODO08: add datsaset and teacherbase ( support save or not ... in lookup dictionary )
 //TODO09: more field in dataset XML like mean_score, listen_score, class, ...
 //TODO10: reduce timestamp to second unit
-//TODO11: how to transverse all dataset in exam and practice
+//TODO11: add enumerate way about (timestamp, score mean, voics and class)
 //TODO12: there is the next and show button in practice dataset and we can hidden webshow in default.
 //TODO13: install apk from qi1002.github.io
 //TODO14: add settings page (download dataset link, default enumator way ...) and save to activility perf folder.
@@ -30,4 +30,5 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO16: wait voiceplay or dataset initialized options (debug)
 //TODO17: update qi1002.github.io and github self icon
 //TODO18: handle network go out case
+//TODO19: add logo transparent color
 

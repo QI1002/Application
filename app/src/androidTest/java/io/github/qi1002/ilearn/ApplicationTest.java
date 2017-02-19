@@ -33,4 +33,5 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO19: add logo transparent color
 //TODO20: how to get chinese input in emulator
 //TODO21: short cut to the next one (practice or exam)
+//TODO22: check why Counter emuerator repeat 2 words twice
 

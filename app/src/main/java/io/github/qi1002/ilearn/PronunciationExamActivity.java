@@ -1,5 +1,6 @@
 package io.github.qi1002.ilearn;
 
+import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,5 +23,8 @@ public class PronunciationExamActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        // let apk use media volume
+        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 }

@@ -1,5 +1,6 @@
 package io.github.qi1002.ilearn;
 
+import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -66,6 +67,10 @@ public class PracticeDatasetActivity extends AppCompatActivity {
 
         // default to set foucs to WebView
         focusWebView();
+
+        // let apk use media volume
+        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
         //do the first practice
         datasetEnumerate = DatasetRecord.getEnumerator(practice_dataset, datasetEnumerateWay);
         practiceWord();

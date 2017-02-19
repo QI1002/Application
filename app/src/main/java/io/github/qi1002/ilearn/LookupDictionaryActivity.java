@@ -1,6 +1,7 @@
 package io.github.qi1002.ilearn;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
@@ -52,6 +53,9 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
 
         // default to set foucs to WebView
         focusWebView();
+
+        // let apk use media volume
+        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override

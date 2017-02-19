@@ -1,6 +1,7 @@
 package io.github.qi1002.ilearn;
 
 import android.content.Intent;
+import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
         // initialize dataset in default
         DatasetRecord.initialDataset(this);
+
+        // let apk use media volume
+        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     private void launchActivity(Class<?> cls) {

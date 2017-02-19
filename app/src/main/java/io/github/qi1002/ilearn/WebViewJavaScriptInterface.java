@@ -47,4 +47,12 @@ public class WebViewJavaScriptInterface{
         sleepThread.start();
         Log.d("PracticeInfo", "Voice done " + message);
     }
+
+    @JavascriptInterface
+    public void getHTMLSource(String html, String word) {
+        //Log.d("ExamInfo", "HTML " + word + " source:\n" + html);
+        //Helper.InformationBox(context, "Extracted Meaning", html);
+        String mean = DatasetRecord.getDictionaryProvider().getWordMean(context, html, word);
+        Helper.InformationBox(context, "Extracted Meaning", mean);
+    }
 }

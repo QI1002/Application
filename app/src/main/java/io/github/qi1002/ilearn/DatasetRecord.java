@@ -54,7 +54,7 @@ public class DatasetRecord {
         return dataset;
     }
 
-    public static IDictionaryProvider getTeachBase()
+    public static IDictionaryProvider getDictionaryProvider()
     {
         return teachbase;
     }

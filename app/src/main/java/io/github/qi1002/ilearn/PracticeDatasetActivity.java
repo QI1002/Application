@@ -11,6 +11,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,9 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                 bLoadPageDone = true;
                 bPlayVoiceDone = false;
                 Log.d("PracticeInfo", "URL done " + url);
-                view.loadUrl(DatasetRecord.getTeachBase().getWordVoiceLink(currentPractice));
+                view.loadUrl(DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentPractice));
+                view.loadUrl("javascript:app.getHTMLSource" +
+                        "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>', '" + currentPractice + "');");
             }
 
             @Override
@@ -91,6 +94,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
             case R.id.action_next:
                 if (!bPlayVoiceDone || !bLoadPageDone) {
                     Log.d("PracticeInfo", "Next not yet");
+                    Toast.makeText(this, "Load Page or Play voice not done yet", Toast.LENGTH_SHORT).show();
                 }else {
                     practiceWord();
                 }
@@ -98,6 +102,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
             case R.id.action_show:
                 if (!bLoadPageDone) {
                     Log.d("PracticeInfo", "Show not yet");
+                    Toast.makeText(this, "Load Page not done yet", Toast.LENGTH_SHORT).show();
                 }else {
                     mWebView.setVisibility(View.VISIBLE);
                 }
@@ -113,7 +118,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         DatasetRecord record = datasetEnumerate.getCurrent();
         datasetEnumerate.moveNext();
         mWebView.setVisibility(View.INVISIBLE);
-        mWebView.loadUrl(DatasetRecord.getTeachBase().getWordMeanLink(record.name));
+        mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(record.name));
         mWordLabel.setText("Practice data: " + record.name);
         currentPractice = record.name;
     }

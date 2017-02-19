@@ -31,4 +31,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO17: update qi1002.github.io and github self icon
 //TODO18: handle network go out case
 //TODO19: add logo transparent color
+//TODO20: how to get chinese input in emulator
+//TODO21: short cut to the next one (practice or exam)
 

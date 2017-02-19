@@ -1,6 +1,6 @@
 package io.github.qi1002.ilearn;
 
-import android.webkit.WebView;
+import android.content.Context;
 
 /**
  * Created by QI on 2017/2/19.
@@ -22,8 +22,69 @@ public class IchachaProvider implements IDictionaryProvider {
         return "javascript:(function() { document.getElementsByClassName('laba')[0].click(); app.voiceDone('" + word + "' ); })()";
     }
 
-    public boolean matchWordMean(WebView view, String word)
-    {
-        return false;
+    public String getWordMean(Context context, String html, String word) {
+
+        String result = "";
+
+        try
+        {
+            // get // <div class="base"> .. </div>
+            int find1 = html.indexOf("<div class=\"base\">");
+            int find2 = html.indexOf("</div>", (find1 < 0) ? 0 : find1);
+            if (find1 > 0 && find2 > 0)
+            {
+                String subHTML = html.substring(find1 + 19, find2);
+                int findLess = 0;
+                int findMore = 0;
+                int inSpanCnt = 0;
+                int inSkipSpanCnt = 0;
+                int inSpanLess = -1;
+                while (findLess >= 0 && findMore >= 0)
+                {
+                    findLess = subHTML.indexOf('<');
+                    findMore = subHTML.indexOf('>');
+                    if (findLess < findMore)
+                    {
+                        result = "";
+                        if (findLess > 0)
+                        {
+                            if (inSpanLess == -1 || inSkipSpanCnt != inSpanCnt)
+                                result += subHTML.substring(0, findLess);
+                            else
+                                result += subHTML.substring(0, inSpanLess);
+                        }
+
+                        if (findLess >= 0)
+                        {
+                            if (subHTML.substring(findLess).startsWith("<span"))
+                            {
+                                inSpanCnt++;
+                                if (subHTML.substring(findLess, findMore).indexOf("toggle") > 0 ||
+                                        subHTML.substring(findLess, findMore).indexOf("display:none") > 0)
+                                {
+                                    inSkipSpanCnt = inSpanCnt;
+                                    inSpanLess = findLess;
+                                }
+                            }
+                            if (subHTML.substring(findLess).startsWith("</span"))
+                            {
+                                if (inSkipSpanCnt == inSpanCnt)
+                                    inSkipSpanCnt = 0;
+                                inSpanCnt--;
+                            }
+                        }
+
+                        if ((findMore + 1) < subHTML.length())
+                            result += subHTML.substring(findMore + 1);
+                        subHTML = result;
+                    }
+                }
+            }
+        }catch (Exception e)
+        {
+            Helper.GenericExceptionHandler(context, e);
+        }
+
+        return result.replace("&nbsp;","");
     }
 }

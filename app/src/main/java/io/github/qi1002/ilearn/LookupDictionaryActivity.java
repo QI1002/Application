@@ -37,7 +37,7 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
         // Force links and redirects to open in the WebView instead of in a browser
         mWebView.setWebViewClient(new WebViewClient());
 
-        mWebView.loadUrl(DatasetRecord.getTeachBase().getEntrance());
+        mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getEntrance());
 
         mLookupWord = (EditText) findViewById(R.id.lookup_dictionary);
         mLookupWord.setOnEditorActionListener(this);
@@ -100,7 +100,7 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
 
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             String input = v.getText().toString();
-            mWebView.loadUrl(DatasetRecord.getTeachBase().getWordMeanLink(input));
+            mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(input));
             hideKeyboard();
             focusWebView();
             return true; // consume.

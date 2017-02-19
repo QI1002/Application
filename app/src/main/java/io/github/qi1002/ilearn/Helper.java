@@ -7,7 +7,11 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 /**
  * Created by QI on 2017/2/12.
@@ -38,6 +42,29 @@ public class Helper {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+    }
+
+    public static void InformationBox(final Context context, final String title, String information) {
+
+        LayoutInflater inflater = LayoutInflater.from(context);
+        final View view = inflater.inflate(R.layout.information_box, null);
+
+        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
+        dlgAlert.setView(view);
+        dlgAlert.setTitle(title);
+        dlgAlert.setCancelable(true);
+        dlgAlert.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //dismiss the dialog
+                    }
+                });
+
+        TextView textView = (TextView) (view.findViewById(R.id.textView1));
+        textView.setMovementMethod(new ScrollingMovementMethod());
+        textView.setText(information);
+        dlgAlert.create().show();
     }
 
     public static void MessageBox(Context context, String message) {

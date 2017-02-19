@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 /**
  * Created by QI on 2017/2/12.
@@ -52,5 +53,12 @@ public class Helper {
                 });
 
         dlgAlert.create().show();
+    }
+
+    public static void GenericExceptionHandler(Context context, Exception exception)
+    {
+        Log.d("GenericExceptionHandler", exception.getLocalizedMessage());
+        Log.d("GenericExceptionHandler", Log.getStackTraceString(exception));
+        Helper.MessageBox(context, exception.getMessage());
     }
 }

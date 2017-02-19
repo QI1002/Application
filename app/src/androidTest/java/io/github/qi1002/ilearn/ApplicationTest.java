@@ -25,9 +25,9 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO11: how to transverse all dataset in exam and practice
 //TODO12: there is the next and show button in practice dataset and we can hidden webshow in default.
 //TODO13: install apk from qi1002.github.io
-//TODO14: add settings page (download dataset link, default enumator way ...)
+//TODO14: add settings page (download dataset link, default enumator way ...) and save to activility perf folder.
 //TODO15: About page
 //TODO16: wait voiceplay or dataset initialized options (debug)
-//TODO17: update qi1002.github.io
+//TODO17: update qi1002.github.io and github self icon
 //TODO18: handle network go out case
 

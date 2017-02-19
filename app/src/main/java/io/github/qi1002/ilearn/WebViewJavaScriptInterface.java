@@ -39,7 +39,7 @@ public class WebViewJavaScriptInterface{
                     activity.setVoiceDone(true);
                     Log.d("PracticeInfo", "Voice play done " + message);
                 } catch (Exception e) {
-                    Helper.MessageBox(inner_context, e.getLocalizedMessage());
+                    Helper.GenericExceptionHandler(inner_context, e);
                 }
             }
         });

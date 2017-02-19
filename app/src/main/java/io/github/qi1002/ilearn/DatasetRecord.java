@@ -86,7 +86,7 @@ public class DatasetRecord {
                     downloadDatasetImpl(inner_context, urllink, filename);
                     DatasetRecord.parseDataset(inner_context, filename);
                 } catch (Exception e) {
-                    Helper.MessageBox(inner_context, e.getLocalizedMessage());
+                    Helper.GenericExceptionHandler(inner_context, e);
                 }
             }
         });
@@ -126,7 +126,7 @@ public class DatasetRecord {
                     + " sec");
         }
         catch (Exception e) {
-            Helper.MessageBox(context, e.getLocalizedMessage());
+            Helper.GenericExceptionHandler(context, e);
         }
     }
 
@@ -153,7 +153,7 @@ public class DatasetRecord {
             bInitialized = true;
         }
         catch (Exception e) {
-            Helper.MessageBox(context, e.getLocalizedMessage());
+            Helper.GenericExceptionHandler(context, e);
         }
     }
 
@@ -189,7 +189,7 @@ public class DatasetRecord {
             fileos.close();
         }
         catch (Exception e) {
-            Helper.MessageBox(context, e.getLocalizedMessage());
+            Helper.GenericExceptionHandler(context, e);
         }
     }
 

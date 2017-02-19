@@ -22,7 +22,7 @@ public class DataPassThread implements Runnable {
             // convert arguments to what you assign
             // do what you want
         } catch (Exception e) {
-            Helper.MessageBox(inner_context, e.getLocalizedMessage());
+            Helper.GenericExceptionHandler(inner_context, e);
         }
     }
 }

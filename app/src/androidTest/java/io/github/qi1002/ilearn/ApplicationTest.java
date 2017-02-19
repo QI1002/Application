@@ -29,4 +29,5 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO15: About page
 //TODO16: wait voiceplay or dataset initialized options (debug)
 //TODO17: update qi1002.github.io
+//TODO18: handle network go out case
 

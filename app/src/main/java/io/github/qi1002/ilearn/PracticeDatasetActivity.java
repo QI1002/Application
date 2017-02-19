@@ -20,8 +20,9 @@ public class PracticeDatasetActivity extends AppCompatActivity {
     private WebView mWebView = null;
     private TextView mWordLabel = null;
     private Menu contextMenu = null;
-    private int practice_index = 0;
     private ArrayList<DatasetRecord> practice_dataset = null;
+    private String datasetEnumerateWay = "Counter";
+    private IEnumerable datasetEnumerate = null;
     private boolean bPlayVoiceDone = true;
     private boolean bLoadPageDone = true;
 
@@ -63,6 +64,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         // default to set foucs to WebView
         focusWebView();
         //do the first practice
+        datasetEnumerate = DatasetRecord.getEnumerator(practice_dataset, datasetEnumerateWay);
         practiceWord();
     }
 
@@ -106,9 +108,10 @@ public class PracticeDatasetActivity extends AppCompatActivity {
     }
 
     private void practiceWord() {
+
         bLoadPageDone = false;
-        practice_index++;
-        DatasetRecord record = practice_dataset.get(practice_index);
+        DatasetRecord record = datasetEnumerate.getCurrent();
+        datasetEnumerate.moveNext();
         mWebView.setVisibility(View.INVISIBLE);
         mWebView.loadUrl("http://tw.ichacha.net/m/" + record.name + ".html");
         mWordLabel.setText("Practice data: " + record.name);

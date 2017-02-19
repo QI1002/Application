@@ -9,6 +9,9 @@ import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -188,5 +191,198 @@ public class DatasetRecord {
         catch (Exception e) {
             Helper.MessageBox(context, e.getLocalizedMessage());
         }
+    }
+
+    public static IEnumerable getEnumerator(ArrayList<DatasetRecord> dataset, String wayname)
+    {
+        EnumerableWay way = EnumerableWay.valueOf(wayname);
+        switch (way)
+        {
+            case Sequence:
+                return new SequenceEnumerable(dataset);
+            case Random:
+                return new RandomEnumerable(dataset);
+            case Shuffle:
+                return new ShuffleEnumerable(dataset);
+            case Counter:
+                return new CounterEnumerable(dataset);
+        }
+
+        return null;
+    }
+}
+
+enum EnumerableWay {
+    Sequence,
+    Random,
+    Shuffle,
+    Counter,
+    ScoreMean,
+    ScoreVoice,
+    Class,
+};
+
+class ArrayIndexComparator implements Comparator<Integer>
+{
+    private ArrayList<DatasetRecord> dataset;
+    private EnumerableWay compareWay;
+
+    public ArrayIndexComparator(ArrayList<DatasetRecord> dataset, EnumerableWay way)
+    {
+        this.dataset = dataset;
+        this.compareWay = way;
+    }
+
+    public ArrayList<Integer> createIndexArray()
+    {
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        for (int i = 0; i < dataset.size(); i++)
+            indexes.add(i);
+
+        return indexes;
+    }
+
+    @Override
+    public int compare(Integer index1, Integer index2)
+    {
+        switch (compareWay)
+        {
+            case Counter:
+                Integer counter1 = dataset.get(index1).lookup_cnt;
+                Integer counter2 = dataset.get(index2).lookup_cnt;
+                // descending order
+                return counter2.compareTo(counter1);
+            default:
+                // default is ascending order in sequence
+                return index1.compareTo(index2);
+        }
+    }
+}
+
+/* enumerate dataset by sequence order */
+class SequenceEnumerable implements IEnumerable {
+
+    private int currentIndex;
+    private ArrayList<DatasetRecord> dataset;
+
+    public SequenceEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        currentIndex = 0;
+        this.dataset = dataset;
+    }
+
+    public DatasetRecord getCurrent()
+    {
+        if (currentIndex >= dataset.size())
+            return null;
+
+        return dataset.get(currentIndex);
+    }
+
+    public DatasetRecord moveNext()
+    {
+        if (currentIndex >= dataset.size())
+            return null;
+
+        return dataset.get(currentIndex++);
+    }
+
+    public void reset()
+    {
+        currentIndex = 0;
+    }
+}
+
+/* enumerate dataset by random order */
+class RandomEnumerable implements IEnumerable {
+
+    private int currentIndex;
+    private Random generator = null;
+    private ArrayList<DatasetRecord> dataset;
+
+    public RandomEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        generator = new Random();
+        currentIndex = generator.nextInt(dataset.size());
+        this.dataset = dataset;
+    }
+
+    public RandomEnumerable(ArrayList<DatasetRecord> dataset, long seed)
+    {
+        generator = new Random(seed);
+        currentIndex = generator.nextInt(dataset.size());
+        this.dataset = dataset;
+    }
+
+    public DatasetRecord getCurrent()
+    {
+        return dataset.get(currentIndex);
+    }
+
+    public DatasetRecord moveNext()
+    {
+        currentIndex = generator.nextInt(dataset.size());
+        return dataset.get(currentIndex);
+    }
+
+    public void reset()
+    {
+        // do nothing
+    }
+}
+
+/* enumerate dataset by shuffle order */
+class ShuffleEnumerable implements IEnumerable {
+
+    protected int currentIndex;
+    protected ArrayList<Integer> indexes = null;
+    protected ArrayList<DatasetRecord> dataset;
+
+    public ShuffleEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        currentIndex = 0;
+        this.dataset = dataset;
+        reset();
+    }
+
+    public DatasetRecord getCurrent()
+    {
+        if (currentIndex >= dataset.size())
+            return null;
+
+        return dataset.get(indexes.get(currentIndex));
+    }
+
+    public DatasetRecord moveNext()
+    {
+        if (currentIndex >= dataset.size())
+            return null;
+
+        return dataset.get(indexes.get(currentIndex++));
+    }
+
+    public void reset()
+    {
+        ArrayIndexComparator comparator = new ArrayIndexComparator(dataset, EnumerableWay.Shuffle);
+        indexes = comparator.createIndexArray();
+        Collections.shuffle(indexes);
+    }
+}
+
+/* enumerate dataset by counter value order */
+class CounterEnumerable extends ShuffleEnumerable {
+
+    public CounterEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        super(dataset);
+        reset();
+    }
+
+    @Override
+    public void reset()
+    {
+        ArrayIndexComparator comparator = new ArrayIndexComparator(dataset, EnumerableWay.Counter);
+        indexes = comparator.createIndexArray();
+        Collections.sort(indexes, comparator);
     }
 }

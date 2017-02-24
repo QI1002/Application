@@ -9,6 +9,9 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
+    // global settings
+    public static boolean saveToXML = true;
+
     private Button mBtLoopupDictionary;
     private Button mBtPracticeDataset;
     private Button mBtVocabularyExam;

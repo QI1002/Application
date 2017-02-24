@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
+import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -153,7 +154,7 @@ public class DatasetRecord {
                 record.lookup_cnt = Integer.parseInt(element.getAttributeNode(ATTR_LOOKUP_CNT).getValue());
                 record.timestamp = Double.parseDouble(element.getAttributeNode(ATTR_TIMESTAMP).getValue());
                 dataset.add(record);
-                Log.d("Test", "name = " + record.name + " count = " + record.lookup_cnt + " stamp = " + new java.util.Date((long)record.timestamp));
+                Log.d("Test", "name = " + record.name + " count = " + record.lookup_cnt + " stamp = " + new Date((long)record.timestamp));
             }
 
             bInitialized = true;
@@ -196,6 +197,33 @@ public class DatasetRecord {
         }
         catch (Exception e) {
             Helper.GenericExceptionHandler(context, e);
+        }
+    }
+
+    public static void updateRecord(String word)
+    {
+        DatasetRecord record = null;
+
+        for (int i = 0; i<dataset.size(); i++) {
+            record = dataset.get(i);
+            if (record.name.compareTo(word) == 0)
+                break;
+            else
+                record = null;
+        }
+
+        if (record == null)
+        {
+            record = new DatasetRecord();
+            record.name = word;
+            record.lookup_cnt = 1;
+            record.timestamp = (double)(new Date()).getTime();
+            dataset.add(record);
+        }else
+        {
+            assert(record.name.compareTo(word) == 0);
+            record.lookup_cnt++;
+            record.timestamp = (double)(new Date()).getTime();
         }
     }
 

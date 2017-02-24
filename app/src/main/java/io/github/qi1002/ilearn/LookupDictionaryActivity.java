@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,9 +20,9 @@ import android.widget.TextView;
 
 public class LookupDictionaryActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
 
+    private String currentLookup = "";
     private WebView mWebView = null;
     private EditText mLookupWord = null;
-    private boolean saveToXML = true;
     private Menu contextMenu = null;
 
     @Override
@@ -35,8 +36,19 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
         /// Enable Javascript
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(this), "app");
         // Force links and redirects to open in the WebView instead of in a browser
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebViewClient(new WebViewClient() {
+            //refer: http://stackoverflow.com/questions/6199717/how-can-i-know-that-my-webview-is-loaded-100
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                Log.d("LookupInfo", "URL done " + url);
+                if (MainActivity.saveToXML && url.compareTo(DatasetRecord.getDictionaryProvider().getEntrance()) != 0) {
+                    view.loadUrl("javascript:app.checkHTMLSource" +
+                            "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>', '" + currentLookup + "');");
+                }
+            }
+        });
 
         mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getEntrance());
 
@@ -55,7 +67,7 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
         focusWebView();
 
         // let apk use media volume
-        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -90,8 +102,7 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
                     mWebView.goForward();
                 return true;
             case R.id.action_save:
-                saveToXML = !saveToXML;
-                //TODO
+                MainActivity.saveToXML = !MainActivity.saveToXML;
                 updateSaveOption();
                 return true;
         }
@@ -103,12 +114,13 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            String input = v.getText().toString();
-            mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(input));
+            currentLookup = v.getText().toString();
+            mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(currentLookup));
             hideKeyboard();
             focusWebView();
             return true; // consume.
         }
+
         return false; // pass on to other listener
     }
 
@@ -124,6 +136,6 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
     private void updateSaveOption() {
         MenuItem saveItem = contextMenu.findItem(R.id.action_save);
         saveItem.setCheckable(true);
-        saveItem.setChecked(saveToXML);
+        saveItem.setChecked(MainActivity.saveToXML);
     }
 }

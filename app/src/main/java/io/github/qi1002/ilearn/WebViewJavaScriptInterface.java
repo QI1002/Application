@@ -3,6 +3,7 @@ package io.github.qi1002.ilearn;
 import android.content.Context;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
+import android.widget.Toast;
 
 /*
  * JavaScript Interface. Web code can access methods in here
@@ -54,5 +55,16 @@ public class WebViewJavaScriptInterface{
         //Helper.InformationBox(context, "Extracted Meaning", html);
         String mean = DatasetRecord.getDictionaryProvider().getWordMean(context, html, word);
         Helper.InformationBox(context, "Extracted Meaning", mean);
+    }
+
+    @JavascriptInterface
+    public void checkHTMLSource(String html, String word) {
+        Log.d("LookupInfo", "checkHTMLSource " + word);
+        if (!DatasetRecord.getDictionaryProvider().isInvalidLookup(html)) {
+            DatasetRecord.updateRecord(word);
+        } else {
+            Toast.makeText(context, word + "is invalid word", Toast.LENGTH_SHORT).show();
+            Log.d("LookupInfo", "checkHTMLSource " + word + " fail");
+        }
     }
 }

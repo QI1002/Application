@@ -24,7 +24,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO10: reduce timestamp to second unit
 //TODO11: add enumerate way about (timestamp, score mean, voics and class)
 //TODO12: there is the next and show button in practice dataset and we can hidden webshow in default.
-//TODO13: install apk from qi1002.github.io
 //TODO14: add settings page (download dataset link, default enumator way ...) and save to activility perf folder.
 //TODO15: About page
 //TODO16: wait voiceplay or dataset initialized options (debug)
@@ -34,4 +33,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO20: how to get chinese input in emulator
 //TODO21: short cut to the next one (practice or exam)
 //TODO22: check why Counter emuerator repeat 2 words twice
-
+//TODO23: get android simulator in T420
+//TODO24: how to save dataset when application finish once. (join and foreground detection ?)
+//TODO25: how to wait the checkHTMLsource done then save dataset ?

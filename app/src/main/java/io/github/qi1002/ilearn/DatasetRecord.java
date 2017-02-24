@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,9 +39,10 @@ public class DatasetRecord {
 
     // download dataset XML
     private static final int BUFFER_SIZE = 4096;
-    private static final String dataset_filename = "data.xml";
-    private static final String output_filename = "output.xml";
     private static boolean bInitialized = false;
+    private static boolean bDirty = false;
+    public static final String dataset_filename = "data.xml";
+    public static final String output_filename = "output.xml";
 
     // XML node names
     static final String NODE_WORD = "w";
@@ -64,6 +66,10 @@ public class DatasetRecord {
         return bInitialized;
     }
 
+    public static boolean isDirty() {
+        return bDirty;
+    }
+
     public static boolean checkFile(String filename)
     {
         File file = new File(Environment.getExternalStorageDirectory(), filename);
@@ -75,7 +81,6 @@ public class DatasetRecord {
             DatasetRecord.downloadDataset(context, "https://raw.githubusercontent.com/QI1002/qi1002.github.io/master/data/" + dataset_filename, dataset_filename);
         else {
             DatasetRecord.parseDataset(context, dataset_filename);
-            //DatasetRecord.writeDataset(context, output_filename);
         }
     }
 
@@ -166,37 +171,58 @@ public class DatasetRecord {
 
     public static void writeDataset(Context context, String outputfile) {
 
-        NumberFormat nf = DecimalFormat.getInstance();
-        nf.setMaximumFractionDigits(2);
-        nf.setGroupingUsed(false);
+        synchronized (dataset) {
+            NumberFormat nf = DecimalFormat.getInstance();
+            nf.setMaximumFractionDigits(2);
+            nf.setGroupingUsed(false);
 
-        try {
-            File filename = new File(Environment.getExternalStorageDirectory(), outputfile);
-            FileOutputStream fileos = new FileOutputStream(filename);
-            XmlSerializer xmlSerializer = Xml.newSerializer();
-            xmlSerializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
-            StringWriter writer = new StringWriter();
-            xmlSerializer.setOutput(writer);
-            xmlSerializer.startDocument("UTF-8", true);
-            xmlSerializer.startTag(null, "collection");
-            for (int i = 0; i<dataset.size(); i++)
-            {
-                DatasetRecord record = dataset.get(i);
-                xmlSerializer.startTag(null, "w");
-                xmlSerializer.attribute(null, "n", record.name);
-                xmlSerializer.attribute(null, "c", String.valueOf(record.lookup_cnt));
-                xmlSerializer.attribute(null, "t", nf.format(record.timestamp));
-                xmlSerializer.endTag(null, "w");
+            try {
+                File filename = new File(Environment.getExternalStorageDirectory(), outputfile);
+                FileOutputStream fileos = new FileOutputStream(filename);
+                XmlSerializer xmlSerializer = Xml.newSerializer();
+                xmlSerializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
+                StringWriter writer = new StringWriter();
+                xmlSerializer.setOutput(writer);
+                xmlSerializer.startDocument("UTF-8", true);
+                xmlSerializer.startTag(null, "collection");
+                for (int i = 0; i < dataset.size(); i++) {
+                    DatasetRecord record = dataset.get(i);
+                    xmlSerializer.startTag(null, "w");
+                    xmlSerializer.attribute(null, "n", record.name);
+                    xmlSerializer.attribute(null, "c", String.valueOf(record.lookup_cnt));
+                    xmlSerializer.attribute(null, "t", nf.format(record.timestamp));
+                    xmlSerializer.endTag(null, "w");
+                }
+
+                xmlSerializer.endTag(null, "collection");
+                xmlSerializer.endDocument();
+                xmlSerializer.flush();
+                fileos.write(writer.toString().getBytes());
+                fileos.close();
+            } catch (Exception e) {
+                Helper.GenericExceptionHandler(context, e);
+            }
+        }
+
+        bDirty = false;
+    }
+
+    public static void updateDataset(String outputfile, String inputfile)
+    {
+        File output_file = new File(Environment.getExternalStorageDirectory(), outputfile);
+
+        if (output_file.exists())
+        {
+            File dataset_file = new File(Environment.getExternalStorageDirectory(), inputfile);
+            if (dataset_file.exists()) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("-yy-MM-dd-HH-mm-ss");
+                String backupfile = inputfile.substring(0, inputfile.length() - 4)+dateFormat.format(new Date())+".xml";
+                File backup_file = new File(Environment.getExternalStorageDirectory(), backupfile);
+                dataset_file.renameTo(backup_file);
             }
 
-            xmlSerializer.endTag(null, "collection");
-            xmlSerializer.endDocument();
-            xmlSerializer.flush();
-            fileos.write(writer.toString().getBytes());
-            fileos.close();
-        }
-        catch (Exception e) {
-            Helper.GenericExceptionHandler(context, e);
+            File dataset2_file = new File(Environment.getExternalStorageDirectory(), inputfile);
+            output_file.renameTo(dataset2_file);
         }
     }
 
@@ -225,6 +251,8 @@ public class DatasetRecord {
             record.lookup_cnt++;
             record.timestamp = (double)(new Date()).getTime();
         }
+
+        bDirty = true;
     }
 
     public static IEnumerable getEnumerator(ArrayList<DatasetRecord> dataset, String wayname)

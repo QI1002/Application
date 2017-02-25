@@ -22,6 +22,11 @@ public class IchachaProvider implements IDictionaryProvider {
         return "document.getElementsByClassName('laba')[0].click();";
     }
 
+    public boolean isTranslate()
+    {
+        return true;
+    }
+
     public boolean isInvalidLookup(String html)
     {
         return html.contains("未收錄此詞條，如要使用機器自動翻譯整個詞條，請點");

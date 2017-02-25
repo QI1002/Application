@@ -165,6 +165,8 @@ public class PracticeDatasetActivity extends AppCompatActivity {
     {
         if (MainActivity.practiceMean) {
             String mean = DatasetRecord.getDictionaryProvider().getWordMean(this, html, word);
+            if (DatasetRecord.getDictionaryProvider().isTranslate())
+                mean = Translate.StoT(mean);
             Helper.InformationBox(this, "Extracted Meaning", mean);
         }
     }

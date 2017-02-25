@@ -9,6 +9,7 @@ public interface IDictionaryProvider {
     abstract public String getEntrance();
     abstract public String getWordMeanLink(String word);
     abstract public String getWordVoiceLink(String word);
+    public boolean isTranslate();
     abstract public boolean isInvalidLookup(String html);
     abstract public String getWordMean(Context context, String html, String word);
 }

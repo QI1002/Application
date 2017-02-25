@@ -151,7 +151,10 @@ public class VocabularyExamActivity extends AppCompatActivity {
     private void examWordCheck() {
         if (!bPlayVoiceDone || !bLoadPageDone) {
             Log.d("ExamInfo", "Next not yet");
-            Toast.makeText(this, "Load Page or Play voice not done yet", Toast.LENGTH_SHORT).show();
+            if (MainActivity.examSpeak)
+                Toast.makeText(this, "Load Page or Play voice not done yet", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, "Load Page not done yet", Toast.LENGTH_SHORT).show();
         }else {
             examWord();
         }
@@ -168,11 +171,12 @@ public class VocabularyExamActivity extends AppCompatActivity {
                 Toast.makeText(this, "The word answer is not got yet", Toast.LENGTH_SHORT).show();
                 return;
             } else {
-                if (currentExam.contains(mWordAnswer.getText().toString())) {
+                if (current_mean.contains(mWordAnswer.getText().toString())) {
                     correct_count++;
                 }
 
                 nextButton.setText("(" + correct_count + "/" + test_count + "/" + total_count + ") Next");
+                mWordAnswer.setText("");
             }
         }
 
@@ -202,6 +206,8 @@ public class VocabularyExamActivity extends AppCompatActivity {
     public void setHTMLDone(String html, String word)
     {
         current_mean = DatasetRecord.getDictionaryProvider().getWordMean(this, html, word);
+        if (DatasetRecord.getDictionaryProvider().isTranslate())
+            current_mean = Translate.StoT(current_mean);
     }
 
     private void updateSpeakOption() {

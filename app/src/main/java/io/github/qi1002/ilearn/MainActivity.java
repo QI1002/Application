@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     // global settings
     public static boolean saveToXML = true;
+    public static boolean practiceMean = false;
     public static boolean switchActivity = false;
 
     // controls

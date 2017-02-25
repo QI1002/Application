@@ -25,6 +25,6 @@ public class VocabularyExamActivity extends AppCompatActivity {
         });
 
         // let apk use media volume
-        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 }

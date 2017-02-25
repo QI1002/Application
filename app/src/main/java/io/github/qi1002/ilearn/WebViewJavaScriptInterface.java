@@ -53,8 +53,11 @@ public class WebViewJavaScriptInterface{
     public void getHTMLSource(String html, String word) {
         //Log.d("ExamInfo", "HTML " + word + " source:\n" + html);
         //Helper.InformationBox(context, "Extracted Meaning", html);
-        String mean = DatasetRecord.getDictionaryProvider().getWordMean(context, html, word);
-        Helper.InformationBox(context, "Extracted Meaning", mean);
+
+        if (context instanceof PracticeDatasetActivity) {
+            PracticeDatasetActivity activity = (PracticeDatasetActivity)context;
+            activity.setHTMLDone(html, word);
+        }
     }
 
     @JavascriptInterface

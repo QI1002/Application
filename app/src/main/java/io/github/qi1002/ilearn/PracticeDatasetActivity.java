@@ -89,6 +89,8 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_practice_dataset, menu);
         contextMenu = menu;
+        // update menu item "mean"
+        updateMeanOption();
         return true;
     }
 
@@ -106,6 +108,10 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                 return true;
             case R.id.action_next:
                 practiceWordCheck();
+                return true;
+            case R.id.action_mean:
+                MainActivity.practiceMean = !MainActivity.practiceMean;
+                updateMeanOption();
                 return true;
             case R.id.action_show:
                 if (!bLoadPageDone) {
@@ -145,4 +151,18 @@ public class PracticeDatasetActivity extends AppCompatActivity {
     }
 
     public void setVoiceDone(boolean value) { bPlayVoiceDone = value; }
+
+    public void setHTMLDone(String html, String word)
+    {
+        if (MainActivity.practiceMean) {
+            String mean = DatasetRecord.getDictionaryProvider().getWordMean(this, html, word);
+            Helper.InformationBox(this, "Extracted Meaning", mean);
+        }
+    }
+
+    private void updateMeanOption() {
+        MenuItem meanItem = contextMenu.findItem(R.id.action_mean);
+        meanItem.setCheckable(true);
+        meanItem.setChecked(MainActivity.practiceMean);
+    }
 }

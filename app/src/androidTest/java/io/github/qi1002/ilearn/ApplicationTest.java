@@ -16,25 +16,19 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO02: change button color
 //TODO03: solve the different jdkName issue in app/app.iml
 //TODO04: check if more rules are added to .gitignore
-//TODO05: add git in android studio Unregistered VCSroot
-//TODO06: use app action bar with edit ?
-//TODO07: add app icon.png in drawable (refer facedetection contextmenu way)
-//TODO08: add datsaset and teacherbase ( support save or not ... in lookup dictionary )
-//TODO09: more field in dataset XML like mean_score, listen_score, class, ...
-//TODO10: reduce timestamp to second unit
-//TODO11: add enumerate way about (timestamp, score mean, voics and class)
-//TODO12: there is the next and show button in practice dataset and we can hidden webshow in default.
-//TODO13: add settings page (download dataset link, default enumator way ...)
-//TODO14: About page
-//TODO15: wait voiceplay or dataset initialized options (debug)
-//TODO16: update qi1002.github.io and github self icon
-//TODO17: handle network go out case
-//TODO18: add logo transparent color
-//TODO19: get android simulator in T420
-//TODO20: how to save dataset when application finish once. (join and foreground detection ?)
-//TODO21: how to wait the checkHTMLsource done then save dataset ?
-//TODO22: main settings => score and test frequency, settings (path) and about and utilities
-//TODO23: common 7000 words
-//TODO24: dickson idoms
-//TODO25:shall we load score history all
-//TODO26: move prounication answer to exam: ________
+//TODO05: more field in dataset XML like mean_score, listen_score, class, ...
+//TODO06: reduce timestamp to second unit
+//TODO07: add enumerate way about (timestamp, score mean, voice and class)
+//TODO08: update qi1002.github.io and github self icon
+//TODO09: handle network go out case
+//TODO10: get android simulator in T420
+//TODO11: how to save dataset when application finish once. (join and foreground detection ?)
+//TODO12: how to wait the checkHTMLsource done then save dataset ?
+//TODO13: main settings => score and test frequency, settings (path) and about and utilities
+//TODO14: add settings page (download dataset link, default enumator way ...)
+//TODO15: About page
+//TODO16: wait voiceplay or dataset initialized options (debug)
+//TODO17: common 7000 words
+//TODO18: dickson idoms
+//TODO19:shall we load score history all
+//TODO20: move prounication answer to exam: ________

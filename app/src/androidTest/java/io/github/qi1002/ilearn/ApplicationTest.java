@@ -34,3 +34,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO20: how to save dataset when application finish once. (join and foreground detection ?)
 //TODO21: how to wait the checkHTMLsource done then save dataset ?
 //TODO22: main settings => score and test frequency, settings (path) and about and utilities
+//TODO23: common 7000 words
+//TODO24: dickson idoms
+//TODO25:

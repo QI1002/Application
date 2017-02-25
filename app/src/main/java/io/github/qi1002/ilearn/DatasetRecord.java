@@ -77,10 +77,10 @@ public class DatasetRecord {
     }
 
     public static void initialDataset(Context context) {
-        if (!DatasetRecord.checkFile(dataset_filename))
-            DatasetRecord.downloadDataset(context, "https://raw.githubusercontent.com/QI1002/qi1002.github.io/master/data/" + dataset_filename, dataset_filename);
+        if (!checkFile(dataset_filename))
+            downloadDataset(context, "https://raw.githubusercontent.com/QI1002/qi1002.github.io/master/data/" + dataset_filename, dataset_filename);
         else {
-            DatasetRecord.parseDataset(context, dataset_filename);
+            parseDataset(context, dataset_filename);
         }
     }
 
@@ -187,11 +187,11 @@ public class DatasetRecord {
                 xmlSerializer.startTag(null, "collection");
                 for (int i = 0; i < dataset.size(); i++) {
                     DatasetRecord record = dataset.get(i);
-                    xmlSerializer.startTag(null, "w");
-                    xmlSerializer.attribute(null, "n", record.name);
-                    xmlSerializer.attribute(null, "c", String.valueOf(record.lookup_cnt));
-                    xmlSerializer.attribute(null, "t", nf.format(record.timestamp));
-                    xmlSerializer.endTag(null, "w");
+                    xmlSerializer.startTag(null, NODE_WORD);
+                    xmlSerializer.attribute(null, ATTR_NAME, record.name);
+                    xmlSerializer.attribute(null, ATTR_LOOKUP_CNT, String.valueOf(record.lookup_cnt));
+                    xmlSerializer.attribute(null, ATTR_TIMESTAMP, nf.format(record.timestamp));
+                    xmlSerializer.endTag(null, NODE_WORD);
                 }
 
                 xmlSerializer.endTag(null, "collection");

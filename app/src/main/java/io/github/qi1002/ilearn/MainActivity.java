@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     // global settings
@@ -66,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
         // initialize dataset in default
         DatasetRecord.initialDataset(this);
+
+        // initialize scoreHistory  in default
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        ScoreRecord.initialScoreHistory(this, cal.get(Calendar.YEAR));
 
         // let apk use media volume
         setVolumeControlStream(AudioManager.STREAM_MUSIC);

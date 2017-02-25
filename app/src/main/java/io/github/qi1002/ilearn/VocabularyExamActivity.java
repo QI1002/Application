@@ -31,6 +31,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
     private Button nextButton = null;
     private String datasetEnumerateWay = "Counter";
     private IEnumerable datasetEnumerate = null;
+    private ScoreRecord scoreData = null;
     private boolean bPlayVoiceDone = true;
     private boolean bLoadPageDone = true;
 
@@ -104,6 +105,11 @@ public class VocabularyExamActivity extends AppCompatActivity {
         //do the first exam
         datasetEnumerate = DatasetRecord.getEnumerator(DatasetRecord.getDataset(), datasetEnumerateWay);
         examWord();
+
+        //initialize
+        scoreData = new ScoreRecord();
+        scoreData.type = ScoreRecord.MEAN;
+        scoreData.test_cnt = total_count;
     }
 
     @Override
@@ -171,10 +177,13 @@ public class VocabularyExamActivity extends AppCompatActivity {
                 Toast.makeText(this, "The word answer is not got yet", Toast.LENGTH_SHORT).show();
                 return;
             } else {
+                boolean correct = false;
                 if (current_mean.contains(mWordAnswer.getText().toString())) {
                     correct_count++;
+                    correct = true;
                 }
 
+                scoreData.applyResult(currentExam, test_count - 1, correct);
                 nextButton.setText("(" + correct_count + "/" + test_count + "/" + total_count + ") Next");
                 mWordAnswer.setText("");
             }
@@ -192,6 +201,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
         }else
         {
             Helper.ExitBox(this, "the score is " + (correct_count * 100 / total_count) + " (" + correct_count + "/" + test_count + "/" + total_count + ")\nand then exit");
+            scoreData.updateRecord(this);
         }
 
         test_count++;

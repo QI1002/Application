@@ -1,6 +1,7 @@
 package io.github.qi1002.ilearn;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     // global settings
+    public static final String PREFS_NAME = "PreferenceSettings";
     public static boolean saveToXML = true;
     public static boolean practiceMean = false;
     public static boolean examSpeak = false;
@@ -67,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
 
         // let apk use media volume
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        //read preference settings
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        saveToXML = settings.getBoolean("saveToXML", true);
+        practiceMean = settings.getBoolean("practiceMean", false);
+        examSpeak = settings.getBoolean("examSpeak", false);
     }
 
     private void launchActivity(Class<?> cls) {
@@ -89,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
             DatasetRecord.updateDataset(DatasetRecord.output_filename, DatasetRecord.dataset_filename);
             Log.d("LookupInfo", "write xml");
         }
+
+        //read preference settings
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("saveToXML", saveToXML);
+        editor.putBoolean("practiceMean", practiceMean);
+        editor.putBoolean("examSpeak", examSpeak);
+        editor.commit(); // Commit the edits!
 
         switchActivity = false;
     }

@@ -41,6 +41,13 @@
 
         </RelativeLayout>
 
+        <EditText
+            android:id="@+id/voc_exam_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="text" />
+
         <WebView
             android:id="@+id/voc_exam_dataset_webview"
             android:layout_width="match_parent"

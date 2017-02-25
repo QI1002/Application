@@ -22,6 +22,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
     private String current_mean = "";
     private WebView mWebView = null;
     private TextView mWordLabel = null;
+    private EditText mWordAnswer = null;
     private Menu contextMenu = null;
     private String datasetEnumerateWay = "Counter";
     private IEnumerable datasetEnumerate = null;
@@ -75,11 +76,11 @@ public class VocabularyExamActivity extends AppCompatActivity {
             }
         });
 
-
+        mWordAnswer = (EditText) findViewById(R.id.voc_exam_answer);
         mWordLabel = (TextView) findViewById(R.id.voc_exam_dataset);
         mWordLabel.setOnTouchListener(new SwipeTouchListener(this) {
 
-            public void onSwipeRight() {
+            public void onSwipeLeft() {
                 examWordCheck();
             }
 
@@ -176,7 +177,6 @@ public class VocabularyExamActivity extends AppCompatActivity {
         MenuItem speakItem = contextMenu.findItem(R.id.action_speak);
         speakItem.setCheckable(true);
         speakItem.setChecked(MainActivity.examSpeak);
-        if (!MainActivity.examSpeak)
-            bPlayVoiceDone = true;
+        bPlayVoiceDone = true;
     }
 }

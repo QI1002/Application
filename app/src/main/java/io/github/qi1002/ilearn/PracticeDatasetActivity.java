@@ -73,7 +73,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         mWordLabel = (TextView) findViewById(R.id.practice_dataset);
         mWordLabel.setOnTouchListener(new SwipeTouchListener(this) {
 
-            public void onSwipeRight() {
+            public void onSwipeLeft() {
                 practiceWordCheck();
             }
 

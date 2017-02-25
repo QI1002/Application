@@ -34,8 +34,6 @@ public class ScoreRecord {
     public int test_cnt;
     public double timestamp;
 
-    // download dataset XML
-    private static final int BUFFER_SIZE = 4096;
     private static boolean bInitialized = false;
     public static final int MEAN = 0;
     public static final int PRONUNCIATION = 1;

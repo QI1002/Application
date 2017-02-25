@@ -49,6 +49,12 @@ public class WebViewJavaScriptInterface{
                         Log.d("ExamInfo", "Voice play done " + message);
                     }
 
+                    if (context instanceof PronunciationExamActivity) {
+                        PronunciationExamActivity activity = (PronunciationExamActivity)context;
+                        activity.setVoiceDone(true);
+                        Log.d("ExamInfo", "Voice play done " + message);
+                    }
+
                 } catch (Exception e) {
                     Helper.GenericExceptionHandler(inner_context, e);
                 }

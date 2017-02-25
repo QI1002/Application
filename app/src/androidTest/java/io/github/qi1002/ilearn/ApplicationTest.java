@@ -36,4 +36,5 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO22: main settings => score and test frequency, settings (path) and about and utilities
 //TODO23: common 7000 words
 //TODO24: dickson idoms
-//TODO25:
+//TODO25:shall we load score history all
+//TODO26: move prounication answer to exam: ________

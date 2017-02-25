@@ -55,11 +55,15 @@ public class VocabularyExamActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 bLoadPageDone = true;
-                bPlayVoiceDone = false;
                 Log.d("ExamInfo", "URL done " + url);
-                view.loadUrl("javascript:(function() { " +
-                             DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentExam) +
-                             " app.voiceDone('" + currentExam + "' ); })()");
+
+                if (MainActivity.examSpeak) {
+                    bPlayVoiceDone = false;
+                    view.loadUrl("javascript:(function() { " +
+                            DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentExam) +
+                            " app.voiceDone('" + currentExam + "' ); })()");
+                }
+
                 view.loadUrl("javascript:app.getHTMLSource" +
                         "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>', '" + currentExam + "');");
             }
@@ -100,6 +104,8 @@ public class VocabularyExamActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_vocabulary_exam, menu);
         contextMenu = menu;
+        // update menu item "speak"
+        updateSpeakOption();
         return true;
     }
 
@@ -117,6 +123,10 @@ public class VocabularyExamActivity extends AppCompatActivity {
                 return true;
             case R.id.action_next:
                 examWordCheck();
+                return true;
+            case R.id.action_speak:
+                MainActivity.examSpeak = !MainActivity.examSpeak;
+                updateSpeakOption();
                 return true;
             case R.id.action_show:
                 if (!bLoadPageDone) {
@@ -160,5 +170,13 @@ public class VocabularyExamActivity extends AppCompatActivity {
     public void setHTMLDone(String html, String word)
     {
         current_mean = DatasetRecord.getDictionaryProvider().getWordMean(this, html, word);
+    }
+
+    private void updateSpeakOption() {
+        MenuItem speakItem = contextMenu.findItem(R.id.action_speak);
+        speakItem.setCheckable(true);
+        speakItem.setChecked(MainActivity.examSpeak);
+        if (!MainActivity.examSpeak)
+            bPlayVoiceDone = true;
     }
 }

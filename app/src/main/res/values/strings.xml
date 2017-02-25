@@ -5,5 +5,6 @@
     <string name="action_back">Back</string>
     <string name="action_show">Show</string>
     <string name="action_mean">Display Mean</string>
+    <string name="action_speak">Speak Voice</string>
     <string name="action_save">Save to Dataset</string>
 </resources>

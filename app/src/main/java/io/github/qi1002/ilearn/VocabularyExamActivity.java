@@ -18,12 +18,17 @@ import android.widget.Toast;
 
 public class VocabularyExamActivity extends AppCompatActivity {
 
+    public final int total_count = 5;
+    private int test_count = 0;
+    private int correct_count = 0;
+
     private String currentExam = "";
     private String current_mean = "";
     private WebView mWebView = null;
     private TextView mWordLabel = null;
     private EditText mWordAnswer = null;
     private Menu contextMenu = null;
+    private Button nextButton = null;
     private String datasetEnumerateWay = "Counter";
     private IEnumerable datasetEnumerate = null;
     private boolean bPlayVoiceDone = true;
@@ -37,7 +42,8 @@ public class VocabularyExamActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Button nextButton = (Button) findViewById(R.id.voc_exam_next);
+        nextButton = (Button) findViewById(R.id.voc_exam_next);
+        nextButton.setText("(" + correct_count + "/" + test_count + "/" + total_count + ") Next");
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,13 +159,38 @@ public class VocabularyExamActivity extends AppCompatActivity {
 
     private void examWord() {
 
-        bLoadPageDone = false;
-        DatasetRecord record = datasetEnumerate.getCurrent();
-        datasetEnumerate.moveNext();
-        mWebView.setVisibility(View.INVISIBLE);
-        mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(record.name));
-        mWordLabel.setText("Exam: " + record.name);
-        currentExam = record.name;
+        // check score
+        if (test_count != 0) {
+            if (current_mean == null || current_mean.length() == 0) {
+                Toast.makeText(this, "The word mean is not got yet", Toast.LENGTH_SHORT).show();
+                return;
+            } else if ( mWordAnswer.getText().toString() == null || mWordAnswer.getText().toString().length() == 0) {
+                Toast.makeText(this, "The word answer is not got yet", Toast.LENGTH_SHORT).show();
+                return;
+            } else {
+                if (currentExam.contains(mWordAnswer.getText().toString())) {
+                    correct_count++;
+                }
+
+                nextButton.setText("(" + correct_count + "/" + test_count + "/" + total_count + ") Next");
+            }
+        }
+
+        if (test_count < total_count) {
+            current_mean = "";
+            bLoadPageDone = false;
+            DatasetRecord record = datasetEnumerate.getCurrent();
+            datasetEnumerate.moveNext();
+            mWebView.setVisibility(View.INVISIBLE);
+            mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(record.name));
+            mWordLabel.setText("Exam : " + record.name);
+            currentExam = record.name;
+        }else
+        {
+            Helper.ExitBox(this, "the score is " + (correct_count * 100 / total_count) + " (" + correct_count + "/" + test_count + "/" + total_count + ")\nand then exit");
+        }
+
+        test_count++;
     }
 
     private void focusWebView() {

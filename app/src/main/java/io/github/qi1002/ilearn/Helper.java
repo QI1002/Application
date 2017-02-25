@@ -47,7 +47,7 @@ public class Helper {
     public static void InformationBox(final Context context, final String title, String information) {
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.information_box, null);
+        View view = inflater.inflate(R.layout.information_box, null);
 
         AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
         dlgAlert.setView(view);
@@ -76,6 +76,21 @@ public class Helper {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //dismiss the dialog
+                    }
+                });
+
+        dlgAlert.create().show();
+    }
+
+    public static void ExitBox(final Context context, String message) {
+        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
+        dlgAlert.setMessage(message);
+        dlgAlert.setTitle("MessageBox");
+        dlgAlert.setCancelable(true);
+        dlgAlert.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((Activity)context).finish();
                     }
                 });
 

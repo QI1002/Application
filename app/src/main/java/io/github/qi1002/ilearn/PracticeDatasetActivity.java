@@ -11,6 +11,7 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,19 @@ public class PracticeDatasetActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Button nextButton = (Button) findViewById(R.id.practice_next);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!bPlayVoiceDone || !bLoadPageDone) {
+                    Log.d("PracticeInfo", "Next not yet");
+                    Toast.makeText(view.getContext(), "Load Page or Play voice not done yet", Toast.LENGTH_SHORT).show();
+                }else {
+                    practiceWord();
+                }
+            }
+        });
 
         mWebView = (WebView) findViewById(R.id.practice_dataset_webview);
         /// Enable Javascript
@@ -142,7 +156,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         datasetEnumerate.moveNext();
         mWebView.setVisibility(View.INVISIBLE);
         mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(record.name));
-        mWordLabel.setText("Practice data: " + record.name);
+        mWordLabel.setText("Practice: " + record.name);
         currentPractice = record.name;
     }
 

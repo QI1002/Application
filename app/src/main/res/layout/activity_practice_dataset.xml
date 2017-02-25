@@ -18,14 +18,29 @@ tools:context="io.github.qi1002.ilearn.PracticeDatasetActivity">
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/practice_dataset"
-            android:layout_width="match_parent"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
             android:background="#22AA22"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:padding="10dip">
+
+            <TextView
+                android:id="@+id/practice_dataset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <Button
+                android:id="@+id/practice_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="1dip"
+                android:text="Next" />
+
+        </RelativeLayout>
+
         <WebView
             android:id="@+id/practice_dataset_webview"
             android:layout_width="match_parent"

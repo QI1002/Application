@@ -36,9 +36,19 @@ public class WebViewJavaScriptInterface{
                     assert((inner_arguments != null) && (inner_arguments.length == 1));
                     String message = (String)inner_arguments[0];
                     Thread.sleep(waitVoicePlayTime);
-                    PracticeDatasetActivity activity = (PracticeDatasetActivity)inner_context;
-                    activity.setVoiceDone(true);
-                    Log.d("PracticeInfo", "Voice play done " + message);
+
+                    if (context instanceof PracticeDatasetActivity) {
+                        PracticeDatasetActivity activity = (PracticeDatasetActivity)context;
+                        activity.setVoiceDone(true);
+                        Log.d("PracticeInfo", "Voice play done " + message);
+                    }
+
+                    if (context instanceof VocabularyExamActivity) {
+                        VocabularyExamActivity activity = (VocabularyExamActivity)context;
+                        activity.setVoiceDone(true);
+                        Log.d("ExamInfo", "Voice play done " + message);
+                    }
+
                 } catch (Exception e) {
                     Helper.GenericExceptionHandler(inner_context, e);
                 }
@@ -51,11 +61,14 @@ public class WebViewJavaScriptInterface{
 
     @JavascriptInterface
     public void getHTMLSource(String html, String word) {
-        //Log.d("ExamInfo", "HTML " + word + " source:\n" + html);
-        //Helper.InformationBox(context, "Extracted Meaning", html);
 
         if (context instanceof PracticeDatasetActivity) {
             PracticeDatasetActivity activity = (PracticeDatasetActivity)context;
+            activity.setHTMLDone(html, word);
+        }
+
+        if (context instanceof VocabularyExamActivity) {
+            VocabularyExamActivity activity = (VocabularyExamActivity)context;
             activity.setHTMLDone(html, word);
         }
     }

@@ -38,12 +38,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!bPlayVoiceDone || !bLoadPageDone) {
-                    Log.d("PracticeInfo", "Next not yet");
-                    Toast.makeText(view.getContext(), "Load Page or Play voice not done yet", Toast.LENGTH_SHORT).show();
-                }else {
-                    practiceWord();
-                }
+                practiceWordCheck();
             }
         });
 

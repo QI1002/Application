@@ -19,7 +19,7 @@ public class IchachaProvider implements IDictionaryProvider {
 
     public String getWordVoiceLink(String word)
     {
-        return "javascript:(function() { document.getElementsByClassName('laba')[0].click(); app.voiceDone('" + word + "' ); })()";
+        return "document.getElementsByClassName('laba')[0].click();";
     }
 
     public boolean isInvalidLookup(String html)

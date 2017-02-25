@@ -62,7 +62,8 @@ public class WebViewJavaScriptInterface{
         Log.d("LookupInfo", "checkHTMLSource " + word);
         if (!DatasetRecord.getDictionaryProvider().isInvalidLookup(html)) {
             DatasetRecord.updateRecord(word);
-        } else {
+        }
+        else {
             Toast.makeText(context, word + "is invalid word", Toast.LENGTH_SHORT).show();
             Log.d("LookupInfo", "checkHTMLSource " + word + " fail");
         }

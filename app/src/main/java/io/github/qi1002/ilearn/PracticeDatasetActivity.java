@@ -14,15 +14,12 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 public class PracticeDatasetActivity extends AppCompatActivity {
 
     private String currentPractice = "";
     private WebView mWebView = null;
     private TextView mWordLabel = null;
     private Menu contextMenu = null;
-    private ArrayList<DatasetRecord> practice_dataset = null;
     private String datasetEnumerateWay = "Counter";
     private IEnumerable datasetEnumerate = null;
     private boolean bPlayVoiceDone = true;
@@ -32,6 +29,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practice_dataset);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -48,7 +46,9 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                 bLoadPageDone = true;
                 bPlayVoiceDone = false;
                 Log.d("PracticeInfo", "URL done " + url);
-                view.loadUrl(DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentPractice));
+                view.loadUrl("javascript:(function() { " +
+                             DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentPractice) +
+                             " app.voiceDone('" + currentPractice + "' ); })()");
                 view.loadUrl("javascript:app.getHTMLSource" +
                         "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>', '" + currentPractice + "');");
             }
@@ -60,19 +60,27 @@ public class PracticeDatasetActivity extends AppCompatActivity {
             }
         });
 
-        // get dataset to practice
-        practice_dataset = DatasetRecord.getDataset();
 
         mWordLabel = (TextView) findViewById(R.id.practice_dataset);
+        mWordLabel.setOnTouchListener(new SwipeTouchListener(this) {
+
+            public void onSwipeRight() {
+                practiceWordCheck();
+            }
+
+            public void onClick() {
+                practiceWordCheck();
+            }
+        });
 
         // default to set foucs to WebView
         focusWebView();
 
         // let apk use media volume
-        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         //do the first practice
-        datasetEnumerate = DatasetRecord.getEnumerator(practice_dataset, datasetEnumerateWay);
+        datasetEnumerate = DatasetRecord.getEnumerator(DatasetRecord.getDataset(), datasetEnumerateWay);
         practiceWord();
     }
 
@@ -97,12 +105,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_next:
-                if (!bPlayVoiceDone || !bLoadPageDone) {
-                    Log.d("PracticeInfo", "Next not yet");
-                    Toast.makeText(this, "Load Page or Play voice not done yet", Toast.LENGTH_SHORT).show();
-                }else {
-                    practiceWord();
-                }
+                practiceWordCheck();
                 return true;
             case R.id.action_show:
                 if (!bLoadPageDone) {
@@ -115,6 +118,15 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void practiceWordCheck() {
+        if (!bPlayVoiceDone || !bLoadPageDone) {
+            Log.d("PracticeInfo", "Next not yet");
+            Toast.makeText(this, "Load Page or Play voice not done yet", Toast.LENGTH_SHORT).show();
+        }else {
+            practiceWord();
+        }
     }
 
     private void practiceWord() {
@@ -131,5 +143,6 @@ public class PracticeDatasetActivity extends AppCompatActivity {
     private void focusWebView() {
         mWebView.requestFocus();
     }
+
     public void setVoiceDone(boolean value) { bPlayVoiceDone = value; }
 }

@@ -56,7 +56,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                 bLoadPageDone = true;
                 bPlayVoiceDone = false;
                 Log.d("PracticeInfo", "URL done " + url);
-                view.loadUrl("javascript:(function() { " +
+                view.loadUrl("javascript:(function() {  app.voiceCheck(" + DatasetRecord.getDictionaryProvider().getWordVoiceCheck(currentPractice) + ");  " +
                              DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentPractice) +
                              " app.voiceDone('" + currentPractice + "' ); })()");
                 view.loadUrl("javascript:app.getHTMLSource" +

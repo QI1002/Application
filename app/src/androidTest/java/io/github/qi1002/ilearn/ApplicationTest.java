@@ -33,4 +33,5 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO19:shall we load score history all
 //TODO20: move prounication answer to exam: ________
 //TODO21: verifyStoragePermissions is enhanced
-//TODO22: no voice ??
+//TODO22: don't consider no voice case if checking if pron exam ok <=> dataset size
+//TODO23: test all data.xml for dictionary feasiblity

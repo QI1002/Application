@@ -17,6 +17,11 @@ public class IchachaProvider implements IDictionaryProvider {
         return "http://tw.ichacha.net/m/" + word + ".html";
     }
 
+    public String getWordVoiceCheck(String word)
+    {
+        return "document.getElementsByClassName('laba').length,'" + word + "'";
+    }
+
     public String getWordVoiceLink(String word)
     {
         return "document.getElementsByClassName('laba')[0].click();";

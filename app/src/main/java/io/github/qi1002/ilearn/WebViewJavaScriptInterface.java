@@ -26,6 +26,43 @@ public class WebViewJavaScriptInterface{
          * required after SDK version 17.
          */
     @JavascriptInterface
+    public void voiceCheck(int classCount, String word) {
+        if (context instanceof LookupDictionaryActivity) {
+            Log.d("LookupInfo", "Voice check " + classCount);
+            LookupDictionaryActivity activity = (LookupDictionaryActivity)context;
+            if (classCount == 0) {
+                activity.setVoiceDone(true);
+                Toast.makeText(context, word + "has no voice", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if (context instanceof PracticeDatasetActivity) {
+            Log.d("PracticeInfo", "Voice check " + classCount);
+            PracticeDatasetActivity activity = (PracticeDatasetActivity)context;
+            if (classCount == 0) {
+                activity.setVoiceDone(true);
+                Toast.makeText(context, word + "has no voice", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if (context instanceof VocabularyExamActivity) {
+            Log.d("ExamInfo", "Voice check " + classCount);
+            VocabularyExamActivity activity = (VocabularyExamActivity)context;
+            if (classCount == 0) {
+                activity.setVoiceDone(true);
+                Toast.makeText(context, word + "has no voice", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if (context instanceof PronunciationExamActivity) {
+            Log.d("ExamInfo", "Voice check " + classCount);
+            PronunciationExamActivity activity = (PronunciationExamActivity)context;
+            if (classCount == 0) {
+                activity.setVoiceDone(true);
+                activity.skipTest();
+                Toast.makeText(context, word + "has no voice", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @JavascriptInterface
     public void voiceDone(String message){
 
         final Object[] arguments = { message };

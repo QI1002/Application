@@ -8,6 +8,7 @@ import android.content.Context;
 public interface IDictionaryProvider {
     abstract public String getEntrance();
     abstract public String getWordMeanLink(String word);
+    public String getWordVoiceCheck(String word);
     abstract public String getWordVoiceLink(String word);
     public boolean isTranslate();
     abstract public boolean isInvalidLookup(String html);

@@ -1,6 +1,7 @@
 package io.github.qi1002.ilearn;
 
 import android.media.AudioManager;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -67,7 +68,7 @@ public class PronunciationExamActivity extends AppCompatActivity {
                 Log.d("ExamInfo", "URL done " + url);
 
                 bPlayVoiceDone = false;
-                view.loadUrl("javascript:(function() { " +
+                view.loadUrl("javascript:(function() {  app.voiceCheck(" + DatasetRecord.getDictionaryProvider().getWordVoiceCheck(currentExam) + ");  " +
                         DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentExam) +
                         " app.voiceDone('" + currentExam + "' ); })()");
             }
@@ -174,14 +175,7 @@ public class PronunciationExamActivity extends AppCompatActivity {
         }
 
         if (test_count < total_count) {
-            current_mean = "";
-            bLoadPageDone = false;
-            DatasetRecord record = datasetEnumerate.getCurrent();
-            datasetEnumerate.moveNext();
-            mWebView.setVisibility(View.INVISIBLE);
-            mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(record.name));
-            mWordLabel.setText("Exam : ");
-            currentExam = record.name;
+            examWordOnly();
         }else
         {
             Helper.ExitBox(this, "the score is " + (correct_count * 100 / total_count) + " (" + correct_count + "/" + test_count + "/" + total_count + ")\nand then exit");
@@ -191,10 +185,31 @@ public class PronunciationExamActivity extends AppCompatActivity {
         test_count++;
     }
 
+    private void examWordOnly() {
+        current_mean = "";
+        bLoadPageDone = false;
+        DatasetRecord record = datasetEnumerate.getCurrent();
+        datasetEnumerate.moveNext();
+        mWebView.setVisibility(View.INVISIBLE);
+        mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(record.name));
+        mWordLabel.setText("Exam : ");
+        currentExam = record.name;
+    }
+
     private void focusWebView() {
         mWebView.requestFocus();
     }
 
     public static int getTestCount() { return total_count; }
     public void setVoiceDone(boolean value) { bPlayVoiceDone = value; }
+    public void skipTest() {
+        Handler mainHandler = new Handler(getMainLooper());
+        mainHandler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                examWordOnly();
+            }
+        });
+    }
 }

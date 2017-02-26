@@ -68,7 +68,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
 
                 if (MainActivity.examSpeak) {
                     bPlayVoiceDone = false;
-                    view.loadUrl("javascript:(function() { " +
+                    view.loadUrl("javascript:(function() {  app.voiceCheck(" + DatasetRecord.getDictionaryProvider().getWordVoiceCheck(currentExam) + ");  " +
                             DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentExam) +
                             " app.voiceDone('" + currentExam + "' ); })()");
                 }

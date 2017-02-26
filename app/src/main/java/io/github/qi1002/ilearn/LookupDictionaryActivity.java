@@ -48,11 +48,11 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
             public void onPageFinished(WebView view, String url) {
                 bLoadPageDone = true;
                 Log.d("LookupInfo", "URL done " + url);
-                if ( !Helper.isNullOrEmpty(currentLookup) &&
+                if (!Helper.isNullOrEmpty(currentLookup) &&
                         url.compareTo(DatasetRecord.getDictionaryProvider().getEntrance()) != 0) {
                     if (MainActivity.lookupSpeak) {
                         bPlayVoiceDone = false;
-                        view.loadUrl("javascript:(function() { " +
+                        view.loadUrl("javascript:(function() {  app.voiceCheck(" + DatasetRecord.getDictionaryProvider().getWordVoiceCheck(currentLookup) + ");  " +
                                 DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentLookup) +
                                 " app.voiceDone('" + currentLookup + "' ); })()");
                     }

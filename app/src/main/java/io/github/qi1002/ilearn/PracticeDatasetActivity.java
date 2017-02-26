@@ -32,6 +32,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_practice_dataset);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Practice Dataset");
         setSupportActionBar(toolbar);
 
         Button nextButton = (Button) findViewById(R.id.practice_next);
@@ -144,15 +145,31 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         }
     }
 
-    private void practiceWord() {
+    public void practiceAgain()
+    {
+        datasetEnumerate.reset();
+        practiceWord(datasetEnumerate.getCurrent());
+    }
 
-        bLoadPageDone = false;
+    public void practiceWord() {
+
         DatasetRecord record = datasetEnumerate.getCurrent();
-        datasetEnumerate.moveNext();
+
+        if (record == null) {
+            Helper.SelectionBox(this, "Finish practicing all items in dataset...", "Repeat", "Return");
+        } else {
+            practiceWord(record);
+        }
+    }
+
+    private void practiceWord(DatasetRecord record) {
+        assert (record != null);
+        bLoadPageDone = false;
         mWebView.setVisibility(View.INVISIBLE);
         mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(record.name));
         mWordLabel.setText("Practice: " + record.name);
         currentPractice = record.name;
+        datasetEnumerate.moveNext();
     }
 
     private void focusWebView() {

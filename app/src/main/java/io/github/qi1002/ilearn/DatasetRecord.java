@@ -142,8 +142,24 @@ public class DatasetRecord {
         }
     }
 
+    private static DatasetRecord checkWord(String word)
+    {
+        DatasetRecord record = null;
+
+        for (int i = 0; i<dataset.size(); i++) {
+            record = dataset.get(i);
+            if (record.name.compareTo(word) == 0)
+                break;
+            else
+                record = null;
+        }
+
+        return record;
+    }
+
     public static void parseDataset(Context context, String inputfile) {
 
+        String duplicateWords = "";
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -158,6 +174,8 @@ public class DatasetRecord {
                 record.name = element.getAttributeNode(ATTR_NAME).getValue();
                 record.lookup_cnt = Integer.parseInt(element.getAttributeNode(ATTR_LOOKUP_CNT).getValue());
                 record.timestamp = Double.parseDouble(element.getAttributeNode(ATTR_TIMESTAMP).getValue());
+                if (checkWord(record.name) != null)
+                    duplicateWords += (record.name + ":");
                 dataset.add(record);
                 Log.d("Test", "name = " + record.name + " count = " + record.lookup_cnt + " stamp = " + new Date((long)record.timestamp));
             }
@@ -167,6 +185,9 @@ public class DatasetRecord {
         catch (Exception e) {
             Helper.GenericExceptionHandler(context, e);
         }
+
+        if (duplicateWords.length() != 0)
+            Helper.MessageBox(context, "Duplicated words\n" + duplicateWords +"\n Found");
     }
 
     public static void writeDataset(Context context, String outputfile) {
@@ -228,15 +249,7 @@ public class DatasetRecord {
 
     public static void updateRecord(String word)
     {
-        DatasetRecord record = null;
-
-        for (int i = 0; i<dataset.size(); i++) {
-            record = dataset.get(i);
-            if (record.name.compareTo(word) == 0)
-                break;
-            else
-                record = null;
-        }
+        DatasetRecord record = checkWord(word);
 
         if (record == null)
         {
@@ -402,7 +415,6 @@ class ShuffleEnumerable implements IEnumerable {
 
     public ShuffleEnumerable(ArrayList<DatasetRecord> dataset)
     {
-        currentIndex = 0;
         this.dataset = dataset;
         reset();
     }
@@ -446,5 +458,6 @@ class CounterEnumerable extends ShuffleEnumerable {
         ArrayIndexComparator comparator = new ArrayIndexComparator(dataset, EnumerableWay.Counter);
         indexes = comparator.createIndexArray();
         Collections.sort(indexes, comparator);
+        currentIndex = 0;
     }
 }

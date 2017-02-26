@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -68,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
         Helper.verifyStoragePermissions(this);
 
         // initialize dataset in default
-        DatasetRecord.initialDataset(this);
+        if (!DatasetRecord.isInitialized())
+            DatasetRecord.initialDataset(this);
 
         // initialize scoreHistory  in default
         Calendar cal = Calendar.getInstance();
@@ -87,9 +89,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchActivity(Class<?> cls) {
         if (DatasetRecord.isInitialized()) {
-            Intent intent = new Intent(this, cls);
-            startActivity(intent);
-            switchActivity = true;
+            if (cls == PracticeDatasetActivity.class &&
+                    DatasetRecord.getDataset().size() == 0) {
+                Toast.makeText(this, " Zero items in dataset so no practice", Toast.LENGTH_SHORT).show();
+            }else if (cls == VocabularyExamActivity.class &&
+                    DatasetRecord.getDataset().size() < VocabularyExamActivity.getTestCount()) {
+                Toast.makeText(this, " Too few items in dataset to exam", Toast.LENGTH_SHORT).show();
+            } else if (cls == PronunciationExamActivity.class &&
+                    DatasetRecord.getDataset().size() < PronunciationExamActivity.getTestCount()) {
+                Toast.makeText(this, "Too few items in dataset to exam", Toast.LENGTH_SHORT).show();
+            }else {
+                Intent intent = new Intent(this, cls);
+                startActivity(intent);
+                switchActivity = true;
+            }
         } else {
             Helper.MessageBox(this, "dataset is not initialized yet");
         }

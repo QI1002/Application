@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 public class PronunciationExamActivity extends AppCompatActivity {
 
-    public final int total_count = 5;
+    public static int total_count = 5;
     private int test_count = 0;
     private int correct_count = 0;
 
@@ -41,6 +41,7 @@ public class PronunciationExamActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pronunciation_exam);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Pronunciation Exam");
         setSupportActionBar(toolbar);
 
         nextButton = (Button) findViewById(R.id.pron_exam_next);
@@ -156,7 +157,7 @@ public class PronunciationExamActivity extends AppCompatActivity {
 
         // check score
         if (test_count != 0) {
-            if ( mWordAnswer.getText().toString() == null || mWordAnswer.getText().toString().length() == 0) {
+            if ( Helper.isNullOrEmpty(mWordAnswer.getText().toString())) {
                 Toast.makeText(this, "The word answer is not got yet", Toast.LENGTH_SHORT).show();
                 return;
             } else {
@@ -194,5 +195,6 @@ public class PronunciationExamActivity extends AppCompatActivity {
         mWebView.requestFocus();
     }
 
+    public static int getTestCount() { return total_count; }
     public void setVoiceDone(boolean value) { bPlayVoiceDone = value; }
 }

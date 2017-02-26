@@ -32,3 +32,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO18: dickson idoms
 //TODO19:shall we load score history all
 //TODO20: move prounication answer to exam: ________
+//TODO21: verifyStoragePermissions is enhanced
+//TODO22: no voice ??
+//TODO23:

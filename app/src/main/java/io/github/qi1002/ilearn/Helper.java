@@ -44,6 +44,11 @@ public class Helper {
         }
     }
 
+    public static boolean isNullOrEmpty(String word)
+    {
+        return (word == null || word.length() == 0);
+    }
+
     public static void InformationBox(final Context context, final String title, String information) {
 
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -57,7 +62,7 @@ public class Helper {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //dismiss the dialog
+                        dialog.dismiss();
                     }
                 });
 
@@ -71,25 +76,50 @@ public class Helper {
         AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
         dlgAlert.setMessage(message);
         dlgAlert.setTitle("MessageBox");
-        dlgAlert.setCancelable(true);
+        dlgAlert.setCancelable(false);
         dlgAlert.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //dismiss the dialog
+                        dialog.dismiss();
                     }
                 });
 
         dlgAlert.create().show();
     }
 
+    public static void SelectionBox(final Context context, String message, String yes, String no) {
+
+        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
+        dlgAlert.setMessage(message);
+        dlgAlert.setTitle("SelectionBox");
+        dlgAlert.setCancelable(false);
+        dlgAlert.setPositiveButton(yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        PracticeDatasetActivity activity = (PracticeDatasetActivity)context;
+                        activity.practiceAgain();
+                    }
+                });
+        dlgAlert.setNegativeButton(no,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        ((Activity)context).finish();
+                    }
+                });
+        dlgAlert.create().show();
+    }
+
     public static void ExitBox(final Context context, String message) {
         AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
         dlgAlert.setMessage(message);
-        dlgAlert.setTitle("MessageBox");
-        dlgAlert.setCancelable(true);
+        dlgAlert.setTitle("ExitBox");
+        dlgAlert.setCancelable(false);
         dlgAlert.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                         ((Activity)context).finish();
                     }
                 });

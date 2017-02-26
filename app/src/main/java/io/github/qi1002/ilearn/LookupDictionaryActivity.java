@@ -17,6 +17,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LookupDictionaryActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
 
@@ -30,6 +31,7 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lookup_dictionary);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Lookup Dictionary");
         setSupportActionBar(toolbar);
 
         mWebView = (WebView) findViewById(R.id.lookup_dictionary_webview);
@@ -43,7 +45,8 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
             @Override
             public void onPageFinished(WebView view, String url) {
                 Log.d("LookupInfo", "URL done " + url);
-                if (MainActivity.saveToXML && url.compareTo(DatasetRecord.getDictionaryProvider().getEntrance()) != 0) {
+                if (MainActivity.saveToXML && Helper.isNullOrEmpty(currentLookup) &&
+                        url.compareTo(DatasetRecord.getDictionaryProvider().getEntrance()) != 0) {
                     view.loadUrl("javascript:app.checkHTMLSource" +
                             "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>', '" + currentLookup + "');");
                 }
@@ -115,9 +118,13 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
 
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             currentLookup = v.getText().toString();
-            mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(currentLookup));
-            hideKeyboard();
-            focusWebView();
+            if (Helper.isNullOrEmpty(currentLookup))
+                Toast.makeText(this, "Lookup word is empty", Toast.LENGTH_SHORT).show();
+            else {
+                mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(currentLookup));
+                hideKeyboard();
+                focusWebView();
+            }
             return true; // consume.
         }
 

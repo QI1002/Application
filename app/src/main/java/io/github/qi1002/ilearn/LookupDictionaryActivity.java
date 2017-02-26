@@ -25,6 +25,8 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
     private WebView mWebView = null;
     private EditText mLookupWord = null;
     private Menu contextMenu = null;
+    private boolean bPlayVoiceDone = true;
+    private boolean bLoadPageDone = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +46,32 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
             //refer: http://stackoverflow.com/questions/6199717/how-can-i-know-that-my-webview-is-loaded-100
             @Override
             public void onPageFinished(WebView view, String url) {
+                bLoadPageDone = true;
                 Log.d("LookupInfo", "URL done " + url);
-                if (MainActivity.saveToXML && Helper.isNullOrEmpty(currentLookup) &&
+                if ( !Helper.isNullOrEmpty(currentLookup) &&
                         url.compareTo(DatasetRecord.getDictionaryProvider().getEntrance()) != 0) {
-                    view.loadUrl("javascript:app.checkHTMLSource" +
-                            "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>', '" + currentLookup + "');");
+                    if (MainActivity.lookupSpeak) {
+                        bPlayVoiceDone = false;
+                        view.loadUrl("javascript:(function() { " +
+                                DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentLookup) +
+                                " app.voiceDone('" + currentLookup + "' ); })()");
+                    }
+                    if (MainActivity.saveToXML) {
+                        view.loadUrl("javascript:app.checkHTMLSource" +
+                                "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>', '" + currentLookup + "');");
+                    }
                 }
+            }
+
+
+            @Override
+            public void onLoadResource(WebView view, String url) {
+                if (url.endsWith(".mp3"))
+                    Log.d("LookupInfo", "Resource done " + url);
             }
         });
 
-        mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getEntrance());
+        //mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getEntrance());
 
         mLookupWord = (EditText) findViewById(R.id.lookup_dictionary);
         mLookupWord.setOnEditorActionListener(this);
@@ -78,6 +96,8 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_lookup_dictionary, menu);
         contextMenu = menu;
+        // update menu item "speak"
+        updateSpeakOption();
         // update menu item "save"
         updateSaveOption();
         return true;
@@ -104,6 +124,10 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
                 if (mWebView.canGoForward())
                     mWebView.goForward();
                 return true;
+            case R.id.action_speak:
+                MainActivity.lookupSpeak = !MainActivity.lookupSpeak;
+                updateSpeakOption();
+                return true;
             case R.id.action_save:
                 MainActivity.saveToXML = !MainActivity.saveToXML;
                 updateSaveOption();
@@ -120,7 +144,14 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
             currentLookup = v.getText().toString();
             if (Helper.isNullOrEmpty(currentLookup))
                 Toast.makeText(this, "Lookup word is empty", Toast.LENGTH_SHORT).show();
-            else {
+            else if (!bPlayVoiceDone || !bLoadPageDone) {
+                Log.d("LookupInfo", "Next not yet");
+                if (MainActivity.lookupSpeak)
+                    Toast.makeText(this, "Load Page or Play voice not done yet", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(this, "Load Page not done yet", Toast.LENGTH_SHORT).show();
+            } else {
+                bLoadPageDone = false;
                 mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(currentLookup));
                 hideKeyboard();
                 focusWebView();
@@ -138,6 +169,15 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
 
     private void focusWebView() {
         mWebView.requestFocus();
+    }
+
+    public void setVoiceDone(boolean value) { bPlayVoiceDone = value; }
+
+    private void updateSpeakOption() {
+        MenuItem speakItem = contextMenu.findItem(R.id.action_speak);
+        speakItem.setCheckable(true);
+        speakItem.setChecked(MainActivity.lookupSpeak);
+        bPlayVoiceDone = true;
     }
 
     private void updateSaveOption() {

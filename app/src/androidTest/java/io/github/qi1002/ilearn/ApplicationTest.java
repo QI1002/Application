@@ -34,4 +34,3 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO20: move prounication answer to exam: ________
 //TODO21: verifyStoragePermissions is enhanced
 //TODO22: no voice ??
-//TODO23:

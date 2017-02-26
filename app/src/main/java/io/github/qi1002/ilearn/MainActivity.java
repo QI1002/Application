@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     // global settings
     public static final String PREFS_NAME = "PreferenceSettings";
     public static boolean saveToXML = true;
+    public static boolean lookupSpeak = false;
     public static boolean practiceMean = false;
     public static boolean examSpeak = false;
     public static boolean switchActivity = false;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         //read preference settings
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         saveToXML = settings.getBoolean("saveToXML", true);
+        lookupSpeak = settings.getBoolean("lookupSpeak", false);
         practiceMean = settings.getBoolean("practiceMean", false);
         examSpeak = settings.getBoolean("examSpeak", false);
     }
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("saveToXML", saveToXML);
+        editor.putBoolean("lookupSpeak", lookupSpeak);
         editor.putBoolean("practiceMean", practiceMean);
         editor.putBoolean("examSpeak", examSpeak);
         editor.commit(); // Commit the edits!

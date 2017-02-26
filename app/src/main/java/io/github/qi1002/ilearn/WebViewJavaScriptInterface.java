@@ -37,6 +37,12 @@ public class WebViewJavaScriptInterface{
                     String message = (String)inner_arguments[0];
                     Thread.sleep(waitVoicePlayTime);
 
+                    if (context instanceof LookupDictionaryActivity) {
+                        LookupDictionaryActivity activity = (LookupDictionaryActivity)context;
+                        activity.setVoiceDone(true);
+                        Log.d("LookupInfo", "Voice play done " + message);
+                    }
+
                     if (context instanceof PracticeDatasetActivity) {
                         PracticeDatasetActivity activity = (PracticeDatasetActivity)context;
                         activity.setVoiceDone(true);
@@ -62,7 +68,15 @@ public class WebViewJavaScriptInterface{
         });
 
         sleepThread.start();
-        Log.d("PracticeInfo", "Voice done " + message);
+
+        if (context instanceof LookupDictionaryActivity)
+            Log.d("LookupInfo", "Voice done " + message);
+        if (context instanceof PracticeDatasetActivity)
+            Log.d("PracticeInfo", "Voice done " + message);
+        if (context instanceof VocabularyExamActivity)
+            Log.d("ExamInfo", "Voice done " + message);
+        if (context instanceof PronunciationExamActivity)
+            Log.d("ExamInfo", "Voice done " + message);
     }
 
     @JavascriptInterface

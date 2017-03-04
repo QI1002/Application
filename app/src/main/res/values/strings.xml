@@ -7,4 +7,42 @@
     <string name="action_mean">Display Mean</string>
     <string name="action_speak">Speak Voice</string>
     <string name="action_save">Save to Dataset</string>
+
+    <!-- The part of Global settings -->
+    <string name="pref_header_global">Global Settings</string>
+
+    <string name="dataset_update_preferences">Dataset Update</string>
+    <string name="pref_title_dataset_update">Enable Dataset Update</string>
+    <string name="pref_description_dataset_update">Recommendations to download dataset from
+        network if no dataset in default.
+    </string>
+    <string name="pref_title_dataset_check">Enable Dataset Validation</string>
+    <string name="pref_description_dataset_check">Recommendations to check current dataset is
+        valid or not.
+    </string>
+    <string name="pref_title_dataset_url_location">Dataset URL Location</string>
+    <string name="pref_defaul_dataset_url_location">https://raw.githubusercontent.com/QI1002/qi1002.github.io/master/data/data.xml</string>
+
+    <string name="behavior_wait_voice_preferences">Behavior for Voice Waiting</string>
+    <string name="pref_title_behavior_wait_voice">do Next until voice up</string>
+    <string-array name="pref_list_behavior_wait_voice">
+        <item>Always</item>
+        <item>Practice Only</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_value_behavior_wait_voice">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- The part of Global settings -->
+    <string name="pref_header_practice">Settings of Practice</string>
+
+    <!-- The part of Global settings -->
+    <string name="pref_header_vocabulary_exam">Settings of Vocabulary Exam</string>
+
+    <!-- The part of Global settings -->
+    <string name="pref_pronunciation_exam">Settings of Pronunciation Exam</string>
+
 </resources>

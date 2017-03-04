@@ -12,8 +12,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 }
 //TODO00: how to do blocking wait in UI thread smartly.
-//TODO01: use style for mainActivity button
-//TODO02: change button color
+//TODO01: change the settings title but not impact fragment title
+//TODO02: resume practice
 //TODO03: solve the different jdkName issue in app/app.iml
 //TODO04: check if more rules are added to .gitignore
 //TODO05: more field in dataset XML like mean_score, listen_score, class, ...

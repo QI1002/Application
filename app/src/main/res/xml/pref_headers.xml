@@ -1,0 +1,25 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$GlobalPreferenceFragment"
+        android:title="@string/pref_header_global"
+        android:icon="@drawable/ic_info_black_24dp" />
+
+    <header
+        android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$GlobalPreferenceFragment"
+        android:title="@string/pref_header_practice"
+        android:icon="@drawable/ic_notifications_black_24dp" />
+
+    <header
+        android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$GlobalPreferenceFragment"
+        android:title="@string/pref_header_vocabulary_exam"
+        android:icon="@drawable/ic_sync_black_24dp" />
+
+    <header
+        android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$GlobalPreferenceFragment"
+        android:title="@string/pref_pronunciation_exam"
+        android:icon="@drawable/ic_sync_black_24dp" />
+
+</preference-headers>

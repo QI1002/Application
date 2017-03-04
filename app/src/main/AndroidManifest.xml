@@ -48,12 +48,7 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".configuration.ConfigurationSettingActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        <activity
-            android:name=".configuration.ConfigurationPreferenceActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:name=".configuration.ConfigurationSettingActivity" >
         </activity>
         <activity
             android:name=".configuration.ConfigurationUtilityActivity"

@@ -117,7 +117,10 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
-                || GlobalPreferenceFragment.class.getName().equals(fragmentName);
+                || GlobalPreferenceFragment.class.getName().equals(fragmentName)
+                || PracticePreferenceFragment.class.getName().equals(fragmentName)
+                || VocExamPreferenceFragment.class.getName().equals(fragmentName)
+                || PronunExamPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     @Override
@@ -152,6 +155,110 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("dataset_url_location"));
             bindPreferenceSummaryToValue(findPreference("behavior_wait_voice"));
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), ConfigurationSettingActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * This fragment shows practice preferences only.
+     */
+    public static class PracticePreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_practice);
+            setHasOptionsMenu(true);
+
+            ConfigurationSettingActivity activity = (ConfigurationSettingActivity)getActivity();
+            if (activity != null) {
+                ActionBar actionBar = activity.getSupportActionBar();
+                if (actionBar != null)
+                    actionBar.setTitle(getString(R.string.pref_header_practice));
+            }
+            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+            // to their values. When their values change, their summaries are
+            // updated to reflect the new value, per the Android Design
+            // guidelines.
+            bindPreferenceSummaryToValue(findPreference("practice_enumerate"));
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), ConfigurationSettingActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * This fragment shows vocabulary exam  preferences only.
+     */
+    public static class VocExamPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_vocabulary_exam);
+            setHasOptionsMenu(true);
+
+            ConfigurationSettingActivity activity = (ConfigurationSettingActivity)getActivity();
+            if (activity != null) {
+                ActionBar actionBar = activity.getSupportActionBar();
+                if (actionBar != null)
+                    actionBar.setTitle(getString(R.string.pref_header_vocabulary_exam));
+            }
+            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+            // to their values. When their values change, their summaries are
+            // updated to reflect the new value, per the Android Design
+            // guidelines.
+            bindPreferenceSummaryToValue(findPreference("vocabulary_exam_count"));
+            bindPreferenceSummaryToValue(findPreference("vocabulary_exam_enumerate"));
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), ConfigurationSettingActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * This fragment shows pronunciation exam preferences only.
+     */
+    public static class PronunExamPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_pronunciation_exam);
+            setHasOptionsMenu(true);
+
+            ConfigurationSettingActivity activity = (ConfigurationSettingActivity)getActivity();
+            if (activity != null) {
+                ActionBar actionBar = activity.getSupportActionBar();
+                if (actionBar != null)
+                    actionBar.setTitle(getString(R.string.pref_header_pronunciation_exam));
+            }
+            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+            // to their values. When their values change, their summaries are
+            // updated to reflect the new value, per the Android Design
+            // guidelines.
+            bindPreferenceSummaryToValue(findPreference("pronunciation_exam_count"));
+            bindPreferenceSummaryToValue(findPreference("pronunciation_exam_enumerate"));
         }
 
         @Override

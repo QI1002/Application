@@ -12,7 +12,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 }
 //TODO00: how to do blocking wait in UI thread smartly.
-//TODO01: change the settings title but not impact fragment title
+//TODO01: link the settings with real behaviors and let mainactivity settings work also in settings
 //TODO02: resume practice
 //TODO03: solve the different jdkName issue in app/app.iml
 //TODO04: check if more rules are added to .gitignore

@@ -8,18 +8,18 @@
         android:icon="@drawable/ic_info_black_24dp" />
 
     <header
-        android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$GlobalPreferenceFragment"
+        android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$PracticePreferenceFragment"
         android:title="@string/pref_header_practice"
         android:icon="@drawable/ic_notifications_black_24dp" />
 
     <header
-        android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$GlobalPreferenceFragment"
+        android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$VocExamPreferenceFragment"
         android:title="@string/pref_header_vocabulary_exam"
         android:icon="@drawable/ic_sync_black_24dp" />
 
     <header
-        android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$GlobalPreferenceFragment"
-        android:title="@string/pref_pronunciation_exam"
+        android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$PronunExamPreferenceFragment"
+        android:title="@string/pref_header_pronunciation_exam"
         android:icon="@drawable/ic_sync_black_24dp" />
 
 </preference-headers>

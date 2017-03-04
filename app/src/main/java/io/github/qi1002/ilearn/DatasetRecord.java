@@ -279,7 +279,7 @@ public class DatasetRecord {
                 return new RandomEnumerable(dataset);
             case Shuffle:
                 return new ShuffleEnumerable(dataset);
-            case Counter:
+            case LookupCount:
                 return new CounterEnumerable(dataset);
         }
 
@@ -291,10 +291,11 @@ enum EnumerableWay {
     Sequence,
     Random,
     Shuffle,
-    Counter,
+    LookupCount,
     ScoreMean,
     ScoreVoice,
-    Class,
+    TimeStemp,
+    Category,
 };
 
 class ArrayIndexComparator implements Comparator<Integer>
@@ -322,7 +323,7 @@ class ArrayIndexComparator implements Comparator<Integer>
     {
         switch (compareWay)
         {
-            case Counter:
+            case LookupCount:
                 Integer counter1 = dataset.get(index1).lookup_cnt;
                 Integer counter2 = dataset.get(index2).lookup_cnt;
                 // descending order
@@ -455,7 +456,7 @@ class CounterEnumerable extends ShuffleEnumerable {
     @Override
     public void reset()
     {
-        ArrayIndexComparator comparator = new ArrayIndexComparator(dataset, EnumerableWay.Counter);
+        ArrayIndexComparator comparator = new ArrayIndexComparator(dataset, EnumerableWay.LookupCount);
         indexes = comparator.createIndexArray();
         Collections.sort(indexes, comparator);
         currentIndex = 0;

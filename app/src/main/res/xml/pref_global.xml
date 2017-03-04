@@ -24,7 +24,7 @@
             android:inputType="textCapWords"
             android:capitalize="words"
             android:singleLine="true"
-            android:maxLines="2" />
+            android:maxLines="1" />
 
     </PreferenceCategory>
 

@@ -29,7 +29,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
     private EditText mWordAnswer = null;
     private Menu contextMenu = null;
     private Button nextButton = null;
-    private String datasetEnumerateWay = "Counter";
+    private String datasetEnumerateWay = "LookupCount";
     private IEnumerable datasetEnumerate = null;
     private ScoreRecord scoreData = null;
     private boolean bPlayVoiceDone = true;

@@ -21,7 +21,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
     private WebView mWebView = null;
     private TextView mWordLabel = null;
     private Menu contextMenu = null;
-    private String datasetEnumerateWay = "Counter";
+    private String datasetEnumerateWay = "LookupCount";
     private IEnumerable datasetEnumerate = null;
     private boolean bPlayVoiceDone = true;
     private boolean bLoadPageDone = true;

@@ -13,6 +13,27 @@
     <string name="config_score">Score Statistics</string>
     <string name="config_utility">The Utilties</string>
 
+    <!-- The part of Common strings in the settings -->
+    <string name="pref_title_enumerate">The Word Enumerate Way</string>
+    <string-array name="pref_list_enumerate">
+        <item>Category</item>
+        <item>Timestamp</item>
+        <item>MeanScore</item>
+        <item>VoiceScore</item>
+        <item>LookupCount</item>
+        <item>Random</item>
+        <item>Shuffle</item>
+        <item>Sequence</item>
+    </string-array>
+
+    <string name="pref_title_exam_count">Total Exam Item Count</string>
+    <string-array name="pref_list_exam_count">
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>25</item>
+    </string-array>
+
     <!-- The part of Global settings -->
     <string name="pref_header_global">Global Settings</string>
 
@@ -44,10 +65,15 @@
     <!-- The part of Global settings -->
     <string name="pref_header_practice">Settings of Practice</string>
 
+    <string name="pref_title_resume_practice">Resume Practice</string>
+    <string name="pref_description_resume_practice">Practice will resume although
+        activities are switched otherwise restart.
+    </string>
+
     <!-- The part of Global settings -->
     <string name="pref_header_vocabulary_exam">Settings of Vocabulary Exam</string>
 
     <!-- The part of Global settings -->
-    <string name="pref_pronunciation_exam">Settings of Pronunciation Exam</string>
+    <string name="pref_header_pronunciation_exam">Settings of Pronunciation Exam</string>
 
 </resources>

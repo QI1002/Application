@@ -16,21 +16,27 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/bt_configuration_score"
+            android:id="@+id/bt_configuration_about"
             android:layout_column="0"
-            android:text="Score Statistics"
+            android:text="@string/config_about"
             style="@style/button_style_configuration"/>
 
         <Button
             android:id="@+id/bt_configuration_settings"
             android:layout_column="0"
-            android:text="The Settings"
+            android:text="@string/config_settings"
+            style="@style/button_style_configuration"/>
+
+        <Button
+            android:id="@+id/bt_configuration_score"
+            android:layout_column="0"
+            android:text="@string/config_score"
             style="@style/button_style_configuration"/>
 
         <Button
             android:id="@+id/bt_configuration_utility"
             android:layout_column="0"
-            android:text="The Utilties"
+            android:text="@string/config_utility"
             style="@style/button_style_configuration"/>
 
     </GridLayout>

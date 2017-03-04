@@ -8,6 +8,11 @@
     <string name="action_speak">Speak Voice</string>
     <string name="action_save">Save to Dataset</string>
 
+    <string name="config_about">about iLean</string>
+    <string name="config_settings">The Settings</string>
+    <string name="config_score">Score Statistics</string>
+    <string name="config_utility">The Utilties</string>
+
     <!-- The part of Global settings -->
     <string name="pref_header_global">Global Settings</string>
 

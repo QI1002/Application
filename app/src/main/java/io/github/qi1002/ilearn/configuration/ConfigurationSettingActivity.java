@@ -30,6 +30,7 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
         if (actionBar != null) {
             // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getString(R.string.config_settings));
         }
     }
 
@@ -129,9 +130,8 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * This fragment shows general preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
+   /**
+     * This fragment shows global preferences only.
      */
     public static class GlobalPreferenceFragment extends PreferenceFragment {
         @Override
@@ -140,6 +140,12 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_global);
             setHasOptionsMenu(true);
 
+            ConfigurationSettingActivity activity = (ConfigurationSettingActivity)getActivity();
+            if (activity != null) {
+                ActionBar actionBar = activity.getSupportActionBar();
+                if (actionBar != null)
+                   actionBar.setTitle(getString(R.string.pref_header_global));
+            }
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design

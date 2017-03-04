@@ -7,8 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import io.github.qi1002.ilearn.configuration.ConfigurationScoreActivity;
+import io.github.qi1002.ilearn.configuration.ConfigurationAboutActivity;
 import io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity;
+import io.github.qi1002.ilearn.configuration.ConfigurationScoreActivity;
 import io.github.qi1002.ilearn.configuration.ConfigurationUtilityActivity;
 
 public class ConfigurationActivity extends AppCompatActivity {
@@ -20,11 +21,11 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         Button button;
 
-        button = (Button) findViewById(R.id.bt_configuration_score);
+        button = (Button) findViewById(R.id.bt_configuration_about);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchActivity(ConfigurationScoreActivity.class);
+                launchActivity(ConfigurationAboutActivity.class);
             }
         });
 
@@ -33,6 +34,14 @@ public class ConfigurationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 launchActivity(ConfigurationSettingActivity.class);
+            }
+        });
+
+        button = (Button) findViewById(R.id.bt_configuration_score);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchActivity(ConfigurationScoreActivity.class);
             }
         });
 

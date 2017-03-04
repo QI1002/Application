@@ -23,46 +23,50 @@ public class MainActivity extends AppCompatActivity {
     public static boolean examSpeak = false;
     public static boolean switchActivity = false;
 
-    // controls
-    private Button mBtLoopupDictionary;
-    private Button mBtPracticeDataset;
-    private Button mBtVocabularyExam;
-    private Button mBtPronunciationExam;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBtLoopupDictionary = (Button) findViewById(R.id.bt_dictionary_lookup);
-        mBtLoopupDictionary.setOnClickListener(new View.OnClickListener() {
+        Button button;
+
+        button = (Button) findViewById(R.id.bt_dictionary_lookup);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchActivity(LookupDictionaryActivity.class);
             }
         });
 
-        mBtPracticeDataset = (Button) findViewById(R.id.bt_dataset_practice);
-        mBtPracticeDataset.setOnClickListener(new View.OnClickListener() {
+        button = (Button) findViewById(R.id.bt_dataset_practice);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchActivity(PracticeDatasetActivity.class);
             }
         });
 
-        mBtVocabularyExam = (Button) findViewById(R.id.bt_exam_vocabulary);
-        mBtVocabularyExam.setOnClickListener(new View.OnClickListener() {
+        button = (Button) findViewById(R.id.bt_exam_vocabulary);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchActivity(VocabularyExamActivity.class);
             }
         });
 
-        mBtPronunciationExam = (Button) findViewById(R.id.bt_exam_pronunciation);
-        mBtPronunciationExam.setOnClickListener(new View.OnClickListener() {
+        button = (Button) findViewById(R.id.bt_exam_pronunciation);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchActivity(PronunciationExamActivity.class);
+            }
+        });
+
+        button = (Button) findViewById(R.id.bt_configuration);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchActivity(ConfigurationActivity.class);
             }
         });
 

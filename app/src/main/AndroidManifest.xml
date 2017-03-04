@@ -47,13 +47,16 @@
             android:name=".configuration.ConfigurationScoreActivity"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-        <activity android:name=".configuration.ConfigurationSettingActivity"
+        <activity
+            android:name=".configuration.ConfigurationSettingActivity"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-        <activity android:name=".configuration.ConfigurationPreferenceActivity"
+        <activity
+            android:name=".configuration.ConfigurationPreferenceActivity"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-        <activity android:name=".configuration.ConfigurationUtilityActivity"
+        <activity
+            android:name=".configuration.ConfigurationUtilityActivity"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>

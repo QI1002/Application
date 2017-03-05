@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         ScoreRecord.initialScoreHistory(this, cal.get(Calendar.YEAR));
+        ScoreRecord.updateDataset();
 
         // let apk use media volume
         setVolumeControlStream(AudioManager.STREAM_MUSIC);

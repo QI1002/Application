@@ -16,14 +16,17 @@
     <!-- The part of Common strings in the settings -->
     <string name="pref_title_enumerate">The Word Enumerate Way</string>
     <string-array name="pref_list_enumerate">
-        <item>Category</item>
-        <item>Timestamp</item>
-        <item>MeanScore</item>
-        <item>VoiceScore</item>
-        <item>LookupCount</item>
+        <item>Sequence</item>
         <item>Random</item>
         <item>Shuffle</item>
-        <item>Sequence</item>
+        <item>LookupCount</item>
+        <item>TimeStamp</item>
+        <item>MeanExamScore</item>
+        <item>MeanExamCount</item>
+        <item>VoiceExamScore</item>
+        <item>VoiceExamCount</item>
+        <item>AllExamScore</item>
+        <item>AllExamCount</item>
     </string-array>
 
     <string name="pref_title_exam_count">Total Exam Item Count</string>

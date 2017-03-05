@@ -37,6 +37,12 @@ public class DatasetRecord {
     public int lookup_cnt;
     public double timestamp;
 
+    public int mean_correct_cnt;
+    public int mean_fail_cnt;
+    public int voice_correct_cnt;
+    public int voice_fail_cnt;
+    public int category;
+
     // download dataset XML
     private static final int BUFFER_SIZE = 4096;
     private static boolean bInitialized = false;
@@ -174,6 +180,9 @@ public class DatasetRecord {
                 record.name = element.getAttributeNode(ATTR_NAME).getValue();
                 record.lookup_cnt = Integer.parseInt(element.getAttributeNode(ATTR_LOOKUP_CNT).getValue());
                 record.timestamp = Double.parseDouble(element.getAttributeNode(ATTR_TIMESTAMP).getValue());
+                record.mean_correct_cnt = record.mean_fail_cnt = 0;
+                record.voice_correct_cnt = record.voice_fail_cnt = 0;
+                record.category = 0; // undefined
                 if (checkWord(record.name) != null)
                     duplicateWords += (record.name + ":");
                 dataset.add(record);
@@ -268,6 +277,32 @@ public class DatasetRecord {
         bDirty = true;
     }
 
+    public static void updateMeanExamResult(String word, boolean correct)
+    {
+        DatasetRecord record = checkWord(word);
+
+        if (record != null)
+        {
+            if (correct)
+                record.mean_correct_cnt++;
+            else
+                record.mean_fail_cnt++;
+        }
+    }
+
+    public static void updateVoiceExamResult(String word, boolean correct)
+    {
+        DatasetRecord record = checkWord(word);
+
+        if (record != null)
+        {
+            if (correct)
+                record.voice_correct_cnt++;
+            else
+                record.voice_fail_cnt++;
+        }
+    }
+
     public static IEnumerable getEnumerator(ArrayList<DatasetRecord> dataset, String wayname)
     {
         EnumerableWay way = EnumerableWay.valueOf(wayname);
@@ -280,7 +315,21 @@ public class DatasetRecord {
             case Shuffle:
                 return new ShuffleEnumerable(dataset);
             case LookupCount:
-                return new CounterEnumerable(dataset);
+                return new LookupCountEnumerable(dataset);
+            case TimeStamp:
+                return new TimeStampEnumerable(dataset);
+            case MeanExamScore:
+                return new MeanScoreEnumerable(dataset);
+            case MeanExamCount:
+                return new MeanCountEnumerable(dataset);
+            case VoiceExamScore:
+                return new VoiceScoreEnumerable(dataset);
+            case VoiceExamCount:
+                return new VoiceCountEnumerable(dataset);
+            case AllExamScore:
+                return new AllScoreEnumerable(dataset);
+            case AllExamCount:
+                return new AllCountEnumerable(dataset);
         }
 
         return null;
@@ -288,14 +337,18 @@ public class DatasetRecord {
 }
 
 enum EnumerableWay {
+    None,
     Sequence,
     Random,
     Shuffle,
     LookupCount,
-    ScoreMean,
-    ScoreVoice,
-    TimeStemp,
-    Category,
+    TimeStamp,
+    MeanExamScore,
+    MeanExamCount,
+    VoiceExamScore,
+    VoiceExamCount,
+    AllExamScore,
+    AllExamCount,
 };
 
 class ArrayIndexComparator implements Comparator<Integer>
@@ -321,13 +374,55 @@ class ArrayIndexComparator implements Comparator<Integer>
     @Override
     public int compare(Integer index1, Integer index2)
     {
+        Integer count1, count2;
+        Integer score1, score2;
+
         switch (compareWay)
         {
             case LookupCount:
-                Integer counter1 = dataset.get(index1).lookup_cnt;
-                Integer counter2 = dataset.get(index2).lookup_cnt;
+                count1 = dataset.get(index1).lookup_cnt;
+                count2 = dataset.get(index2).lookup_cnt;
                 // descending order
-                return counter2.compareTo(counter1);
+                return count2.compareTo(count1);
+            case TimeStamp:
+                Double stamp1 = dataset.get(index1).timestamp;
+                Double stamp2 = dataset.get(index2).timestamp;
+                // descending order
+                return stamp2.compareTo(stamp1);
+            case MeanExamScore:
+                score1 = dataset.get(index1).mean_correct_cnt - dataset.get(index1).mean_fail_cnt;
+                score2 = dataset.get(index2).mean_correct_cnt - dataset.get(index2).mean_fail_cnt;
+                // descending order
+                return score2.compareTo(score1);
+            case MeanExamCount:
+                count1 = dataset.get(index1).mean_correct_cnt + dataset.get(index1).mean_fail_cnt;
+                count2 = dataset.get(index2).mean_correct_cnt + dataset.get(index2).mean_fail_cnt;
+                // descending order
+                return count2.compareTo(count1);
+            case VoiceExamScore:
+                score1 = dataset.get(index1).voice_correct_cnt - dataset.get(index1).voice_fail_cnt;
+                score2 = dataset.get(index2).voice_correct_cnt - dataset.get(index2).voice_fail_cnt;
+                // descending order
+                return score2.compareTo(score1);
+            case VoiceExamCount:
+                count1 = dataset.get(index1).voice_correct_cnt + dataset.get(index1).voice_fail_cnt;
+                count2 = dataset.get(index2).voice_correct_cnt + dataset.get(index2).voice_fail_cnt;
+                // descending order
+                return count2.compareTo(count1);
+            case AllExamScore:
+                score1 = dataset.get(index1).mean_correct_cnt - dataset.get(index1).mean_fail_cnt +
+                         dataset.get(index1).voice_correct_cnt - dataset.get(index1).voice_fail_cnt;
+                score2 = dataset.get(index2).mean_correct_cnt - dataset.get(index2).mean_fail_cnt +
+                         dataset.get(index2).voice_correct_cnt - dataset.get(index2).voice_fail_cnt;
+                // descending order
+                return score2.compareTo(score1);
+            case AllExamCount:
+                count1 = dataset.get(index1).mean_correct_cnt + dataset.get(index1).mean_fail_cnt +
+                         dataset.get(index1).voice_correct_cnt + dataset.get(index1).voice_fail_cnt;
+                count2 = dataset.get(index2).mean_correct_cnt + dataset.get(index2).mean_fail_cnt +
+                         dataset.get(index2).voice_correct_cnt + dataset.get(index2).voice_fail_cnt;
+                // descending order
+                return count2.compareTo(count1);
             default:
                 // default is ascending order in sequence
                 return index1.compareTo(index2);
@@ -444,21 +539,165 @@ class ShuffleEnumerable implements IEnumerable {
     }
 }
 
-/* enumerate dataset by counter value order */
-class CounterEnumerable extends ShuffleEnumerable {
+/* enumerate dataset by some value order */
+class ValueEnumerable implements IEnumerable {
 
-    public CounterEnumerable(ArrayList<DatasetRecord> dataset)
+    protected int currentIndex;
+    protected ArrayList<Integer> indexes = null;
+    protected ArrayList<DatasetRecord> dataset;
+
+    protected EnumerableWay getEnumerableWay()
     {
-        super(dataset);
+        return EnumerableWay.None;
+    }
+
+    public ValueEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        this.dataset = dataset;
         reset();
     }
 
-    @Override
+    public DatasetRecord getCurrent()
+    {
+        if (currentIndex >= dataset.size())
+            return null;
+
+        return dataset.get(indexes.get(currentIndex));
+    }
+
+    public DatasetRecord moveNext()
+    {
+        if (currentIndex >= dataset.size())
+            return null;
+
+        return dataset.get(indexes.get(currentIndex++));
+    }
+
     public void reset()
     {
-        ArrayIndexComparator comparator = new ArrayIndexComparator(dataset, EnumerableWay.LookupCount);
+        ArrayIndexComparator comparator = new ArrayIndexComparator(dataset, getEnumerableWay());
         indexes = comparator.createIndexArray();
         Collections.sort(indexes, comparator);
         currentIndex = 0;
+    }
+}
+
+/* enumerate dataset by lookup count value order */
+class LookupCountEnumerable extends ValueEnumerable {
+
+    @Override
+    protected EnumerableWay getEnumerableWay()
+    {
+        return EnumerableWay.LookupCount;
+    }
+
+    public LookupCountEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        super(dataset);
+    }
+}
+
+/* enumerate dataset by timestamp value order */
+class TimeStampEnumerable extends ValueEnumerable {
+
+    @Override
+    protected EnumerableWay getEnumerableWay()
+    {
+        return EnumerableWay.TimeStamp;
+    }
+
+    public TimeStampEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        super(dataset);
+    }
+}
+
+/* enumerate dataset by mean score value order */
+class MeanScoreEnumerable extends ValueEnumerable {
+
+    @Override
+    protected EnumerableWay getEnumerableWay()
+    {
+        return EnumerableWay.MeanExamScore;
+    }
+
+    public MeanScoreEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        super(dataset);
+    }
+}
+
+/* enumerate dataset by mean count value order */
+class MeanCountEnumerable extends ValueEnumerable {
+
+    @Override
+    protected EnumerableWay getEnumerableWay()
+    {
+        return EnumerableWay.MeanExamCount;
+    }
+
+    public MeanCountEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        super(dataset);
+    }
+}
+
+/* enumerate dataset by voice score value order */
+class VoiceScoreEnumerable extends ValueEnumerable {
+
+    @Override
+    protected EnumerableWay getEnumerableWay()
+    {
+        return EnumerableWay.VoiceExamScore;
+    }
+
+    public VoiceScoreEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        super(dataset);
+    }
+}
+
+/* enumerate dataset by voice count value order */
+class VoiceCountEnumerable extends ValueEnumerable {
+
+    @Override
+    protected EnumerableWay getEnumerableWay()
+    {
+        return EnumerableWay.VoiceExamCount;
+    };
+
+    public VoiceCountEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        super(dataset);
+    }
+}
+
+/* enumerate dataset by all  score value order */
+class AllScoreEnumerable extends ValueEnumerable {
+
+    @Override
+    protected EnumerableWay getEnumerableWay()
+    {
+        return EnumerableWay.AllExamScore;
+    }
+
+    public AllScoreEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        super(dataset);
+    }
+}
+
+/* enumerate dataset by all count value order */
+class AllCountEnumerable extends ValueEnumerable {
+
+    @Override
+    protected EnumerableWay getEnumerableWay()
+    {
+        return EnumerableWay.AllExamCount;
+    }
+
+    public AllCountEnumerable(ArrayList<DatasetRecord> dataset)
+    {
+        super(dataset);
     }
 }

@@ -146,6 +146,28 @@ public class ScoreRecord {
         }
     }
 
+    public static void updateDataset()
+    {
+        ArrayList<DatasetRecord> dataset = DatasetRecord.getDataset();
+
+        for (int i = 0; i < scoreHistory.size(); i++) {
+            ScoreRecord record = scoreHistory.get(i);
+
+            String items[] = record.items.split(":");
+            assert(items.length == record.test_cnt);
+
+            if (record.type == MEAN) {
+                for (int j = 0; j <items.length; j++)
+                    DatasetRecord.updateMeanExamResult(items[i], (record.scores & (1<<j)) != 0);
+            }
+
+            if (record.type == PRONUNCIATION) {
+                for (int j = 0; j <items.length; j++)
+                    DatasetRecord.updateVoiceExamResult(items[i], (record.scores & (1<<j)) != 0);
+            }
+        }
+    }
+
     public void applyResult(String item, int index, boolean correct)
     {
         if (items.length() == 0)

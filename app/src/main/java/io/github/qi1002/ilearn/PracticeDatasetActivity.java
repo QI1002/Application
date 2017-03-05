@@ -120,7 +120,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                 practiceWordCheck();
                 return true;
             case R.id.action_mean:
-                MainActivity.practiceMean = !MainActivity.practiceMean;
+                Helper.putPreferenceBoolean(this, "show mean dialog", !getPracticeMean());
                 updateMeanOption();
                 return true;
             case R.id.action_show:
@@ -180,7 +180,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
 
     public void setHTMLDone(String html, String word)
     {
-        if (MainActivity.practiceMean) {
+        if (getPracticeMean()) {
             String mean = DatasetRecord.getDictionaryProvider().getWordMean(this, html, word);
             if (DatasetRecord.getDictionaryProvider().isTranslate())
                 mean = Translate.StoT(mean);
@@ -188,9 +188,14 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         }
     }
 
+    public boolean getPracticeMean()
+    {
+        return Helper.getPreferenceBoolean(this, "show mean dialog", false);
+    }
+
     private void updateMeanOption() {
         MenuItem meanItem = contextMenu.findItem(R.id.action_mean);
         meanItem.setCheckable(true);
-        meanItem.setChecked(MainActivity.practiceMean);
+        meanItem.setChecked(getPracticeMean());
     }
 }

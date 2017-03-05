@@ -16,11 +16,6 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     // global settings
-    public static final String PREFS_NAME = "PreferenceSettings";
-    public static boolean saveToXML = true;
-    public static boolean lookupSpeak = false;
-    public static boolean practiceMean = false;
-    public static boolean examSpeak = false;
     public static boolean switchActivity = false;
 
     @Override
@@ -85,13 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
         // let apk use media volume
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
-        //read preference settings
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        saveToXML = settings.getBoolean("saveToXML", true);
-        lookupSpeak = settings.getBoolean("lookupSpeak", false);
-        practiceMean = settings.getBoolean("practiceMean", false);
-        examSpeak = settings.getBoolean("examSpeak", false);
     }
 
     private void launchActivity(Class<?> cls) {
@@ -125,15 +113,6 @@ public class MainActivity extends AppCompatActivity {
             DatasetRecord.updateDataset(DatasetRecord.output_filename, DatasetRecord.dataset_filename);
             Log.d("LookupInfo", "write xml");
         }
-
-        //read preference settings
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("saveToXML", saveToXML);
-        editor.putBoolean("lookupSpeak", lookupSpeak);
-        editor.putBoolean("practiceMean", practiceMean);
-        editor.putBoolean("examSpeak", examSpeak);
-        editor.commit(); // Commit the edits!
 
         switchActivity = false;
     }

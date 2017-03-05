@@ -66,7 +66,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
                 bLoadPageDone = true;
                 Log.d("ExamInfo", "URL done " + url);
 
-                if (MainActivity.examSpeak) {
+                if (getExamSpeak()) {
                     bPlayVoiceDone = false;
                     view.loadUrl("javascript:(function() {  app.voiceCheck(" + DatasetRecord.getDictionaryProvider().getWordVoiceCheck(currentExam) + ");  " +
                             DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentExam) +
@@ -139,7 +139,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
                 examWordCheck();
                 return true;
             case R.id.action_speak:
-                MainActivity.examSpeak = !MainActivity.examSpeak;
+                Helper.putPreferenceBoolean(this, "exam speak", !getExamSpeak());
                 updateSpeakOption();
                 return true;
             case R.id.action_show:
@@ -158,7 +158,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
     private void examWordCheck() {
         if (!bPlayVoiceDone || !bLoadPageDone) {
             Log.d("ExamInfo", "Next not yet");
-            if (MainActivity.examSpeak)
+            if (getExamSpeak())
                 Toast.makeText(this, "Load Page or Play voice not done yet", Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(this, "Load Page not done yet", Toast.LENGTH_SHORT).show();
@@ -222,10 +222,15 @@ public class VocabularyExamActivity extends AppCompatActivity {
             current_mean = Translate.StoT(current_mean);
     }
 
+    public boolean getExamSpeak()
+    {
+        return Helper.getPreferenceBoolean(this, "exam speak", false);
+    }
+
     private void updateSpeakOption() {
         MenuItem speakItem = contextMenu.findItem(R.id.action_speak);
         speakItem.setCheckable(true);
-        speakItem.setChecked(MainActivity.examSpeak);
+        speakItem.setChecked(getExamSpeak());
         bPlayVoiceDone = true;
     }
 }

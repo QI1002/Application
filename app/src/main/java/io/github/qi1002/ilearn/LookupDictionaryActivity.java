@@ -50,13 +50,13 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
                 Log.d("LookupInfo", "URL done " + url);
                 if (!Helper.isNullOrEmpty(currentLookup) &&
                         url.compareTo(DatasetRecord.getDictionaryProvider().getEntrance()) != 0) {
-                    if (MainActivity.lookupSpeak) {
+                    if (getLookupSpeak()) {
                         bPlayVoiceDone = false;
                         view.loadUrl("javascript:(function() {  app.voiceCheck(" + DatasetRecord.getDictionaryProvider().getWordVoiceCheck(currentLookup) + ");  " +
                                 DatasetRecord.getDictionaryProvider().getWordVoiceLink(currentLookup) +
                                 " app.voiceDone('" + currentLookup + "' ); })()");
                     }
-                    if (MainActivity.saveToXML) {
+                    if (getSaveToXML()) {
                         view.loadUrl("javascript:app.checkHTMLSource" +
                                 "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>', '" + currentLookup + "');");
                     }
@@ -125,11 +125,11 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
                     mWebView.goForward();
                 return true;
             case R.id.action_speak:
-                MainActivity.lookupSpeak = !MainActivity.lookupSpeak;
+                Helper.putPreferenceBoolean(this, "lookup speak", !getLookupSpeak());
                 updateSpeakOption();
                 return true;
             case R.id.action_save:
-                MainActivity.saveToXML = !MainActivity.saveToXML;
+                Helper.putPreferenceBoolean(this, "lookup save", !getSaveToXML());
                 updateSaveOption();
                 return true;
         }
@@ -146,7 +146,7 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
                 Toast.makeText(this, "Lookup word is empty", Toast.LENGTH_SHORT).show();
             else if (!bPlayVoiceDone || !bLoadPageDone) {
                 Log.d("LookupInfo", "Next not yet");
-                if (MainActivity.lookupSpeak)
+                if (getLookupSpeak())
                     Toast.makeText(this, "Load Page or Play voice not done yet", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(this, "Load Page not done yet", Toast.LENGTH_SHORT).show();
@@ -173,16 +173,26 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
 
     public void setVoiceDone(boolean value) { bPlayVoiceDone = value; }
 
+    public boolean getSaveToXML()
+    {
+        return Helper.getPreferenceBoolean(this, "lookup save", true);
+    }
+
+    public boolean getLookupSpeak()
+    {
+        return Helper.getPreferenceBoolean(this, "lookup speak", false);
+    }
+
     private void updateSpeakOption() {
         MenuItem speakItem = contextMenu.findItem(R.id.action_speak);
         speakItem.setCheckable(true);
-        speakItem.setChecked(MainActivity.lookupSpeak);
+        speakItem.setChecked(getLookupSpeak());
         bPlayVoiceDone = true;
     }
 
     private void updateSaveOption() {
         MenuItem saveItem = contextMenu.findItem(R.id.action_save);
         saveItem.setCheckable(true);
-        saveItem.setChecked(MainActivity.saveToXML);
+        saveItem.setChecked(getSaveToXML());
     }
 }

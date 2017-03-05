@@ -65,7 +65,17 @@
         <item>-1</item>
     </string-array>
 
-    <!-- The part of Global settings -->
+    <!-- The part of Lookup settings -->
+    <string name="pref_header_lookup">Settings of Lookup</string>
+
+    <string name="pref_title_save_to_dataset">Save Lookup Word to Dataset</string>
+    <string name="pref_description_save_to_dataset">Save the lookup words
+        into dataset xml file.
+    </string>
+
+    <string name="pref_title_speak_when_lookup">Speak when Lookup Word</string>
+
+    <!-- The part of Practice settings -->
     <string name="pref_header_practice">Settings of Practice</string>
 
     <string name="pref_title_resume_practice">Resume Practice</string>
@@ -73,10 +83,14 @@
         activities are switched otherwise restart.
     </string>
 
-    <!-- The part of Global settings -->
+    <string name="pref_title_show_mean_dialog">Extra mean and show it by Dialog</string>
+
+    <!-- The part of Vocabulary Exam settings -->
     <string name="pref_header_vocabulary_exam">Settings of Vocabulary Exam</string>
 
-    <!-- The part of Global settings -->
+    <string name="pref_title_exam_speak">Speak when Vocabulary Exam</string>
+
+    <!-- The part of Pronunciation Exam settings -->
     <string name="pref_header_pronunciation_exam">Settings of Pronunciation Exam</string>
 
 </resources>

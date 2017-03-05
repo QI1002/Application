@@ -38,3 +38,5 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO24: change settings icon and bar chart title position depends on screen size
 //TODO25: score update by hash set flow => apply to checkWord
 //TODO26: enumerate words by category limitation
+//TODO27: find default value from preference xml
+//TODO28: reset all preferences

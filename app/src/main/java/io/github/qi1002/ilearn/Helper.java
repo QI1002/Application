@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
@@ -97,7 +99,7 @@ public class Helper {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        PracticeDatasetActivity activity = (PracticeDatasetActivity)context;
+                        PracticeDatasetActivity activity = (PracticeDatasetActivity) context;
                         activity.practiceAgain();
                     }
                 });
@@ -105,7 +107,7 @@ public class Helper {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        ((Activity)context).finish();
+                        ((Activity) context).finish();
                     }
                 });
         dlgAlert.create().show();
@@ -120,7 +122,7 @@ public class Helper {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        ((Activity)context).finish();
+                        ((Activity) context).finish();
                     }
                 });
 
@@ -132,5 +134,33 @@ public class Helper {
         Log.d("GenericExceptionHandler", exception.getLocalizedMessage());
         Log.d("GenericExceptionHandler", Log.getStackTraceString(exception));
         Helper.MessageBox(context, exception.getMessage());
+    }
+
+    public static boolean getPreferenceBoolean(Context context, String prefString, boolean defaultValue)
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getBoolean(prefString, defaultValue);
+    }
+
+    public static void putPreferenceBoolean(Context context, String prefString, boolean value)
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(prefString, value);
+        editor.commit(); // Commit the edits!
+    }
+
+    public static String getPreferenceString(Context context, String prefString, String defaultValue)
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString(prefString, defaultValue);
+    }
+
+    public static void putPreferenceString(Context context, String prefString, String value)
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(prefString, value);
+        editor.commit(); // Commit the edits!
     }
 }

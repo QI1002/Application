@@ -106,9 +106,8 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
         // Trigger the listener immediately with the preference's
         // current value.
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+                PreferenceManager.getDefaultSharedPreferences(preference.getContext())
+                        .getString(preference.getKey(), "")); // default value defined in XML, so "" can be ignored
     }
 
     /**
@@ -118,6 +117,7 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || GlobalPreferenceFragment.class.getName().equals(fragmentName)
+                || LookupPreferenceFragment.class.getName().equals(fragmentName)
                 || PracticePreferenceFragment.class.getName().equals(fragmentName)
                 || VocExamPreferenceFragment.class.getName().equals(fragmentName)
                 || PronunExamPreferenceFragment.class.getName().equals(fragmentName);
@@ -155,6 +155,35 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("dataset_url_location"));
             bindPreferenceSummaryToValue(findPreference("behavior_wait_voice"));
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), ConfigurationSettingActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * This fragment shows practice preferences only.
+     */
+    public static class LookupPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_lookup);
+            setHasOptionsMenu(true);
+
+            ConfigurationSettingActivity activity = (ConfigurationSettingActivity)getActivity();
+            if (activity != null) {
+                ActionBar actionBar = activity.getSupportActionBar();
+                if (actionBar != null)
+                    actionBar.setTitle(getString(R.string.pref_header_lookup));
+            }
         }
 
         @Override

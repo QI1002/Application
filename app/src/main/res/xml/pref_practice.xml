@@ -8,6 +8,11 @@
             android:summary="@string/pref_description_resume_practice"
             android:defaultValue="true" />
 
+        <SwitchPreference
+            android:key="show mean dialog"
+            android:title="@string/pref_title_show_mean_dialog"
+            android:defaultValue="false" />
+
         <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
              dismiss it. -->
         <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->

@@ -8,6 +8,11 @@
         android:icon="@drawable/ic_info_black_24dp" />
 
     <header
+        android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$LookupPreferenceFragment"
+        android:title="@string/pref_header_lookup"
+        android:icon="@drawable/ic_notifications_black_24dp" />
+
+    <header
         android:fragment="io.github.qi1002.ilearn.configuration.ConfigurationSettingActivity$PracticePreferenceFragment"
         android:title="@string/pref_header_practice"
         android:icon="@drawable/ic_notifications_black_24dp" />

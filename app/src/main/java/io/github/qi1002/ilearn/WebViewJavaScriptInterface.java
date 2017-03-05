@@ -65,7 +65,7 @@ public class WebViewJavaScriptInterface{
     @JavascriptInterface
     public void voiceDone(String message){
 
-        final Object[] arguments = { message };
+        Object[] arguments = { message };
         Thread sleepThread = new Thread(new DataPassThread(context, arguments) {
             @Override
             public void run() {

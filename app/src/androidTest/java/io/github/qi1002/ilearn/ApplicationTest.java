@@ -35,3 +35,4 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO21: verifyStoragePermissions is enhanced
 //TODO22: don't consider no voice case if checking if pron exam ok <=> dataset size
 //TODO23: test all data.xml for dictionary feasiblity
+//TODO24: change settings icon and bar chart title position depends on screen size

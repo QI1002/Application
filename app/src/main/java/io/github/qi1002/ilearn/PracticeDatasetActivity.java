@@ -21,7 +21,6 @@ public class PracticeDatasetActivity extends AppCompatActivity {
     private WebView mWebView = null;
     private TextView mWordLabel = null;
     private Menu contextMenu = null;
-    private String datasetEnumerateWay = "LookupCount";
     private IEnumerable datasetEnumerate = null;
     private boolean bPlayVoiceDone = true;
     private boolean bLoadPageDone = true;
@@ -90,8 +89,22 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         //do the first practice
-        datasetEnumerate = DatasetRecord.getEnumerator(DatasetRecord.getDataset(), datasetEnumerateWay);
+        if (Helper.getPreferenceBoolean(this, "resume practice", true) && MainActivity.practiceEnumerate != null)
+        {
+            datasetEnumerate = MainActivity.practiceEnumerate;
+        }else {
+            String datasetEnumerateWay = Helper.getPreferenceString(this, "practice_enumerate", "LookupCount");
+            datasetEnumerate = DatasetRecord.getEnumerator(DatasetRecord.getDataset(), datasetEnumerateWay);
+        }
+
         practiceWord();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Helper.getPreferenceBoolean(this, "resume practice", true))
+            MainActivity.practiceEnumerate = datasetEnumerate;
     }
 
     @Override

@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     // global settings
     public static boolean switchActivity = false;
+    public static IEnumerable practiceEnumerate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +89,10 @@ public class MainActivity extends AppCompatActivity {
                     DatasetRecord.getDataset().size() == 0) {
                 Toast.makeText(this, " Zero items in dataset so no practice", Toast.LENGTH_SHORT).show();
             }else if (cls == VocabularyExamActivity.class &&
-                    DatasetRecord.getDataset().size() < VocabularyExamActivity.getTestCount()) {
+                    DatasetRecord.getDataset().size() < VocabularyExamActivity.getTestCount(this)) {
                 Toast.makeText(this, " Too few items in dataset to exam", Toast.LENGTH_SHORT).show();
             } else if (cls == PronunciationExamActivity.class &&
-                    DatasetRecord.getDataset().size() < PronunciationExamActivity.getTestCount()) {
+                    DatasetRecord.getDataset().size() < PronunciationExamActivity.getTestCount(this)) {
                 Toast.makeText(this, "Too few items in dataset to exam", Toast.LENGTH_SHORT).show();
             }else {
                 Intent intent = new Intent(this, cls);

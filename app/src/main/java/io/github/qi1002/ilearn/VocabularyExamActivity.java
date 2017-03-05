@@ -1,5 +1,6 @@
 package io.github.qi1002.ilearn;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +19,6 @@ import android.widget.Toast;
 
 public class VocabularyExamActivity extends AppCompatActivity {
 
-    public static int total_count = 5;
     private int test_count = 0;
     private int correct_count = 0;
 
@@ -29,7 +29,6 @@ public class VocabularyExamActivity extends AppCompatActivity {
     private EditText mWordAnswer = null;
     private Menu contextMenu = null;
     private Button nextButton = null;
-    private String datasetEnumerateWay = "LookupCount";
     private IEnumerable datasetEnumerate = null;
     private ScoreRecord scoreData = null;
     private boolean bPlayVoiceDone = true;
@@ -45,7 +44,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         nextButton = (Button) findViewById(R.id.voc_exam_next);
-        nextButton.setText("(" + correct_count + "/" + test_count + "/" + total_count + ") Next");
+        nextButton.setText("(" + correct_count + "/" + test_count + "/" + getTestCount() + ") Next");
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,13 +103,14 @@ public class VocabularyExamActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         //do the first exam
+        String datasetEnumerateWay = Helper.getPreferenceString(this, "vocabulary_exam_enumerate", "LookupCount");
         datasetEnumerate = DatasetRecord.getEnumerator(DatasetRecord.getDataset(), datasetEnumerateWay);
         examWord();
 
         //initialize
         scoreData = new ScoreRecord();
         scoreData.type = ScoreRecord.MEAN;
-        scoreData.test_cnt = total_count;
+        scoreData.test_cnt = getTestCount();
     }
 
     @Override
@@ -185,12 +185,12 @@ public class VocabularyExamActivity extends AppCompatActivity {
                 }
 
                 scoreData.applyResult(currentExam, test_count - 1, correct);
-                nextButton.setText("(" + correct_count + "/" + test_count + "/" + total_count + ") Next");
+                nextButton.setText("(" + correct_count + "/" + test_count + "/" + getTestCount() + ") Next");
                 mWordAnswer.setText("");
             }
         }
 
-        if (test_count < total_count) {
+        if (test_count < getTestCount()) {
             current_mean = "";
             bLoadPageDone = false;
             DatasetRecord record = datasetEnumerate.getCurrent();
@@ -201,7 +201,8 @@ public class VocabularyExamActivity extends AppCompatActivity {
             currentExam = record.name;
         }else
         {
-            Helper.ExitBox(this, "the score is " + (correct_count * 100 / total_count) + " (" + correct_count + "/" + test_count + "/" + total_count + ")\nand then exit");
+            Helper.ExitBox(this, "the score is " + (correct_count * 100 / getTestCount()) + " (" + correct_count + "/" +
+                    test_count + "/" + getTestCount() + ")\nand then exit");
             scoreData.updateRecord(this);
         }
 
@@ -212,7 +213,14 @@ public class VocabularyExamActivity extends AppCompatActivity {
         mWebView.requestFocus();
     }
 
-    public static int getTestCount() { return total_count; }
+    public int getTestCount() {
+        return getTestCount(this);
+    }
+    public static int getTestCount(Context context) {
+        String count = Helper.getPreferenceString(context, "vocabulary_exam_count", "5");
+        return Integer.valueOf(count);
+    }
+
     public void setVoiceDone(boolean value) { bPlayVoiceDone = value; }
 
     public void setHTMLDone(String html, String word)

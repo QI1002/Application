@@ -12,31 +12,25 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 }
 //TODO00: how to do blocking wait in UI thread smartly.
-//TODO01: link the settings with real behaviors and let mainactivity settings work also in settings
-//TODO02: resume practice
+//TODO01: link the global settings with real behaviors
+//TODO02: score chart update by real datta
 //TODO03: solve the different jdkName issue in app/app.iml
 //TODO04: check if more rules are added to .gitignore
-//TODO05: more field in dataset XML like mean_score, listen_score, class, ...
-//TODO06: reduce timestamp to second unit
-//TODO07: add enumerate way about (timestamp, score mean, voice and class)
-//TODO08: update qi1002.github.io and github self icon
-//TODO09: handle network go out case
-//TODO10: get android simulator in T420
-//TODO11: how to save dataset when application finish once. (join and foreground detection ?)
-//TODO12: how to wait the checkHTMLsource done then save dataset ?
-//TODO13: main settings => score and test frequency, settings (path) and about and utilities
-//TODO14: add settings page (download dataset link, default enumerate way ...)
-//TODO15: About page
-//TODO16: wait voiceplay or dataset initialized options (debug)
-//TODO17: common 7000 words
-//TODO18: dickson idoms
-//TODO19:shall we load score history all
-//TODO20: move pronunciation answer to exam: ________
-//TODO21: verifyStoragePermissions is enhanced
-//TODO22: don't consider no voice case if checking if pron exam ok <=> dataset size
-//TODO23: test all data.xml for dictionary feasibility
-//TODO24: change settings icon and bar chart title position depends on screen size
-//TODO25: score update by hash set flow => apply to checkWord
-//TODO26: enumerate words by category limitation
-//TODO27: find default value from preference xml
-//TODO28: reset all preferences
+//TODO05: reduce timestamp to second unit
+//TODO06: handle network go out case
+//TODO07: get android simulator in T420
+//TODO08: how to save dataset when application finish once. (join and foreground detection ?)
+//TODO09: a flow to reset all preferences
+//TODO10: utility page to transfer ecdict data to data.xml
+//TODO11: iLearn About page
+//TODO12: wait voice play or dataset initialized options (debug)
+//TODO13: common 7000 words
+//TODO14: dickson idoms
+//TODO15: move pronunciation answer to exam: ________
+//TODO16: verifyStoragePermissions is enhanced
+//TODO17: don't consider no voice case if checking if pron exam ok <=> dataset size
+//TODO18: test all data.xml for dictionary feasibility
+//TODO19: change settings icon and bar chart title position depends on screen size
+//TODO20: score update by hash set flow => apply to checkWord
+//TODO21: enumerate words by category limitation
+//TODO22: find default value from preference xml

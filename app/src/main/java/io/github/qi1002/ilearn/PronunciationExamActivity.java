@@ -1,5 +1,6 @@
 package io.github.qi1002.ilearn;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +20,6 @@ import android.widget.Toast;
 
 public class PronunciationExamActivity extends AppCompatActivity {
 
-    public static int total_count = 5;
     private int test_count = 0;
     private int correct_count = 0;
 
@@ -30,7 +30,6 @@ public class PronunciationExamActivity extends AppCompatActivity {
     private EditText mWordAnswer = null;
     private Menu contextMenu = null;
     private Button nextButton = null;
-    private String datasetEnumerateWay = "LookupCount";
     private IEnumerable datasetEnumerate = null;
     private ScoreRecord scoreData = null;
     private boolean bPlayVoiceDone = true;
@@ -46,7 +45,7 @@ public class PronunciationExamActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         nextButton = (Button) findViewById(R.id.pron_exam_next);
-        nextButton.setText("(" + correct_count + "/" + test_count + "/" + total_count + ") Next");
+        nextButton.setText("(" + correct_count + "/" + test_count + "/" + getTestCount() + ") Next");
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,13 +99,14 @@ public class PronunciationExamActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         //do the first exam
+        String datasetEnumerateWay = Helper.getPreferenceString(this, "pronunciation_exam_enumerate", "LookupCount");
         datasetEnumerate = DatasetRecord.getEnumerator(DatasetRecord.getDataset(), datasetEnumerateWay);
         examWord();
 
         //initialize
         scoreData = new ScoreRecord();
         scoreData.type = ScoreRecord.PRONUNCIATION;
-        scoreData.test_cnt = total_count;
+        scoreData.test_cnt = getTestCount();
     }
 
     @Override
@@ -169,16 +169,17 @@ public class PronunciationExamActivity extends AppCompatActivity {
                 }
 
                 scoreData.applyResult(currentExam, test_count - 1, correct);
-                nextButton.setText("(" + correct_count + "/" + test_count + "/" + total_count + ") Next");
+                nextButton.setText("(" + correct_count + "/" + test_count + "/" + getTestCount() + ") Next");
                 mWordAnswer.setText("");
             }
         }
 
-        if (test_count < total_count) {
+        if (test_count < getTestCount()) {
             examWordOnly();
         }else
         {
-            Helper.ExitBox(this, "the score is " + (correct_count * 100 / total_count) + " (" + correct_count + "/" + test_count + "/" + total_count + ")\nand then exit");
+            Helper.ExitBox(this, "the score is " + (correct_count * 100 / getTestCount()) + " (" + correct_count + "/" +
+                    test_count + "/" + getTestCount() + ")\nand then exit");
             scoreData.updateRecord(this);
         }
 
@@ -200,7 +201,14 @@ public class PronunciationExamActivity extends AppCompatActivity {
         mWebView.requestFocus();
     }
 
-    public static int getTestCount() { return total_count; }
+    public int getTestCount() {
+        return getTestCount(this);
+    }
+    public static int getTestCount(Context context) {
+        String count = Helper.getPreferenceString(context, "pronunciation_exam_count", "5");
+        return Integer.valueOf(count);
+    }
+
     public void setVoiceDone(boolean value) { bPlayVoiceDone = value; }
     public void skipTest() {
         Handler mainHandler = new Handler(getMainLooper());

@@ -16,6 +16,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.utils.Utils;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
@@ -30,11 +31,11 @@ public class ConfigurationScoreActivity extends AppCompatActivity {
 
     private int MAX_MONTH_COUNT = 5;
 
-    class MyXAxisValueFormatter implements IAxisValueFormatter {
+    class ScoreXAxisValueFormatter implements IAxisValueFormatter {
 
         private List<String> mValues;
 
-        public MyXAxisValueFormatter(List<String> values) {
+        public ScoreXAxisValueFormatter(List<String> values) {
             this.mValues = values;
         }
 
@@ -60,15 +61,18 @@ public class ConfigurationScoreActivity extends AppCompatActivity {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
+        float height = displayMetrics.heightPixels;
+        float width = displayMetrics.widthPixels;
+
+        float dpX = Utils.convertPixelsToDp(0);
+        float dpY = Utils.convertPixelsToDp(height) - 160;
 
         Description desc = new Description();
         desc.setText("The score history in recent 5 months");
-        //desc.setText("The score history \n" + width + " " + height);
+        //desc.setText("The score history \n" + width + " " + height + " " + dpX + " " + dpY);
         desc.setTextSize(20);
-        desc.setYOffset(500);
-        desc.setXOffset(0);
+        desc.setYOffset(dpY);
+        desc.setXOffset(dpX);
         chart_bar.setDescription(desc);
         chart_bar.animateY(5000);
     }
@@ -100,12 +104,22 @@ public class ConfigurationScoreActivity extends AppCompatActivity {
                 "Score>=75"};
     }
 
+    public int getColorWrapper(int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return getColor(id);
+        } else {
+            //noinspection deprecation
+            return getResources().getColor(id);
+        }
+    }
+
     private int[] getChartColors() {
+
         int[] colors = new int[]{
-                getColor(R.color.chart_color_0_25),
-                getColor(R.color.chart_color_25_50),
-                getColor(R.color.chart_color_50_75),
-                getColor(R.color.chart_color_75_100)};
+                getColorWrapper(R.color.chart_color_0_25),
+                getColorWrapper(R.color.chart_color_25_50),
+                getColorWrapper(R.color.chart_color_50_75),
+                getColorWrapper(R.color.chart_color_75_100)};
         return colors;
     }
 
@@ -127,12 +141,15 @@ public class ConfigurationScoreActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         int month = cal.get(Calendar.MONTH);
+        int year = cal.get(Calendar.YEAR);
 
         DateFormatSymbols symbols = new DateFormatSymbols();
         String[] monthNames = symbols.getMonths();
         List<String> chartLabels = new ArrayList<>();
         for(int i=0;i<MAX_MONTH_COUNT;i++){
-            chartLabels.add(monthNames[(i+month)%12]);
+            int monthIndex =  (13 - MAX_MONTH_COUNT + month + i) % 12;
+            String yearString = (monthIndex > month) ? Integer.toString(year - 1) : Integer.toString(year);
+            chartLabels.add(yearString + " " + monthNames[monthIndex]);
         }
         return chartLabels;
     }
@@ -143,7 +160,7 @@ public class ConfigurationScoreActivity extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
         xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(new MyXAxisValueFormatter(getLabels()));
+        xAxis.setValueFormatter(new ScoreXAxisValueFormatter(getLabels()));
 
         YAxis leftYAxis = chart_bar.getAxisLeft();
         leftYAxis.setAxisMinimum(0);

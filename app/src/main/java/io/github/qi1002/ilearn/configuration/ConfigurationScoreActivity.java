@@ -25,11 +25,13 @@ import java.util.Date;
 import java.util.List;
 
 import io.github.qi1002.ilearn.R;
+import io.github.qi1002.ilearn.ScoreRecord;
 
 // use https://github.com/PhilJay/MPAndroidChart 3.0.1 as android chart libraries
 public class ConfigurationScoreActivity extends AppCompatActivity {
 
     private int MAX_MONTH_COUNT = 5;
+    private boolean bGetScoreData = true;
 
     class ScoreXAxisValueFormatter implements IAxisValueFormatter {
 
@@ -124,13 +126,59 @@ public class ConfigurationScoreActivity extends AppCompatActivity {
     }
 
     private List<BarEntry> getChartData(){
+
+        int scoreResult[][] = new int[MAX_MONTH_COUNT][4];
+
+        if (bGetScoreData) {
+            // get current month index
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            ArrayList<ScoreRecord> scoreHistory = ScoreRecord.getYearHistory(year);
+
+            for (int i = 0; i < MAX_MONTH_COUNT; i++)
+                scoreResult[i][0] = scoreResult[i][1] = scoreResult[i][2] = scoreResult[i][3] = 0;
+
+            for (int i = 0; i < scoreHistory.size(); i++) {
+                ScoreRecord record = scoreHistory.get(i);
+                Date stamp = new Date((long) record.timestamp);
+                cal.setTime(stamp);
+                int stamp_year = cal.get(Calendar.YEAR);
+                int stamp_month = cal.get(Calendar.MONTH);
+                int month_diff = (year - stamp_year) * 12 + (month - stamp_month);
+
+                if (month_diff >= 5) continue;
+
+                int correctCount = Integer.bitCount(record.scores);
+                assert (correctCount <= record.test_cnt);
+                int score = (record.test_cnt == 0) ? 0 : correctCount * 100 / record.test_cnt;
+
+                if (score <= 25)
+                    scoreResult[5 - month_diff][0]++;
+                else if (score > 25 && score <= 50)
+                    scoreResult[5 - month_diff][1]++;
+                else if (score > 50 && score <= 75)
+                    scoreResult[5 - month_diff][2]++;
+                else
+                    scoreResult[5 - month_diff][3]++;
+            }
+        }
+
         List<BarEntry> chartData = new ArrayList<>();
         for(int i=0;i<MAX_MONTH_COUNT;i++){
-            float count_75_100 = (i+1)*1;
-            float count_50_75 = (i+1)*2;
-            float count_25_50 = (i+1)*3;
-            float count_0_25 = (i+1)*4;
-            chartData.add(new BarEntry(i,new float[]{count_0_25, count_25_50, count_50_75, count_75_100}));
+
+            if (bGetScoreData) {
+                chartData.add(new BarEntry(i, new float[]{scoreResult[i][0], scoreResult[i][1], scoreResult[i][2], scoreResult[i][3]}));
+            }else
+            {
+                float count_75_100 = (i + 1) * 1;
+                float count_50_75 = (i + 1) * 2;
+                float count_25_50 = (i + 1) * 3;
+                float count_0_25 = (i + 1) * 4;
+
+                chartData.add(new BarEntry(i, new float[]{count_0_25, count_25_50, count_50_75, count_75_100}));
+            }
         }
         return chartData;
     }

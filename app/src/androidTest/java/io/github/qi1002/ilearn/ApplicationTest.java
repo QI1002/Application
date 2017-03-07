@@ -13,7 +13,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 }
 //TODO00: how to do blocking wait in UI thread smartly.
 //TODO01: link the global settings with real behaviors
-//TODO02: score chart update by real datta
+//TODO02: make preference header layout beautiful more
 //TODO03: solve the different jdkName issue in app/app.iml
 //TODO04: check if more rules are added to .gitignore
 //TODO05: reduce timestamp to second unit
@@ -36,4 +36,3 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO22: find default value from preference xml
 //TODO23: selection box with customer callback for positive/negative callback
 //TODO24: use ecdict as dictionary provider
-//TODO25: make preference header layout beautiful more

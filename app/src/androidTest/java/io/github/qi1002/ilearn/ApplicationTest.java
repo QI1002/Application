@@ -27,7 +27,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO13: common 7000 words
 //TODO14: dickson idoms
 //TODO15: move pronunciation answer to exam: ________
-//TODO16: verifyStoragePermissions is enhanced ( not restart or auto restart APK again ?? )
+//TODO16: new verifyStoragePermissions ok in SS 6.01 but NG in emulator 6.0
 //TODO17: don't consider no voice case if checking if pron exam ok <=> dataset size
 //TODO18: test all data.xml for dictionary feasibility
 //TODO19: review all final usage in *.java

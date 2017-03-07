@@ -1,7 +1,11 @@
 package io.github.qi1002.ilearn;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +17,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
+
+    // Storage Permissions variables
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     // global settings
     public static boolean switchActivity = false;
@@ -65,9 +76,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // enable external storage
-        Helper.verifyStoragePermissions(this);
+        // let apk use media volume
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
+        // enable external storage
+        if (verifyStoragePermissions() == false)
+            dataLoading();
+
+    }
+
+    //persmission method.
+    //more step in android studio 0) generate sdcard image file by mksdcard.exe by android sdk
+    // 1) enable to use external SDcard in emulator.exe avd file by AVD manager (menu->tools->Android)
+    // 2) add below flow to verifyStoragePermission of this activity (refer: http://stackoverflow.com/questions/33030933/android-6-0-open-failed-eacces-permission-denied)
+    public boolean verifyStoragePermissions() {
+        // Check if we have read or write permission
+        int writePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int readPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        if (writePermission != PackageManager.PERMISSION_GRANTED || readPermission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void dataLoading()
+    {
         // initialize dataset in default
         if (!DatasetRecord.isInitialized())
             DatasetRecord.initialDataset(this);
@@ -77,9 +119,32 @@ public class MainActivity extends AppCompatActivity {
         cal.setTime(new Date());
         ScoreRecord.initialScoreHistory(this, cal.get(Calendar.YEAR));
         ScoreRecord.updateDataset();
+    }
 
-        // let apk use media volume
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    dataLoading();
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Helper.ExitBox(this, "Permission Rejected, leave the APP");
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     private void launchActivity(Class<?> cls) {

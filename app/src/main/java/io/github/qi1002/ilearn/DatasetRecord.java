@@ -24,6 +24,7 @@ import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlSerializer;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Environment;
 import android.os.Looper;
 import android.util.Log;
@@ -181,7 +182,7 @@ public class DatasetRecord {
         return record;
     }
 
-    public static void parseDataset(Context context, String inputfile) {
+    public static void parseDataset(final Context context, String inputfile) {
 
         boolean dataset_check = Helper.getPreferenceBoolean(context, "dataset_check", true);
         String duplicateWords = "";
@@ -219,8 +220,19 @@ public class DatasetRecord {
             Helper.GenericExceptionHandler(context, e);
         }
 
-        if (duplicateWords.length() != 0) {
-            Helper.DatasetCheckSelectionBox(context, "Duplicated words\n" + duplicateWords + "\nFound\nDo you want to reset dataset ?", "Reset", "Keep");
+         if (duplicateWords.length() != 0) {
+
+            DialogInterface.OnClickListener positiveListner =
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    DatasetRecord.resetDataset();
+                    DatasetRecord.downloadDataset(context, DatasetRecord.dataset_filename);
+                }
+            };
+
+            Helper.SelectionBox(context, "Duplicated words\n" + duplicateWords + "\nFound\nDo you want to reset dataset ?", "Reset", "Keep",
+                    "Dataset Check Selection Box", positiveListner, null);
         }
     }
 

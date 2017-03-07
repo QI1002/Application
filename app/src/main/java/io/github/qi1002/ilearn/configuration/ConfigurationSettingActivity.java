@@ -1,6 +1,7 @@
 package io.github.qi1002.ilearn.configuration;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -108,7 +109,16 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
             {
                 if (boolValue && DatasetRecord.getDataset().size() == 0) {
 
-                    Helper.DatasetUpdateSelectionBox(preference.getContext(), "Download dataset now ?", "Yes", "No");
+                    DialogInterface.OnClickListener positiveListner =
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    DatasetRecord.downloadDataset(preference.getContext(), DatasetRecord.dataset_filename);
+                                }
+                            };
+
+                    Helper.SelectionBox(preference.getContext(), "Download dataset now ?", "Yes", "No",
+                            "Dataset Update Selection Box", positiveListner, null);
                 }
             }
 

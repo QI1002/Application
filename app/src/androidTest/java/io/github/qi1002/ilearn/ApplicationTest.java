@@ -34,4 +34,3 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO20: score update by hash set flow => apply to checkWord
 //TODO21: enumerate words by category limitation
 //TODO22: find default value from preference xml
-//TODO23: selection box with customer callback for positive/negative callback

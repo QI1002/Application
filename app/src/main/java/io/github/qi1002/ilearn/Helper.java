@@ -89,73 +89,34 @@ public class Helper {
         dlgAlert.create().show();
     }
 
-        public static void PracticeSelectionBox(final Context context, String message, String yes, String no) {
+    public static void SelectionBox(final Context context, String message, String yes, String no, String title,
+                                   final DialogInterface.OnClickListener positiveListener, final DialogInterface.OnClickListener negativeListener) {
 
         AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
         dlgAlert.setMessage(message);
-        dlgAlert.setTitle("Practice Selection Box");
+        dlgAlert.setTitle(title);
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(yes,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        PracticeDatasetActivity activity = (PracticeDatasetActivity) context;
-                        activity.practiceAgain();
-                    }
-                });
-        dlgAlert.setNegativeButton(no,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        ((Activity) context).finish();
-                    }
-                });
-        dlgAlert.create().show();
-    }
 
-    public static void DatasetUpdateSelectionBox(final Context context, String message, String yes, String no) {
+        if (positiveListener != null)
+            dlgAlert.setPositiveButton(yes, positiveListener);
+        else
+            dlgAlert.setPositiveButton(yes,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
 
-        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
-        dlgAlert.setMessage(message);
-        dlgAlert.setTitle("Dataset Update Selection Box");
-        dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(yes,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        DatasetRecord.resetDataset();
-                        DatasetRecord.downloadDataset(context, DatasetRecord.dataset_filename);
-                    }
-                });
-        dlgAlert.setNegativeButton(no,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        dlgAlert.create().show();
-    }
+        if (negativeListener != null)
+            dlgAlert.setNegativeButton(no, negativeListener);
+        else
+            dlgAlert.setNegativeButton(no,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
 
-    public static void DatasetCheckSelectionBox(final Context context, String message, String yes, String no) {
-
-        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
-        dlgAlert.setMessage(message);
-        dlgAlert.setTitle("Dataset Check Selection Box");
-        dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(yes,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        DatasetRecord.resetDataset();
-                        DatasetRecord.downloadDataset(context, DatasetRecord.dataset_filename);
-                    }
-                });
-        dlgAlert.setNegativeButton(no,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
         dlgAlert.create().show();
     }
 

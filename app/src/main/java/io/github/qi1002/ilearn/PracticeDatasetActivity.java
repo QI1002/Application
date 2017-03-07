@@ -1,5 +1,6 @@
 package io.github.qi1002.ilearn;
 
+import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -176,7 +177,24 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         DatasetRecord record = datasetEnumerate.getCurrent();
 
         if (record == null) {
-            Helper.PracticeSelectionBox(this, "Finish practicing all items in dataset...", "Repeat", "Return");
+
+            DialogInterface.OnClickListener positiveListner =
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            practiceAgain();
+                        }
+                    };
+
+            DialogInterface.OnClickListener negativeListner =
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    };
+
+            Helper.SelectionBox(this, "Finish practicing all items in dataset...", "Repeat", "Return", "Practice Selection Box", positiveListner, negativeListner);
         } else {
             practiceWord(record);
         }

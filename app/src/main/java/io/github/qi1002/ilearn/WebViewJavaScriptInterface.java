@@ -65,30 +65,34 @@ public class WebViewJavaScriptInterface{
     @JavascriptInterface
     public void voiceDone(String message){
 
-        Object[] arguments = { message };
+        String strValue = Helper.getPreferenceString(context, "behavior_wait_voice", "1");
+        int behavior_wait_voice = Integer.valueOf(strValue); // 1: always , 0: practice only, 2: never
+
+        Object[] arguments = { message , behavior_wait_voice};
         Thread sleepThread = new Thread(new DataPassThread(context, arguments) {
             @Override
             public void run() {
                 try {
-                    assert((inner_arguments != null) && (inner_arguments.length == 1));
+                    assert((inner_arguments != null) && (inner_arguments.length == 2));
                     String message = (String)inner_arguments[0];
+                    int wait_voice = (int)inner_arguments[1];
                     Thread.sleep(waitVoicePlayTime);
 
                     if (context instanceof LookupDictionaryActivity) {
                         LookupDictionaryActivity activity = (LookupDictionaryActivity)context;
-                        activity.setVoiceDone(true);
+                        if (wait_voice == 1) activity.setVoiceDone(true);
                         Log.d("LookupInfo", "Voice play done " + message);
                     }
 
                     if (context instanceof PracticeDatasetActivity) {
                         PracticeDatasetActivity activity = (PracticeDatasetActivity)context;
-                        activity.setVoiceDone(true);
+                        if (wait_voice != -1) activity.setVoiceDone(true);
                         Log.d("PracticeInfo", "Voice play done " + message);
                     }
 
                     if (context instanceof VocabularyExamActivity) {
                         VocabularyExamActivity activity = (VocabularyExamActivity)context;
-                        activity.setVoiceDone(true);
+                        if (wait_voice == 1) activity.setVoiceDone(true);
                         Log.d("ExamInfo", "Voice play done " + message);
                     }
 
@@ -106,14 +110,27 @@ public class WebViewJavaScriptInterface{
 
         sleepThread.start();
 
-        if (context instanceof LookupDictionaryActivity)
+        if (context instanceof LookupDictionaryActivity) {
+            LookupDictionaryActivity activity = (LookupDictionaryActivity)context;
+            if (behavior_wait_voice != 1) activity.setVoiceDone(true);
             Log.d("LookupInfo", "Voice done " + message);
-        if (context instanceof PracticeDatasetActivity)
+        }
+
+        if (context instanceof PracticeDatasetActivity) {
+            PracticeDatasetActivity activity = (PracticeDatasetActivity)context;
+            if (behavior_wait_voice == -1) activity.setVoiceDone(true);
             Log.d("PracticeInfo", "Voice done " + message);
-        if (context instanceof VocabularyExamActivity)
+        }
+
+        if (context instanceof VocabularyExamActivity) {
+            VocabularyExamActivity activity = (VocabularyExamActivity)context;
+            if (behavior_wait_voice != 1) activity.setVoiceDone(true);
             Log.d("ExamInfo", "Voice done " + message);
-        if (context instanceof PronunciationExamActivity)
+        }
+
+        if (context instanceof PronunciationExamActivity) {
             Log.d("ExamInfo", "Voice done " + message);
+        }
     }
 
     @JavascriptInterface

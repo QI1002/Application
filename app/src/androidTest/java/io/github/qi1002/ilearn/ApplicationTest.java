@@ -23,7 +23,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO09: a flow to reset all preferences
 //TODO10: utility page to transfer ecdict data to data.xml
 //TODO11: iLearn About page
-//TODO12: wait voice play or dataset initialized options (debug)
+//TODO12: input the word from english studio classmate (one category)
 //TODO13: common 7000 words
 //TODO14: dickson idoms
 //TODO15: move pronunciation answer to exam: ________

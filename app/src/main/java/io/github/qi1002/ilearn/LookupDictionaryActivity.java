@@ -2,6 +2,7 @@ package io.github.qi1002.ilearn;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
@@ -35,6 +36,9 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Lookup Dictionary");
         setSupportActionBar(toolbar);
+
+        ActionBar actionbar = getSupportActionBar ();
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         mWebView = (WebView) findViewById(R.id.lookup_dictionary_webview);
         /// Enable Javascript
@@ -113,6 +117,9 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
         //noinspection SimplifiableIfStatement
         switch(id)
         {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.action_return:
                 finish();
                 return true;

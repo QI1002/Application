@@ -41,7 +41,7 @@
         </activity>
         <activity
             android:name=".ConfigurationActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+>
         </activity>
         <activity
             android:name=".configuration.ConfigurationAboutActivity" >
@@ -50,7 +50,7 @@
         </activity>
         <activity
             android:name=".configuration.ConfigurationScoreActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+>
         </activity>
         <activity
             android:name=".configuration.ConfigurationUtilityActivity"

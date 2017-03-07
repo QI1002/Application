@@ -27,10 +27,13 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO13: common 7000 words
 //TODO14: dickson idoms
 //TODO15: move pronunciation answer to exam: ________
-//TODO16: verifyStoragePermissions is enhanced
+//TODO16: verifyStoragePermissions is enhanced ( not restart or auto restart APK again ?? )
 //TODO17: don't consider no voice case if checking if pron exam ok <=> dataset size
 //TODO18: test all data.xml for dictionary feasibility
 //TODO19: change settings icon and bar chart title position depends on screen size
 //TODO20: score update by hash set flow => apply to checkWord
 //TODO21: enumerate words by category limitation
 //TODO22: find default value from preference xml
+//TODO23: selection box with customer callback for positive/negative callback
+//TODO24: use ecdict as dictionary provider
+//TODO25: make preference header layout beautiful more

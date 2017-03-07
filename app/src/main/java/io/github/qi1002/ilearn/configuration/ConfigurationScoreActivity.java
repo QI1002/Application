@@ -1,8 +1,11 @@
 package io.github.qi1002.ilearn.configuration;
 
+import android.os.Build;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.MenuItem;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -47,6 +50,10 @@ public class ConfigurationScoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration_score);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(getString(R.string.config_score));
+
         BarChart chart_bar = (BarChart)findViewById(R.id.chart);
         chart_bar.setData(getBarData());
         configChartAxis(chart_bar);
@@ -64,6 +71,16 @@ public class ConfigurationScoreActivity extends AppCompatActivity {
         desc.setXOffset(0);
         chart_bar.setDescription(desc);
         chart_bar.animateY(5000);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private BarData getBarData(){

@@ -3,6 +3,7 @@ package io.github.qi1002.ilearn;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +44,9 @@ public class PronunciationExamActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Pronunciation Exam");
         setSupportActionBar(toolbar);
+
+        ActionBar actionbar = getSupportActionBar ();
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         nextButton = (Button) findViewById(R.id.pron_exam_next);
         nextButton.setText("(" + correct_count + "/" + test_count + "/" + getTestCount() + ") Next");
@@ -126,6 +130,9 @@ public class PronunciationExamActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.action_return:
                 finish();
                 return true;

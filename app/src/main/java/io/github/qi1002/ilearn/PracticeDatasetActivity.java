@@ -1,6 +1,7 @@
 package io.github.qi1002.ilearn;
 
 import android.media.AudioManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +34,9 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Practice Dataset");
         setSupportActionBar(toolbar);
+
+        ActionBar actionbar = getSupportActionBar ();
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         Button nextButton = (Button) findViewById(R.id.practice_next);
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +130,9 @@ public class PracticeDatasetActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.action_return:
                 finish();
                 return true;

@@ -176,7 +176,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         DatasetRecord record = datasetEnumerate.getCurrent();
 
         if (record == null) {
-            Helper.SelectionBox(this, "Finish practicing all items in dataset...", "Repeat", "Return");
+            Helper.PracticeSelectionBox(this, "Finish practicing all items in dataset...", "Repeat", "Return");
         } else {
             practiceWord(record);
         }

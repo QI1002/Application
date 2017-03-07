@@ -89,11 +89,11 @@ public class Helper {
         dlgAlert.create().show();
     }
 
-    public static void SelectionBox(final Context context, String message, String yes, String no) {
+        public static void PracticeSelectionBox(final Context context, String message, String yes, String no) {
 
         AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
         dlgAlert.setMessage(message);
-        dlgAlert.setTitle("SelectionBox");
+        dlgAlert.setTitle("Practice Selection Box");
         dlgAlert.setCancelable(false);
         dlgAlert.setPositiveButton(yes,
                 new DialogInterface.OnClickListener() {
@@ -108,6 +108,52 @@ public class Helper {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         ((Activity) context).finish();
+                    }
+                });
+        dlgAlert.create().show();
+    }
+
+    public static void DatasetUpdateSelectionBox(final Context context, String message, String yes, String no) {
+
+        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
+        dlgAlert.setMessage(message);
+        dlgAlert.setTitle("Dataset Update Selection Box");
+        dlgAlert.setCancelable(false);
+        dlgAlert.setPositiveButton(yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        DatasetRecord.resetDataset();
+                        DatasetRecord.downloadDataset(context, DatasetRecord.dataset_filename);
+                    }
+                });
+        dlgAlert.setNegativeButton(no,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        dlgAlert.create().show();
+    }
+
+    public static void DatasetCheckSelectionBox(final Context context, String message, String yes, String no) {
+
+        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
+        dlgAlert.setMessage(message);
+        dlgAlert.setTitle("Dataset Check Selection Box");
+        dlgAlert.setCancelable(false);
+        dlgAlert.setPositiveButton(yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        DatasetRecord.resetDataset();
+                        DatasetRecord.downloadDataset(context, DatasetRecord.dataset_filename);
+                    }
+                });
+        dlgAlert.setNegativeButton(no,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                     }
                 });
         dlgAlert.create().show();

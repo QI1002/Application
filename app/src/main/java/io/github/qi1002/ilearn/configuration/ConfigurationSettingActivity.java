@@ -10,8 +10,12 @@ import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
+
+import io.github.qi1002.ilearn.DatasetRecord;
+import io.github.qi1002.ilearn.Helper;
 import io.github.qi1002.ilearn.R;
 
 public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
@@ -86,6 +90,35 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
                 // simple string representation.
                 preference.setSummary(stringValue);
             }
+
+            return true;
+        }
+    };
+
+    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToBooleanListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(final Preference preference, Object value) {
+
+            if (!(value instanceof Boolean))
+                return true;
+
+            Boolean boolValue = (Boolean)value;
+
+            if (preference.hasKey() && preference.getKey().compareTo("dataset_update") == 0)
+            {
+                if (boolValue && DatasetRecord.getDataset().size() == 0) {
+
+                    Helper.DatasetUpdateSelectionBox(preference.getContext(), "Download dataset now ?", "Yes", "No");
+                }
+            }
+
+            if (preference.hasKey() && preference.getKey().compareTo("dataset_check") == 0)
+            {
+                if (boolValue) {
+                    Toast.makeText(preference.getContext(), "dataset check will work in the next iLearn Startup", Toast.LENGTH_SHORT).show();
+                }
+            }
+
             return true;
         }
     };
@@ -108,6 +141,11 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                 PreferenceManager.getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), "")); // default value defined in XML, so "" can be ignored
+    }
+
+    private static void bindPreferenceSummaryToBoolean(Preference preference) {
+        // Set the listener to watch for value changes.
+        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToBooleanListener);
     }
 
     /**
@@ -153,6 +191,8 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
+            bindPreferenceSummaryToBoolean(findPreference("dataset_update"));
+            bindPreferenceSummaryToBoolean(findPreference("dataset_check"));
             bindPreferenceSummaryToValue(findPreference("dataset_url_location"));
             bindPreferenceSummaryToValue(findPreference("behavior_wait_voice"));
         }

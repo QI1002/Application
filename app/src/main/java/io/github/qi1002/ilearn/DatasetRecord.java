@@ -25,6 +25,7 @@ import org.xmlpull.v1.XmlSerializer;
 
 import android.content.Context;
 import android.os.Environment;
+import android.os.Looper;
 import android.util.Log;
 import android.util.Xml;
 
@@ -82,23 +83,40 @@ public class DatasetRecord {
         return file.exists();
     }
 
+    public static void resetDataset() {
+        dataset = new ArrayList<DatasetRecord>();
+    }
+
     public static void initialDataset(Context context) {
-        if (!checkFile(dataset_filename))
-            downloadDataset(context, "https://raw.githubusercontent.com/QI1002/qi1002.github.io/master/data/" + dataset_filename, dataset_filename);
+        if (!checkFile(dataset_filename)) {
+            downloadDataset(context, dataset_filename);
+        }
         else {
             parseDataset(context, dataset_filename);
         }
     }
 
-    public static void downloadDataset(Context context, final String urllink, final String filename) {
+    public static void downloadDataset(Context context, String filename) {
+
+        boolean dataset_update = Helper.getPreferenceBoolean(context, "dataset_update", true);
+        String dataset_url_location = Helper.getPreferenceString(context, "dataset_url_location", "");
+
+        if (dataset_update == false || Helper.isNullOrEmpty(dataset_url_location))
+        {
+            resetDataset();
+            bInitialized = true;
+            return;
+        }
 
         // avoid NetworkOnMainThreadException ( not use http download in UI thread)
-        final Object[] arguments = { urllink,  filename };
+        Object[] arguments = { dataset_url_location,  filename };
         Thread downloadThread = new Thread(new DataPassThread(context, arguments) {
             @Override
             public void run() {
                 try {
                     assert((inner_arguments != null) && (inner_arguments.length == 2));
+                    // avoid exception "can't create handler inside thread that has not called looper.prepare()"
+                    Looper.prepare();
                     String urllink = (String)inner_arguments[0];
                     String filename = (String)inner_arguments[1];
                     downloadDatasetImpl(inner_context, urllink, filename);
@@ -165,7 +183,9 @@ public class DatasetRecord {
 
     public static void parseDataset(Context context, String inputfile) {
 
+        boolean dataset_check = Helper.getPreferenceBoolean(context, "dataset_check", true);
         String duplicateWords = "";
+
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -183,8 +203,12 @@ public class DatasetRecord {
                 record.mean_correct_cnt = record.mean_fail_cnt = 0;
                 record.voice_correct_cnt = record.voice_fail_cnt = 0;
                 record.category = 0; // undefined
-                if (checkWord(record.name) != null)
-                    duplicateWords += (record.name + ":");
+
+                if (dataset_check) {
+                    if (checkWord(record.name) != null)
+                        duplicateWords += (record.name + ":");
+                }
+
                 dataset.add(record);
                 Log.d("Test", "name = " + record.name + " count = " + record.lookup_cnt + " stamp = " + new Date((long)record.timestamp));
             }
@@ -195,8 +219,9 @@ public class DatasetRecord {
             Helper.GenericExceptionHandler(context, e);
         }
 
-        if (duplicateWords.length() != 0)
-            Helper.MessageBox(context, "Duplicated words\n" + duplicateWords +"\n Found");
+        if (duplicateWords.length() != 0) {
+            Helper.DatasetCheckSelectionBox(context, "Duplicated words\n" + duplicateWords + "\nFound\nDo you want to reset dataset ?", "Reset", "Keep");
+        }
     }
 
     public static void writeDataset(Context context, String outputfile) {

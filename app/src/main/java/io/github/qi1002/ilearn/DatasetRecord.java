@@ -211,7 +211,7 @@ public class DatasetRecord {
                 }
 
                 dataset.add(record);
-                Log.d("Test", "name = " + record.name + " count = " + record.lookup_cnt + " stamp = " + new Date((long)record.timestamp));
+                //Log.d("Test", "name = " + record.name + " count = " + record.lookup_cnt + " stamp = " + new Date((long)record.timestamp));
             }
 
             bInitialized = true;
@@ -233,6 +233,34 @@ public class DatasetRecord {
 
             Helper.SelectionBox(context, "Duplicated words\n" + duplicateWords + "\nFound\nDo you want to reset dataset ?", "Reset", "Keep",
                     "Dataset Check Selection Box", positiveListner, null);
+        }
+    }
+
+    public static void parseECDICT(Context context, String inputfile) {
+
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            File filename = new File("/data/data/com.csst.ecdict/shared_prefs", inputfile);
+            Document doc = db.parse(filename);
+            doc.getDocumentElement().normalize();
+
+            NodeList nodeList = doc.getElementsByTagName("long");
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Element element = (Element) nodeList.item(i);
+                DatasetRecord record = new DatasetRecord();
+                record.name = element.getAttributeNode("name").getValue();
+                record.lookup_cnt = 1;
+                record.timestamp = Double.parseDouble(element.getAttributeNode("value").getValue());
+                record.mean_correct_cnt = record.mean_fail_cnt = 0;
+                record.voice_correct_cnt = record.voice_fail_cnt = 0;
+                record.category = 0; // undefined
+
+                Log.d("ecDict", "name = " + record.name + " stamp = " + new Date((long)record.timestamp));
+            }
+        }
+        catch (Exception e) {
+            Helper.GenericExceptionHandler(context, e);
         }
     }
 

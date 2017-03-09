@@ -26,9 +26,10 @@
 
             <TextView
                 android:id="@+id/pron_exam_dataset"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:text="Exam : "
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <Button
@@ -39,14 +40,17 @@
                 android:layout_marginLeft="1dip"
                 android:text="Next" />
 
-        </RelativeLayout>
+            <EditText
+                android:id="@+id/pron_exam_answer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/pron_exam_next"
+                android:layout_toRightOf="@id/pron_exam_dataset"
+                android:theme="@style/MyEditTextTheme"
+                android:imeOptions="actionDone"
+                android:inputType="text" />
 
-        <EditText
-            android:id="@+id/pron_exam_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:inputType="text" />
+        </RelativeLayout>
 
         <WebView
             android:id="@+id/pron_exam_dataset_webview"

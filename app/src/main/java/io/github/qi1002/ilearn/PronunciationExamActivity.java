@@ -200,7 +200,6 @@ public class PronunciationExamActivity extends AppCompatActivity {
         datasetEnumerate.moveNext();
         mWebView.setVisibility(View.INVISIBLE);
         mWebView.loadUrl(DatasetRecord.getDictionaryProvider().getWordMeanLink(record.name));
-        mWordLabel.setText("Exam : ");
         currentExam = record.name;
     }
 

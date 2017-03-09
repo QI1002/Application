@@ -45,4 +45,10 @@
         <item name="android:padding">25dp</item>
     </style>
 
+    <style name="MyEditTextTheme">
+        <!-- Used for the bottom line when not selected / focused -->
+        <item name="colorControlNormal">#808080</item>
+        <item name="colorControlActivated">#0050c0</item>
+        <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
+    </style>
 </resources>

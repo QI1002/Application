@@ -26,7 +26,7 @@ public class Helper {
         return (word == null || word.length() == 0);
     }
 
-    public static void InformationBox(final Context context, final String title, String information) {
+    public static void InformationBox(Context context, String title, String information) {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.information_box, null);
@@ -64,8 +64,8 @@ public class Helper {
         dlgAlert.create().show();
     }
 
-    public static void SelectionBox(final Context context, String message, String yes, String no, String title,
-                                   final DialogInterface.OnClickListener positiveListener, final DialogInterface.OnClickListener negativeListener) {
+    public static void SelectionBox(Context context, String message, String yes, String no, String title,
+                                   DialogInterface.OnClickListener positiveListener, DialogInterface.OnClickListener negativeListener) {
 
         AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
         dlgAlert.setMessage(message);

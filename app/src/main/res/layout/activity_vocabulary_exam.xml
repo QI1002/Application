@@ -45,6 +45,7 @@
             android:id="@+id/voc_exam_answer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/MyEditTextTheme"
             android:imeOptions="actionDone"
             android:inputType="text" />
 

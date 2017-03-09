@@ -236,8 +236,9 @@ public class DatasetRecord {
         }
     }
 
-    public static void parseECDICT(Context context, String inputpath, String inputfile) {
+    public static boolean parseECDICT(Context context, String inputpath, String inputfile) {
 
+        boolean result = true;
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -260,8 +261,11 @@ public class DatasetRecord {
             }
         }
         catch (Exception e) {
+            result = false;
             Helper.GenericExceptionHandler(context, e);
         }
+
+        return result;
     }
 
     public static void writeDataset(Context context, String outputfile) {

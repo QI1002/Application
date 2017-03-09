@@ -1,6 +1,7 @@
 package io.github.qi1002.ilearn.configuration;
 
 import android.media.AudioManager;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import io.github.qi1002.ilearn.DatasetRecord;
+import io.github.qi1002.ilearn.Helper;
 import io.github.qi1002.ilearn.R;
 
 public class ConfigurationUtilityActivity extends AppCompatActivity {
@@ -45,6 +47,7 @@ public class ConfigurationUtilityActivity extends AppCompatActivity {
 
     public void importEcdict()
     {
-        DatasetRecord.parseECDICT(this, "/data/data/com.csst.ecdict/shared_prefs" , "history.xml");
+        //Helper.EditTextBox(this, "Enter Imported File", "/data/data/com.csst.ecdict/shared_prefs/history.xml");
+        Helper.EditTextBox(this, "Enter Imported File", Environment.getExternalStorageDirectory() + "/history.xml");
     }
 }

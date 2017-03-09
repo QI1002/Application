@@ -4,17 +4,20 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
 
 /**
  * Created by QI on 2017/2/12.
@@ -105,6 +108,49 @@ public class Helper {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         ((Activity) context).finish();
+                    }
+                });
+
+        dlgAlert.create().show();
+    }
+
+    public static void EditTextBox(final Context context, String message, final String defaultText) {
+        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
+        dlgAlert.setTitle("EditTextBox");
+        dlgAlert.setMessage(message);
+
+        final EditText input = new EditText(context);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        input.setText(defaultText);
+        dlgAlert.setView(input);
+
+        dlgAlert.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String importedfile = input.getText().toString();
+                        int index = importedfile.lastIndexOf("/");
+                        String filename = importedfile.substring(index + 1);
+                        String filepath = importedfile.substring(0, index);
+                        File file = new File(filepath, filename);
+                        if (file.exists() == true) {
+                            boolean result = DatasetRecord.parseECDICT(context, filepath, filename);
+                            if (result)
+                                Toast.makeText(context, "Import Success", Toast.LENGTH_SHORT).show();
+                            else
+                                Toast.makeText(context, "Import Fail", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Not found file", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        dlgAlert.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
                     }
                 });
 

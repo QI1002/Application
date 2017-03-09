@@ -236,12 +236,12 @@ public class DatasetRecord {
         }
     }
 
-    public static void parseECDICT(Context context, String inputfile) {
+    public static void parseECDICT(Context context, String inputpath, String inputfile) {
 
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            File filename = new File("/data/data/com.csst.ecdict/shared_prefs", inputfile);
+            File filename = new File(inputpath, inputfile);
             Document doc = db.parse(filename);
             doc.getDocumentElement().normalize();
 

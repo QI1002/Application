@@ -1,11 +1,15 @@
 package io.github.qi1002.ilearn.configuration;
 
 import android.media.AudioManager;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import io.github.qi1002.ilearn.DatasetRecord;
 import io.github.qi1002.ilearn.R;
 
 public class ConfigurationUtilityActivity extends AppCompatActivity {
@@ -15,16 +19,32 @@ public class ConfigurationUtilityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration_utility);
 
-        Button button = (Button) findViewById(R.id.bt_go_back);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(getString(R.string.config_utility));
+
+        Button button;
+        button = (Button) findViewById(R.id.bt_ecdict_import);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                finish();
+                importEcdict();
             }
         });
+    }
 
-        // let apk use media volume
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void importEcdict()
+    {
+        DatasetRecord.parseECDICT(this, "/data/data/com.csst.ecdict/shared_prefs" , "history.xml");
     }
 }

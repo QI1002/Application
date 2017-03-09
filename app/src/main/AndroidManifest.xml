@@ -40,21 +40,19 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".ConfigurationActivity"
->
+            android:name=".ConfigurationActivity" >
         </activity>
         <activity
             android:name=".configuration.ConfigurationAboutActivity" >
         </activity>
-        <activity android:name=".configuration.ConfigurationSettingActivity" >
+        <activity
+            android:name=".configuration.ConfigurationSettingActivity" >
         </activity>
         <activity
-            android:name=".configuration.ConfigurationScoreActivity"
->
+            android:name=".configuration.ConfigurationScoreActivity">
         </activity>
         <activity
-            android:name=".configuration.ConfigurationUtilityActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:name=".configuration.ConfigurationUtilityActivity" >
         </activity>
     </application>
 

@@ -93,4 +93,7 @@
     <!-- The part of Pronunciation Exam settings -->
     <string name="pref_header_pronunciation_exam">Settings of Pronunciation Exam</string>
 
+    <!-- The part of Pronunciation Exam settings -->
+    <string name="pref_header_reset">Reset</string>
+
 </resources>

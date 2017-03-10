@@ -168,7 +168,8 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
                 || LookupPreferenceFragment.class.getName().equals(fragmentName)
                 || PracticePreferenceFragment.class.getName().equals(fragmentName)
                 || VocExamPreferenceFragment.class.getName().equals(fragmentName)
-                || PronunExamPreferenceFragment.class.getName().equals(fragmentName);
+                || PronunExamPreferenceFragment.class.getName().equals(fragmentName)
+                || ResetPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     @Override
@@ -348,6 +349,19 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * This fragment to reset all preferences only.
+     */
+    public static class ResetPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            Toast.makeText(getActivity(), "Rest all preferences", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(), ConfigurationSettingActivity.class));
         }
     }
 }

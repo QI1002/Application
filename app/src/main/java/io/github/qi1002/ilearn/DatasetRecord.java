@@ -37,7 +37,7 @@ public class DatasetRecord {
     // real data fields
     public String name;
     public int lookup_cnt;
-    public double timestamp;
+    public long timestamp;
 
     public int mean_correct_cnt;
     public int mean_fail_cnt;
@@ -200,7 +200,7 @@ public class DatasetRecord {
                 DatasetRecord record = new DatasetRecord();
                 record.name = element.getAttributeNode(ATTR_NAME).getValue();
                 record.lookup_cnt = Integer.parseInt(element.getAttributeNode(ATTR_LOOKUP_CNT).getValue());
-                record.timestamp = Double.parseDouble(element.getAttributeNode(ATTR_TIMESTAMP).getValue());
+                record.timestamp = Long.parseLong(element.getAttributeNode(ATTR_TIMESTAMP).getValue());
                 record.mean_correct_cnt = record.mean_fail_cnt = 0;
                 record.voice_correct_cnt = record.voice_fail_cnt = 0;
                 record.category = 0; // undefined
@@ -211,7 +211,7 @@ public class DatasetRecord {
                 }
 
                 dataset.add(record);
-                //Log.d("Test", "name = " + record.name + " count = " + record.lookup_cnt + " stamp = " + new Date((long)record.timestamp));
+                //Log.d("Test", "name = " + record.name + " count = " + record.lookup_cnt + " stamp = " + new Date(record.timestamp));
             }
 
             bInitialized = true;
@@ -236,9 +236,33 @@ public class DatasetRecord {
         }
     }
 
-    public static boolean parseECDICT(Context context, String inputpath, String inputfile) {
+    public static void mergeDataset(ArrayList<DatasetRecord> mergedData, ArrayList<DatasetRecord> appenedData)
+    {
+        for (int i = 0; i < appenedData.size(); i++) {
+            DatasetRecord newRecord = appenedData.get(i);
+            DatasetRecord record = checkWord(newRecord.name);
 
-        boolean result = true;
+            if (record == null)
+            {
+                mergedData.add(newRecord);
+            }else
+            {
+                assert(record.name.compareTo(newRecord.name) == 0);
+                if (newRecord.timestamp > record.timestamp) {
+                    record.timestamp = newRecord.timestamp;
+                    record.lookup_cnt += newRecord.lookup_cnt;
+                }
+            }
+
+            bDirty = true;
+        }
+    }
+
+    public static ArrayList<DatasetRecord> parseECDICT(Context context, String inputpath, String inputfile) {
+
+        ArrayList<DatasetRecord> ecdictData = new ArrayList<DatasetRecord>();
+        ArrayList<DatasetRecord> result = ecdictData;
+
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -252,21 +276,21 @@ public class DatasetRecord {
                 DatasetRecord record = new DatasetRecord();
                 record.name = element.getAttributeNode("name").getValue();
                 record.lookup_cnt = 1;
-                record.timestamp = Double.parseDouble(element.getAttributeNode("value").getValue());
+                record.timestamp = Long.parseLong(element.getAttributeNode("value").getValue());
                 record.mean_correct_cnt = record.mean_fail_cnt = 0;
                 record.voice_correct_cnt = record.voice_fail_cnt = 0;
                 record.category = 0; // undefined
 
-                Log.d("ecDict", "name = " + record.name + " stamp = " + new Date((long)record.timestamp));
+                ecdictData.add(record);
+                Log.d("ecDict", "name = " + record.name + " stamp = " + new Date(record.timestamp));
             }
         }
         catch (Exception e) {
-            result = false;
+            ecdictData = null;
             Helper.GenericExceptionHandler(context, e);
         }
 
-        return result;
-    }
+        return ecdictData;   }
 
     public static void writeDataset(Context context, String outputfile) {
 
@@ -289,7 +313,7 @@ public class DatasetRecord {
                     xmlSerializer.startTag(null, NODE_WORD);
                     xmlSerializer.attribute(null, ATTR_NAME, record.name);
                     xmlSerializer.attribute(null, ATTR_LOOKUP_CNT, String.valueOf(record.lookup_cnt));
-                    xmlSerializer.attribute(null, ATTR_TIMESTAMP, nf.format(record.timestamp));
+                    xmlSerializer.attribute(null, ATTR_TIMESTAMP, String.valueOf(record.timestamp));
                     xmlSerializer.endTag(null, NODE_WORD);
                 }
 
@@ -334,13 +358,13 @@ public class DatasetRecord {
             record = new DatasetRecord();
             record.name = word;
             record.lookup_cnt = 1;
-            record.timestamp = (double)(new Date()).getTime();
+            record.timestamp = (new Date()).getTime();
             dataset.add(record);
         }else
         {
             assert(record.name.compareTo(word) == 0);
             record.lookup_cnt++;
-            record.timestamp = (double)(new Date()).getTime();
+            record.timestamp = (new Date()).getTime();
         }
 
         bDirty = true;
@@ -454,8 +478,8 @@ class ArrayIndexComparator implements Comparator<Integer>
                 // descending order
                 return count2.compareTo(count1);
             case TimeStamp:
-                Double stamp1 = dataset.get(index1).timestamp;
-                Double stamp2 = dataset.get(index2).timestamp;
+                Long stamp1 = dataset.get(index1).timestamp;
+                Long stamp2 = dataset.get(index2).timestamp;
                 // descending order
                 return stamp2.compareTo(stamp1);
             case MeanExamScore:

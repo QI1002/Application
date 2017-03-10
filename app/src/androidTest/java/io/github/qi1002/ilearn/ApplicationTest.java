@@ -16,19 +16,17 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO02: make preference header layout beautiful more (TODO)
 //TODO03: solve the different jdkName issue in app/app.iml
 //TODO04: check if more rules are added to .gitignore
-//TODO05: reduce timestamp to second unit (TODO)
-//TODO06: handle network go out case (TODO)
-//TODO07: get android simulator in T420
-//TODO08: how to save dataset when application finish once. (join and foreground detection ?) (TODO)
-//TODO09: a flow to reset all preferences (TODO)
-//TODO10: utility page to transfer ecdict data to data.xml (TODO)
-//TODO11: iLearn About page (TODO)
-//TODO12: input the word from english studio classmate (one category)
-//TODO13: common 7000 words
-//TODO14: dickson idoms
-//TODO15: new verifyStoragePermissions ok in SS 6.01 but NG in emulator 6.0
-//TODO16: don't consider no voice case if checking if pron exam ok <=> dataset size (TODO)
-//TODO17: test all data.xml for dictionary feasibility
-//TODO18: score update by hash set flow => apply to checkWord (TODO))
-//TODO19: enumerate words by category limitation
-//TODO20: find default value from preference xml (TODO)
+//TODO05: handle network go out case (TODO)
+//TODO06: get android simulator in T420
+//TODO07: how to save dataset when application finish once. (join and foreground detection and not always leave from MainActivity?) (TODO)
+//TODO08: a flow to reset all preferences (TODO)
+//TODO09: iLearn About page (TODO)
+//TODO10: input the word from english studio classmate (one category)
+//TODO11: common 7000 words
+//TODO12: dickson idoms
+//TODO13: new verifyStoragePermissions ok in SS 6.01 but NG in emulator 6.0
+//TODO14: don't consider no voice case if checking if pron exam ok <=> dataset size (TODO)
+//TODO15: test all data.xml for dictionary feasibility
+//TODO16: score update by hash set flow => apply to checkWord (TODO))
+//TODO17: enumerate words by category limitation
+//TODO18: find default value from preference xml (TODO)

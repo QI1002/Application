@@ -20,7 +20,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO06: get android simulator in T420
 //TODO07: how to save dataset when application finish once. (join and foreground detection and not always leave from MainActivity?) (TODO)
 //TODO08: check why setting reset flow not trigger OnPreferenceChangeListener (TODO)
-//TODO09: iLearn About page (TODO)
+//TODO09: enumerate words by category limitation
 //TODO10: input the word from english studio classmate (one category)
 //TODO11: common 7000 words
 //TODO12: dickson idoms
@@ -28,4 +28,4 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO14: don't consider no voice case if checking if pron exam ok <=> dataset size (TODO)
 //TODO15: test all data.xml for dictionary feasibility
 //TODO16: score update by hash set flow => apply to checkWord (TODO))
-//TODO17: enumerate words by category limitation
+//TODO17: check spelling (TODO)

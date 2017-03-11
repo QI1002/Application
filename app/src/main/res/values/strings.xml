@@ -8,9 +8,19 @@
     <string name="action_speak">Speak Voice</string>
     <string name="action_save">Save to Dataset</string>
 
-    <string name="config_about">about iLean</string>
+    <string name="config_about">about iLearn</string>
     <string name="config_settings">The Settings</string>
     <string name="config_score">Score Statistics</string>
-    <string name="config_utility">The Utilties</string>
+    <string name="config_utility">The Utilities</string>
+
+    <string name="about_version">Version 1.0</string>
+    <string name="copy_right">iLearn Copyrights © %1$d</string>
+    <string name="about_description">iLearn is a feasible APP to let you learn language more easily</string>
+    <string name="about_acknowledgement">Thanks for these people give me useful libraries and idea to help me finish iLearn\n\n
+Android chart: PhilJay in github\n
+Chinese Translation: npes87184 in github\n
+About Page: medyo in github\n
+All Contributors in http://stackoverflow.com/
+    </string>
 
 </resources>

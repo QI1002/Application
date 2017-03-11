@@ -107,7 +107,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         //do the first exam
-        String datasetEnumerateWay = Helper.getPreferenceString(this, "vocabulary_exam_enumerate", "LookupCount");
+        String datasetEnumerateWay = Helper.getPreferenceString(this, R.string.pref_key_vocabulary_exam_enumerate);
         datasetEnumerate = DatasetRecord.getEnumerator(DatasetRecord.getDataset(), datasetEnumerateWay);
         examWord();
 
@@ -146,7 +146,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
                 examWordCheck();
                 return true;
             case R.id.action_speak:
-                Helper.putPreferenceBoolean(this, "exam speak", !getExamSpeak());
+                Helper.putPreferenceBoolean(this, R.string.pref_key_exam_speak, !getExamSpeak());
                 updateSpeakOption();
                 return true;
             case R.id.action_show:
@@ -224,7 +224,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
         return getTestCount(this);
     }
     public static int getTestCount(Context context) {
-        String count = Helper.getPreferenceString(context, "vocabulary_exam_count", "5");
+        String count = Helper.getPreferenceString(context, R.string.pref_key_vocabulary_exam_count);
         return Integer.valueOf(count);
     }
 
@@ -239,7 +239,7 @@ public class VocabularyExamActivity extends AppCompatActivity {
 
     public boolean getExamSpeak()
     {
-        return Helper.getPreferenceBoolean(this, "exam speak", false);
+        return Helper.getPreferenceBoolean(this, R.string.pref_key_exam_speak);
     }
 
     private void updateSpeakOption() {

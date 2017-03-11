@@ -3,17 +3,17 @@
     <PreferenceCategory android:title="@string/pref_header_vocabulary_exam">
 
         <SwitchPreference
-            android:key="exam speak"
+            android:key="@string/pref_key_exam_speak"
             android:title="@string/pref_title_exam_speak"
-            android:defaultValue="false" />
+            android:defaultValue="@string/pref_default_exam_speak" />
 
         <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
              dismiss it. -->
         <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
         <ListPreference
-            android:key="vocabulary_exam_count"
+            android:key="@string/pref_key_vocabulary_exam_count"
             android:title="@string/pref_title_exam_count"
-            android:defaultValue="5"
+            android:defaultValue="@string/pref_default_vocabulary_exam_count"
             android:entries="@array/pref_list_exam_count"
             android:entryValues="@array/pref_list_exam_count"
             android:negativeButtonText="@null"
@@ -23,9 +23,9 @@
              dismiss it. -->
         <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
         <ListPreference
-            android:key="vocabulary_exam_enumerate"
+            android:key="@string/pref_key_vocabulary_exam_enumerate"
             android:title="@string/pref_title_enumerate"
-            android:defaultValue="LookupCount"
+            android:defaultValue="@string/pref_default_vocabulary_exam_enumerate"
             android:entries="@array/pref_list_enumerate"
             android:entryValues="@array/pref_list_enumerate"
             android:negativeButtonText="@null"

@@ -1,7 +1,6 @@
 package io.github.qi1002.ilearn;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -33,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Helper.initialPerferenceDefault(this);
 
         Button button;
 
@@ -148,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchActivity(Class<?> cls) {
-        if (DatasetRecord.isInitialized()) {
+        if (DatasetRecord.isInitialized() || cls == ConfigurationActivity.class) {
             if (cls == PracticeDatasetActivity.class &&
                     DatasetRecord.getDataset().size() == 0) {
                 Toast.makeText(this, " Zero items in dataset so no practice", Toast.LENGTH_SHORT).show();

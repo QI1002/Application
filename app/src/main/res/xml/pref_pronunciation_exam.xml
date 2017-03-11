@@ -6,9 +6,9 @@
              dismiss it. -->
         <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
         <ListPreference
-            android:key="pronunciation_exam_count"
+            android:key="@string/pref_key_pronunciation_exam_count"
             android:title="@string/pref_title_exam_count"
-            android:defaultValue="5"
+            android:defaultValue="@string/pref_default_pronunciation_exam_count"
             android:entries="@array/pref_list_exam_count"
             android:entryValues="@array/pref_list_exam_count"
             android:negativeButtonText="@null"
@@ -18,9 +18,9 @@
              dismiss it. -->
         <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
         <ListPreference
-            android:key="pronunciation_exam_enumerate"
+            android:key="@string/pref_key_pronunciation_exam_enumerate"
             android:title="@string/pref_title_enumerate"
-            android:defaultValue="LookupCount"
+            android:defaultValue="@string/pref_default_pronunciation_exam_enumerate"
             android:entries="@array/pref_list_enumerate"
             android:entryValues="@array/pref_list_enumerate"
             android:negativeButtonText="@null"

@@ -103,7 +103,7 @@ public class PronunciationExamActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         //do the first exam
-        String datasetEnumerateWay = Helper.getPreferenceString(this, "pronunciation_exam_enumerate", "LookupCount");
+        String datasetEnumerateWay = Helper.getPreferenceString(this, R.string.pref_key_pronunciation_exam_enumerate);
         datasetEnumerate = DatasetRecord.getEnumerator(DatasetRecord.getDataset(), datasetEnumerateWay);
         examWord();
 
@@ -211,7 +211,7 @@ public class PronunciationExamActivity extends AppCompatActivity {
         return getTestCount(this);
     }
     public static int getTestCount(Context context) {
-        String count = Helper.getPreferenceString(context, "pronunciation_exam_count", "5");
+        String count = Helper.getPreferenceString(context, R.string.pref_key_pronunciation_exam_count);
         return Integer.valueOf(count);
     }
 

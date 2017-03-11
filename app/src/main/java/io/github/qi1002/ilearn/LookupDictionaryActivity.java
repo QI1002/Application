@@ -132,11 +132,11 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
                     mWebView.goForward();
                 return true;
             case R.id.action_speak:
-                Helper.putPreferenceBoolean(this, "lookup speak", !getLookupSpeak());
+                Helper.putPreferenceBoolean(this, R.string.pref_key_lookup_speak, !getLookupSpeak());
                 updateSpeakOption();
                 return true;
             case R.id.action_save:
-                Helper.putPreferenceBoolean(this, "lookup save", !getSaveToXML());
+                Helper.putPreferenceBoolean(this, R.string.pref_key_lookup_save, !getSaveToXML());
                 updateSaveOption();
                 return true;
         }
@@ -182,12 +182,12 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
 
     public boolean getSaveToXML()
     {
-        return Helper.getPreferenceBoolean(this, "lookup save", true);
+        return Helper.getPreferenceBoolean(this, R.string.pref_key_lookup_save);
     }
 
     public boolean getLookupSpeak()
     {
-        return Helper.getPreferenceBoolean(this, "lookup speak", false);
+        return Helper.getPreferenceBoolean(this, R.string.pref_key_lookup_speak);
     }
 
     private void updateSpeakOption() {

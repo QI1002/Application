@@ -104,8 +104,9 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
                 return true;
 
             Boolean boolValue = (Boolean)value;
-
-            if (preference.hasKey() && preference.getKey().compareTo("dataset_update") == 0)
+            String strDatasetUpdate = preference.getContext().getString(R.string.pref_key_dataset_update);
+            String strDatasetCheck = preference.getContext().getString(R.string.pref_key_dataset_check);
+            if (preference.hasKey() && preference.getKey().compareTo(strDatasetUpdate) == 0)
             {
                 if (boolValue && DatasetRecord.getDataset().size() == 0) {
 
@@ -122,7 +123,7 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
                 }
             }
 
-            if (preference.hasKey() && preference.getKey().compareTo("dataset_check") == 0)
+            if (preference.hasKey() && preference.getKey().compareTo(strDatasetCheck) == 0)
             {
                 if (boolValue) {
                     Toast.makeText(preference.getContext(), "dataset check will work in the next iLearn Startup", Toast.LENGTH_SHORT).show();
@@ -202,10 +203,10 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToBoolean(findPreference("dataset_update"));
-            bindPreferenceSummaryToBoolean(findPreference("dataset_check"));
-            bindPreferenceSummaryToValue(findPreference("dataset_url_location"));
-            bindPreferenceSummaryToValue(findPreference("behavior_wait_voice"));
+            bindPreferenceSummaryToBoolean(findPreference(getString(R.string.pref_key_dataset_update)));
+            bindPreferenceSummaryToBoolean(findPreference(getString(R.string.pref_key_dataset_check)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_dataset_url_location)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_behavior_wait_voice)));
         }
 
         @Override
@@ -268,7 +269,7 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("practice_enumerate"));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_practice_enumerate)));
         }
 
         @Override
@@ -302,8 +303,8 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("vocabulary_exam_count"));
-            bindPreferenceSummaryToValue(findPreference("vocabulary_exam_enumerate"));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_vocabulary_exam_count)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_vocabulary_exam_enumerate)));
         }
 
         @Override
@@ -337,8 +338,8 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("pronunciation_exam_count"));
-            bindPreferenceSummaryToValue(findPreference("pronunciation_exam_enumerate"));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_pronunciation_exam_count)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_pronunciation_exam_enumerate)));
         }
 
         @Override
@@ -359,9 +360,45 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
 
-            Toast.makeText(getActivity(), "Rest all preferences", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getActivity(), ConfigurationSettingActivity.class));
+            ConfigurationSettingActivity activity = (ConfigurationSettingActivity)getActivity();
+            if (activity != null) {
+                ActionBar actionBar = activity.getSupportActionBar();
+                if (actionBar != null)
+                    actionBar.setTitle(getString(R.string.pref_header_reset));
+            }
+
+            DialogInterface.OnClickListener positiveListner =
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Toast.makeText(getActivity(), "Rest all preferences", Toast.LENGTH_SHORT).show();
+                            Helper.restorePerferenceDefault(getActivity());
+                            getActivity().onBackPressed();
+                        }
+                    };
+
+            DialogInterface.OnClickListener negativeListner =
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            getActivity().onBackPressed();
+                        }
+                    };
+
+            Helper.SelectionBox(getActivity(), "are you sure to reset all settings ?", "Yes", "No", "Reset Selection Box", positiveListner, negativeListner);
+            //startActivity(new Intent(getActivity(), ConfigurationSettingActivity.class));
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), ConfigurationSettingActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
         }
     }
 }

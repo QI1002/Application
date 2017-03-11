@@ -99,8 +99,8 @@ public class DatasetRecord {
 
     public static void downloadDataset(Context context, String filename) {
 
-        boolean dataset_update = Helper.getPreferenceBoolean(context, "dataset_update", true);
-        String dataset_url_location = Helper.getPreferenceString(context, "dataset_url_location", "");
+        boolean dataset_update = Helper.getPreferenceBoolean(context, R.string.pref_key_dataset_update);
+        String dataset_url_location = Helper.getPreferenceString(context, R.string.pref_key_dataset_url_location);
 
         if (dataset_update == false || Helper.isNullOrEmpty(dataset_url_location))
         {
@@ -184,7 +184,7 @@ public class DatasetRecord {
 
     public static void parseDataset(final Context context, String inputfile) {
 
-        boolean dataset_check = Helper.getPreferenceBoolean(context, "dataset_check", true);
+        boolean dataset_check = Helper.getPreferenceBoolean(context, R.string.pref_key_dataset_check);
         String duplicateWords = "";
 
         try {

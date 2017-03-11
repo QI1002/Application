@@ -65,7 +65,7 @@ public class WebViewJavaScriptInterface{
     @JavascriptInterface
     public void voiceDone(String message){
 
-        String strValue = Helper.getPreferenceString(context, "behavior_wait_voice", "1");
+        String strValue = Helper.getPreferenceString(context, R.string.pref_key_behavior_wait_voice);
         int behavior_wait_voice = Integer.valueOf(strValue); // 1: always , 0: practice only, 2: never
 
         Object[] arguments = { message , behavior_wait_voice};

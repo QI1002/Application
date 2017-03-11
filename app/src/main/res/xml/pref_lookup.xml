@@ -3,15 +3,15 @@
     <PreferenceCategory android:title="@string/pref_header_lookup">
 
         <SwitchPreference
-            android:key="lookup save"
+            android:key="@string/pref_key_lookup_save"
             android:title="@string/pref_title_save_to_dataset"
             android:summary="@string/pref_description_save_to_dataset"
-            android:defaultValue="true" />
+            android:defaultValue="@string/pref_default_lookup_save" />
 
         <SwitchPreference
-            android:key="lookup speak"
+            android:key="@string/pref_key_lookup_speak"
             android:title="@string/pref_title_speak_when_lookup"
-            android:defaultValue="false" />
+            android:defaultValue="@string/pref_default_lookup_speak" />
 
     </PreferenceCategory>
 

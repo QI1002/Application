@@ -94,11 +94,11 @@ public class PracticeDatasetActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         //do the first practice
-        if (Helper.getPreferenceBoolean(this, "resume practice", true) && MainActivity.practiceEnumerate != null)
+        if (Helper.getPreferenceBoolean(this, R.string.pref_key_resume_practice) && MainActivity.practiceEnumerate != null)
         {
             datasetEnumerate = MainActivity.practiceEnumerate;
         }else {
-            String datasetEnumerateWay = Helper.getPreferenceString(this, "practice_enumerate", "LookupCount");
+            String datasetEnumerateWay = Helper.getPreferenceString(this, R.string.pref_key_practice_enumerate);
             datasetEnumerate = DatasetRecord.getEnumerator(DatasetRecord.getDataset(), datasetEnumerateWay);
         }
 
@@ -108,7 +108,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        if (Helper.getPreferenceBoolean(this, "resume practice", true))
+        if (Helper.getPreferenceBoolean(this, R.string.pref_key_resume_practice))
             MainActivity.practiceEnumerate = datasetEnumerate;
     }
 
@@ -141,7 +141,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                 practiceWordCheck();
                 return true;
             case R.id.action_mean:
-                Helper.putPreferenceBoolean(this, "show mean dialog", !getPracticeMean());
+                Helper.putPreferenceBoolean(this, R.string.pref_key_show_mean_dialog, !getPracticeMean());
                 updateMeanOption();
                 return true;
             case R.id.action_show:
@@ -228,7 +228,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
 
     public boolean getPracticeMean()
     {
-        return Helper.getPreferenceBoolean(this, "show mean dialog", false);
+        return Helper.getPreferenceBoolean(this, R.string.pref_key_show_mean_dialog);
     }
 
     private void updateMeanOption() {

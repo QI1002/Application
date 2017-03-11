@@ -3,23 +3,23 @@
     <PreferenceCategory android:title="@string/dataset_update_preferences">
 
         <SwitchPreference
-            android:key="dataset_update"
+            android:key="@string/pref_key_dataset_update"
             android:title="@string/pref_title_dataset_update"
             android:summary="@string/pref_description_dataset_update"
-            android:defaultValue="true" />
+            android:defaultValue="@string/pref_default_dataset_update" />
 
         <SwitchPreference
-            android:key="dataset_check"
+            android:key="@string/pref_key_dataset_check"
             android:title="@string/pref_title_dataset_check"
             android:summary="@string/pref_description_dataset_check"
-            android:defaultValue="true" />
+            android:defaultValue="@string/pref_default_dataset_check" />
 
         <!-- NOTE: EditTextPreference accepts EditText attributes. -->
         <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
         <EditTextPreference
-            android:key="dataset_url_location"
+            android:key="@string/pref_key_dataset_url_location"
             android:title="@string/pref_title_dataset_url_location"
-            android:defaultValue="@string/pref_defaul_dataset_url_location"
+            android:defaultValue="@string/pref_default_dataset_url_location"
             android:selectAllOnFocus="true"
             android:inputType="textCapWords"
             android:capitalize="words"
@@ -34,9 +34,9 @@
              dismiss it. -->
         <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
         <ListPreference
-            android:key="behavior_wait_voice"
+            android:key="@string/pref_key_behavior_wait_voice"
             android:title="@string/pref_title_behavior_wait_voice"
-            android:defaultValue="1"
+            android:defaultValue="@string/pref_default_behavior_wait_voice"
             android:entries="@array/pref_list_behavior_wait_voice"
             android:entryValues="@array/pref_value_behavior_wait_voice"
             android:negativeButtonText="@null"

@@ -24,7 +24,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/control"
         android:layout_width="match_parent"
         android:layout_height="112dp"
@@ -32,23 +32,94 @@
         android:layout_alignParentStart="true"
         android:background="@color/control_background">
 
-        <Button
-            android:id="@+id/picture"
+        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/picture" />
+            android:columnCount="2"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:text="Accelerometer"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/info1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:text="@string/x_prompt"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/info2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_row="2"
+                android:layout_column="0"
+                android:text="@string/y_prompt"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/info3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_row="3"
+                android:layout_column="0"
+                android:text="@string/z_prompt"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:text="Proximity"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+            <TextView
+                android:id="@+id/info4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:text="@string/distance_prompt"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </GridLayout>
 
         <ImageButton
-            android:id="@+id/info"
-            android:contentDescription="@string/description_info"
+            android:id="@+id/picture"
             style="@android:style/Widget.Material.Light.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|right"
-            android:padding="20dp"
-            android:src="@drawable/ic_action_info" />
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_launcher" />
 
-    </FrameLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

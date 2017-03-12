@@ -52,6 +52,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -144,6 +145,10 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
      * An {@link AutoFitTextureView} for camera preview.
      */
     private AutoFitTextureView mTextureView;
+    public TextView textinfo1;
+    public TextView textinfo2;
+    public TextView textinfo3;
+    public TextView textinfo4;
 
     /**
      * A {@link CameraCaptureSession } for camera preview.
@@ -389,7 +394,10 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.picture).setOnClickListener(this);
-        view.findViewById(R.id.info).setOnClickListener(this);
+        textinfo1 = (TextView)view.findViewById(R.id.info1);
+        textinfo2 = (TextView)view.findViewById(R.id.info2);
+        textinfo3 = (TextView)view.findViewById(R.id.info3);
+        textinfo4 = (TextView)view.findViewById(R.id.info4);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     }
 
@@ -754,16 +762,6 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
         switch (view.getId()) {
             case R.id.picture: {
                 takePicture();
-                break;
-            }
-            case R.id.info: {
-                Activity activity = getActivity();
-                if (null != activity) {
-                    new AlertDialog.Builder(activity)
-                            .setMessage(R.string.intro_message)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show();
-                }
                 break;
             }
         }

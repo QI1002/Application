@@ -54,6 +54,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -149,6 +150,7 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
     public TextView textinfo2;
     public TextView textinfo3;
     public TextView textinfo4;
+    public VideoView videoView;
 
     /**
      * A {@link CameraCaptureSession } for camera preview.
@@ -398,6 +400,7 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
         textinfo2 = (TextView)view.findViewById(R.id.info2);
         textinfo3 = (TextView)view.findViewById(R.id.info3);
         textinfo4 = (TextView)view.findViewById(R.id.info4);
+        videoView = (VideoView)view.findViewById(R.id.videoview);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     }
 

@@ -19,14 +19,20 @@ package io.github.qi1002.icamera;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.PixelFormat;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.widget.VideoView;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -34,9 +40,10 @@ import java.text.NumberFormat;
 public class CameraActivity extends Activity implements SensorEventListener {
 
     // Storage Permissions variables
-    private static final int REQUEST_ACESS_CAMERA = 1;
-    private static String[] PERMISSIONS_CAMERA = {
-            Manifest.permission.CAMERA
+    private static final int REQUEST_ACCESS= 1;
+    private static String[] PERMISSIONS_REQUESTS = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE
     };
 
     private Camera2BasicFragment fragment;
@@ -54,11 +61,25 @@ public class CameraActivity extends Activity implements SensorEventListener {
                     .replace(R.id.container, fragment).commit();
         }
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+
         // request camera access right
         verifyCameraPermissions();
 
         // get the sensors information
         setupSensors();
+
+        // get the video player
+        Handler handler=new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                setupVideoPlayer();
+            }
+        };
+
+        Message message = new Message();
+        message.arg1 = 0;
+        handler.sendMessage(message);
     }
 
     private void setupSensors()
@@ -103,16 +124,40 @@ public class CameraActivity extends Activity implements SensorEventListener {
         mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
     }
 
+    private void setupVideoPlayer()
+    {
+        if (fragment == null || fragment.videoView == null)
+            return;
+
+        try {
+            VideoView videoView = fragment.videoView;
+
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.setLooping(true);
+                }
+            });
+
+            videoView.setVideoPath("/sdcard/testfile.mp4");
+            videoView.requestFocus();
+            videoView.start();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean verifyCameraPermissions() {
         // Check if we have read or write permission
         int cameraPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        int readPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
 
-        if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+        if (cameraPermission != PackageManager.PERMISSION_GRANTED || readPermission != PackageManager.PERMISSION_GRANTED) {
             // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(
                     this,
-                    PERMISSIONS_CAMERA,
-                    REQUEST_ACESS_CAMERA
+                    PERMISSIONS_REQUESTS,
+                    REQUEST_ACCESS
             );
 
             return true;

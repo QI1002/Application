@@ -12,8 +12,13 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 }
 
-//TODO01: play media in iCamera
+//TODO01: test other phone's sensors
 //TODO02: adjust screen size to full size (J4 and other camera)
+//TODO03: detect the TV box area
+//TODO04: review the camera code
+//TODO05: play file from http
+//TODO6: know the way to move videoview
+//TODO7: boot from landscape mode will not show sensor data
 
 /* SS J7 sensor list
 

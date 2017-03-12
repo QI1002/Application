@@ -19,8 +19,9 @@
         <Button
             android:id="@+id/bt_ecdict_import"
             android:layout_column="0"
-            android:text="Import from ECDict"
-            style="@style/button_style_configuration"/>
+            android:text="Import from EC Dictionary"
+            android:drawableLeft="@drawable/icon_ecdict"
+            style="@style/button_style_utility"/>
 
     </GridLayout>
     

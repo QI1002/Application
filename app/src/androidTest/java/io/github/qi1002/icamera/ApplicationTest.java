@@ -49,3 +49,29 @@ D/camerademo: There is no android.sensor.geomagnetic_rotation_vector
 D/camerademo: There is no android.sensor.heart_rate
 
  */
+
+/* HTC (htc_a50cml_dtul)
+
+03-12 23:52:23.520 9306-9306/? D/camerademo: There is a android.sensor.accelerometer(BOSCH Acceleration Sensor,Bosch Sensortec GmbH,3060102)
+03-12 23:52:23.525 9306-9306/? D/camerademo: There is a android.sensor.magnetic_field(BOSCH Magnetic Field Sensor,Bosch Sensortec GmbH,3060102)
+03-12 23:52:23.529 9306-9306/? D/camerademo: There is a android.sensor.orientation(BOSCH Orientation Sensor,Bosch Sensortec GmbH,3060102)
+03-12 23:52:23.531 9306-9306/? D/camerademo: There is no android.sensor.gyroscope
+03-12 23:52:23.533 9306-9306/? D/camerademo: There is a android.sensor.light(CM36686 Light sensor,Capella Microsystems,1)
+03-12 23:52:23.534 9306-9306/? D/camerademo: There is no android.sensor.pressure
+03-12 23:52:23.535 9306-9306/? D/camerademo: There is no android.sensor.temperature
+03-12 23:52:23.537 9306-9306/? D/camerademo: There is a android.sensor.proximity(CM36686 Proximity sensor,Capella Microsystems,1)
+03-12 23:52:23.538 9306-9306/? D/camerademo: There is a android.sensor.gravity(BOSCH Gravity Sensor,Bosch Sensortec GmbH,3060102)
+03-12 23:52:23.540 9306-9306/? D/camerademo: There is a android.sensor.linear_acceleration(BOSCH Linear Acceleration Sensor,Bosch Sensortec GmbH,3060102)
+03-12 23:52:23.542 9306-9306/? D/camerademo: There is a android.sensor.rotation_vector(BOSCH Rotation Vector Sensor,Bosch Sensortec GmbH,3060102)
+03-12 23:52:23.544 9306-9306/? D/camerademo: There is no android.sensor.relative_humidity
+03-12 23:52:23.546 9306-9306/? D/camerademo: There is no android.sensor.ambient_temperature
+03-12 23:52:23.547 9306-9306/? D/camerademo: There is a android.sensor.magnetic_field_uncalibrated(BOSCH Magnetic Field Uncalibrated Sensor,Bosch Sensortec GmbH,3060102)
+03-12 23:52:23.548 9306-9306/? D/camerademo: There is no android.sensor.game_rotation_vector
+03-12 23:52:23.550 9306-9306/? D/camerademo: There is no android.sensor.gyroscope_uncalibrated
+03-12 23:52:23.551 9306-9306/? D/camerademo: There is no android.sensor.significant_motion
+03-12 23:52:23.553 9306-9306/? D/camerademo: There is no android.sensor.step_detector
+03-12 23:52:23.554 9306-9306/? D/camerademo: There is no android.sensor.step_counter
+03-12 23:52:23.557 9306-9306/? D/camerademo: There is a android.sensor.geomagnetic_rotation_vector(BOSCH Geomagnetic Rotation Vector Sensor,Bosch Sensortec GmbH,3060102)
+03-12 23:52:23.559 9306-9306/? D/camerademo: There is no android.sensor.heart_rate
+
+ */

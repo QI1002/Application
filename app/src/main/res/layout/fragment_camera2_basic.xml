@@ -26,8 +26,8 @@
 
     <VideoView
         android:id="@+id/videoview"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="256dp"
+        android:layout_height="144dp"
         android:layout_centerInParent="true"
         />
 

@@ -360,15 +360,23 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
      * @param aspectRatio The aspect ratio
      * @return The optimal {@code Size}, or an arbitrary one if none were big enough
      */
-    private static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
+    private static Size chooseOptimalSize(Fragment fragment, Size[] choices, int width, int height, Size aspectRatio) {
         // Collect the supported resolutions that are at least as big as the preview Surface
         List<Size> bigEnough = new ArrayList<Size>();
         int w = aspectRatio.getWidth();
         int h = aspectRatio.getHeight();
+        int orientation = fragment.getResources().getConfiguration().orientation;
         for (Size option : choices) {
-            if (option.getHeight() == option.getWidth() * h / w &&
-                    option.getWidth() >= width && option.getHeight() >= height) {
-                bigEnough.add(option);
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if (option.getHeight() == option.getWidth() * h / w &&
+                        option.getWidth() >= width && option.getHeight() >= height) {
+                    bigEnough.add(option);
+                }
+            } else {
+                if (option.getHeight() >= option.getWidth() * width / height &&
+                        option.getHeight() >= width && option.getWidth() >= height) {
+                    bigEnough.add(option);
+                }
             }
         }
 
@@ -468,7 +476,7 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                 // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
                 // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
                 // garbage capture data.
-                mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
+                mPreviewSize = chooseOptimalSize(this, map.getOutputSizes(SurfaceTexture.class),
                         width, height, largest);
 
                 // We fit the aspect ratio of TextureView to the size of preview we picked.

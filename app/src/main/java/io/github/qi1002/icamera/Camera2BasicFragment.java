@@ -443,10 +443,6 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                 Size largest = Collections.max(
                         Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
                         new CompareSizesByArea());
-                mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
-                        ImageFormat.JPEG, /*maxImages*/2);
-                mImageReader.setOnImageAvailableListener(
-                        mOnImageAvailableListener, mBackgroundHandler);
 
                 // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
                 // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
@@ -459,10 +455,17 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                 if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     mTextureView.setAspectRatio(
                             mPreviewSize.getWidth(), mPreviewSize.getHeight());
+                    mImageReader = ImageReader.newInstance(mPreviewSize.getWidth(), mPreviewSize.getHeight(),
+                            ImageFormat.YUV_420_888, /*maxImages*/2);
                 } else {
                     mTextureView.setAspectRatio(
                             mPreviewSize.getHeight(), mPreviewSize.getWidth());
+                    mImageReader = ImageReader.newInstance(mPreviewSize.getHeight(), mPreviewSize.getWidth(),
+                            ImageFormat.YUV_420_888, /*maxImages*/2);
                 }
+
+                mImageReader.setOnImageAvailableListener(
+                        mOnImageAvailableListener, mBackgroundHandler);
 
                 mCameraId = cameraId;
                 return;
@@ -733,13 +736,25 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
 
         @Override
         public void run() {
-            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[buffer.remaining()];
-            buffer.get(bytes);
+            ByteBuffer buffer;
+            buffer = mImage.getPlanes()[0].getBuffer();
+            byte[] bytes0 = new byte[buffer.remaining()];
+            Log.d("camerademo", "plane0 length = " + buffer.remaining());
+            buffer.get(bytes0);
+            buffer = mImage.getPlanes()[1].getBuffer();
+            byte[] bytes1 = new byte[buffer.remaining()];
+            Log.d("camerademo", "plane1 length = " + buffer.remaining());
+            buffer.get(bytes1);
+            buffer = mImage.getPlanes()[2].getBuffer();
+            byte[] bytes2 = new byte[buffer.remaining()];
+            Log.d("camerademo", "plane2 length = " + buffer.remaining());
+            buffer.get(bytes2);
             FileOutputStream output = null;
             try {
                 output = new FileOutputStream(mFile);
-                output.write(bytes);
+                output.write(bytes0);
+                output.write(bytes1);
+                output.write(bytes2);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

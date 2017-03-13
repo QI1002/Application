@@ -126,8 +126,18 @@ public class CameraActivity extends Activity implements SensorEventListener {
 
     private void setupVideoPlayer()
     {
-        if (fragment == null || fragment.videoView == null)
+        if (fragment == null || fragment.videoView == null) {
+            Message message = new Message();
+            message.arg1 = 0;
+            Handler handler=new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    setupVideoPlayer();
+                }
+            };
+            handler.sendMessage(message);
             return;
+        }
 
         try {
             VideoView videoView = fragment.videoView;

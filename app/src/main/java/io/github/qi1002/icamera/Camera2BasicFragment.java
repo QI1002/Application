@@ -763,43 +763,24 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
         @Override
         public void run() {
 
-            mImage.close();
-
-/*
             ByteBuffer buffer;
             buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes0 = new byte[buffer.remaining()];
-            Log.d("camerademo", "plane0 length = " + buffer.remaining());
             buffer.get(bytes0);
             buffer = mImage.getPlanes()[1].getBuffer();
             byte[] bytes1 = new byte[buffer.remaining()];
-            Log.d("camerademo", "plane1 length = " + buffer.remaining());
             buffer.get(bytes1);
             buffer = mImage.getPlanes()[2].getBuffer();
             byte[] bytes2 = new byte[buffer.remaining()];
-            Log.d("camerademo", "plane2 length = " + buffer.remaining());
             buffer.get(bytes2);
-            FileOutputStream output = null;
-            try {
-                output = new FileOutputStream(mFile);
-                output.write(bytes0);
-                output.write(bytes1);
-                output.write(bytes2);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                mImage.close();
-                if (null != output) {
-                    try {
-                        output.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            */
-        }
 
+            DetectionROI roi = new DetectionROI(mImage.getWidth(), mImage.getHeight());
+            int[] rectROI = roi.detectROI(bytes0, bytes1, bytes2);
+            Log.d("camerademo", "rect = " + rectROI[0] + " " + rectROI[1] + " " + rectROI[2] + " " + rectROI[3]);
+            roi.release();
+
+            mImage.close();
+        }
     }
 
     /**

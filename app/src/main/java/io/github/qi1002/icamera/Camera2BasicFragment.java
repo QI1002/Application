@@ -59,6 +59,7 @@ import android.widget.VideoView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -146,10 +147,13 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
      * An {@link AutoFitTextureView} for camera preview.
      */
     private AutoFitTextureView mTextureView;
+    private int frameCount = 0;
+    private int captureCount = 0;
     public TextView textinfo1;
     public TextView textinfo2;
     public TextView textinfo3;
     public TextView textinfo4;
+    public TextView textinfo5;
     public VideoView videoView;
 
     /**
@@ -230,7 +234,12 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+            captureCount++;
+            showFrameCount(captureCount);
+            Image img = reader.acquireNextImage();
+            Log.d("camerademo", "capture c = " + captureCount + " w = " + img.getWidth() + " h = " + img.getHeight());
+            mBackgroundHandler.post(new ImageSaver(img, mFile));
+            img.close();
         }
 
     };
@@ -266,7 +275,10 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
         private void process(CaptureResult result) {
             switch (mState) {
                 case STATE_PREVIEW: {
-                    // We have nothing to do when the camera preview is working normally.
+                    frameCount++;
+                    if ((frameCount % 5) == 1)
+                        mState = STATE_WAITING_LOCK;
+                    //showFrameCount(frameCount);
                     break;
                 }
                 case STATE_WAITING_LOCK: {
@@ -306,7 +318,10 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
         public void handleMessage(Message msg) {
             Activity activity = getActivity();
             if (activity != null) {
-                Toast.makeText(activity, (String) msg.obj, Toast.LENGTH_SHORT).show();
+                if (msg.obj instanceof  String)
+                    Toast.makeText(activity, (String) msg.obj, Toast.LENGTH_SHORT).show();
+                if (msg.obj instanceof  Integer)
+                    textinfo5.setText(((Integer)msg.obj).toString());
             }
         }
     };
@@ -321,6 +336,14 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
         // Toast is shown on the UI thread.
         Message message = Message.obtain();
         message.obj = text;
+        mMessageHandler.sendMessage(message);
+    }
+
+    private void showFrameCount(Integer count) {
+        // We show a Toast by sending request message to mMessageHandler. This makes sure that the
+        // Toast is shown on the UI thread.
+        Message message = Message.obtain();
+        message.obj = count;
         mMessageHandler.sendMessage(message);
     }
 
@@ -383,7 +406,9 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
         textinfo2 = (TextView)view.findViewById(R.id.info2);
         textinfo3 = (TextView)view.findViewById(R.id.info3);
         textinfo4 = (TextView)view.findViewById(R.id.info4);
+        textinfo5 = (TextView)view.findViewById(R.id.info5);
         videoView = (VideoView)view.findViewById(R.id.videoview);
+        videoView.setX(0); videoView.setY(0);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     }
 
@@ -456,12 +481,12 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                     mTextureView.setAspectRatio(
                             mPreviewSize.getWidth(), mPreviewSize.getHeight());
                     mImageReader = ImageReader.newInstance(mPreviewSize.getWidth(), mPreviewSize.getHeight(),
-                            ImageFormat.YUV_420_888, /*maxImages*/2);
+                            ImageFormat.YUV_420_888, /*maxImages*/3);
                 } else {
                     mTextureView.setAspectRatio(
                             mPreviewSize.getHeight(), mPreviewSize.getWidth());
                     mImageReader = ImageReader.newInstance(mPreviewSize.getHeight(), mPreviewSize.getWidth(),
-                            ImageFormat.YUV_420_888, /*maxImages*/2);
+                            ImageFormat.YUV_420_888, /*maxImages*/3);
                 }
 
                 mImageReader.setOnImageAvailableListener(
@@ -679,13 +704,15 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request,
                                                TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
+                    //showToast("Saved: " + mFile);
                     unlockFocus();
                 }
             };
 
-            mCaptureSession.stopRepeating();
-            mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);
+            //mCaptureSession.stopRepeating();
+            //mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);
+            mCaptureSession.capture(captureBuilder.build(), null, null);
+            mState = STATE_PREVIEW;
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -736,6 +763,10 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
 
         @Override
         public void run() {
+
+            mImage.close();
+
+/*
             ByteBuffer buffer;
             buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes0 = new byte[buffer.remaining()];
@@ -767,6 +798,7 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                     }
                 }
             }
+            */
         }
 
     }

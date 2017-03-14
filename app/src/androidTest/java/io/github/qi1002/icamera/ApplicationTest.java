@@ -75,3 +75,29 @@ D/camerademo: There is no android.sensor.heart_rate
 03-12 23:52:23.559 9306-9306/? D/camerademo: There is no android.sensor.heart_rate
 
  */
+
+/*  kibo+
+
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is a android.sensor.accelerometer(ACCELEROMETER,MTK,3)
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is a android.sensor.magnetic_field(MAGNETOMETER,MTK,3)
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is a android.sensor.orientation(ORIENTATION,MTK,3)
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is a android.sensor.gyroscope(GYROSCOPE,MTK,3)
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is a android.sensor.light(LIGHT,MTK,1)
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is no android.sensor.pressure
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is no android.sensor.temperature
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is a android.sensor.proximity(PROXIMITY,MTK,1)
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is a android.sensor.gravity(Gravity Sensor,AOSP,3)
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is a android.sensor.linear_acceleration(Linear Acceleration Sensor,AOSP,3)
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is a android.sensor.rotation_vector(Rotation Vector Sensor,AOSP,3)
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is no android.sensor.relative_humidity
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is no android.sensor.ambient_temperature
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is no android.sensor.magnetic_field_uncalibrated
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is a android.sensor.game_rotation_vector(Game Rotation Vector Sensor,AOSP,3)
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is no android.sensor.gyroscope_uncalibrated
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is no android.sensor.significant_motion
+01-07 04:07:56.878 28652-28652/? D/camerademo: There is no android.sensor.step_detector
+01-07 04:07:56.879 28652-28652/? D/camerademo: There is no android.sensor.step_counter
+01-07 04:07:56.879 28652-28652/? D/camerademo: There is a android.sensor.geomagnetic_rotation_vector(GeoMag Rotation Vector Sensor,AOSP,3)
+01-07 04:07:56.879 28652-28652/? D/camerademo: There is no android.sensor.heart_rate
+
+ */

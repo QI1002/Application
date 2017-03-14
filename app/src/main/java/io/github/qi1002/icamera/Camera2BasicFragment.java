@@ -57,9 +57,6 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,7 +66,7 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class Camera2BasicFragment extends Fragment implements View.OnClickListener {
+public class Camera2BasicFragment extends Fragment {
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -87,28 +84,6 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
      * Tag for the {@link Log}.
      */
     private static final String TAG = "Camera2BasicFragment";
-
-    /**
-     * Camera state: Showing camera preview.
-     */
-    private static final int STATE_PREVIEW = 0;
-
-    /**
-     * Camera state: Waiting for the focus to be locked.
-     */
-    private static final int STATE_WAITING_LOCK = 1;
-    /**
-     * Camera state: Waiting for the exposure to be precapture state.
-     */
-    private static final int STATE_WAITING_PRECAPTURE = 2;
-    /**
-     * Camera state: Waiting for the exposure state to be something other than precapture.
-     */
-    private static final int STATE_WAITING_NON_PRECAPTURE = 3;
-    /**
-     * Camera state: Picture was taken.
-     */
-    private static final int STATE_PICTURE_TAKEN = 4;
 
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
@@ -202,7 +177,6 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                 activity.finish();
             }
         }
-
     };
 
     /**
@@ -221,11 +195,6 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
     private ImageReader mImageReader;
 
     /**
-     * This is the output file for our picture.
-     */
-    private File mFile;
-
-    /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
      */
@@ -238,7 +207,7 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
             showFrameCount(captureCount);
             Image img = reader.acquireNextImage();
             //Log.d("camerademo", "capture c = " + captureCount + " w = " + img.getWidth() + " h = " + img.getHeight());
-            mBackgroundHandler.post(new ImageSaver(img, mFile));
+            mBackgroundHandler.post(new ImageSaver(img));
         }
 
     };
@@ -254,13 +223,6 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
     private CaptureRequest mPreviewRequest;
 
     /**
-     * The current state of camera state for taking pictures.
-     *
-     * @see #mCaptureCallback
-     */
-    private int mState = STATE_PREVIEW;
-
-    /**
      * A {@link Semaphore} to prevent the app from exiting before closing the camera.
      */
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
@@ -272,26 +234,10 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
             = new CameraCaptureSession.CaptureCallback() {
 
         private void process(CaptureResult result) {
-            switch (mState) {
-                case STATE_PREVIEW: {
-                    frameCount++;
-                    if ((frameCount % 5) == 1)
-                        mState = STATE_WAITING_LOCK;
-                    //showFrameCount(frameCount);
-                    break;
-                }
-                case STATE_WAITING_LOCK: {
-                    captureStillPicture();
-                    break;
-                }
-                case STATE_WAITING_PRECAPTURE: {
-                    // CONTROL_AE_STATE can be null on some devices
-                    break;
-                }
-                case STATE_WAITING_NON_PRECAPTURE: {
-                    // CONTROL_AE_STATE can be null on some devices
-                    break;
-                }
+            frameCount++;
+            //showFrameCount(frameCount);
+            if ((frameCount % 5) == 1) {
+                captureStillPicture();
             }
         }
 
@@ -400,7 +346,6 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.picture).setOnClickListener(this);
         textinfo1 = (TextView)view.findViewById(R.id.info1);
         textinfo2 = (TextView)view.findViewById(R.id.info2);
         textinfo3 = (TextView)view.findViewById(R.id.info3);
@@ -409,12 +354,6 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
         videoView = (VideoView)view.findViewById(R.id.videoview);
         videoView.setX(0); videoView.setY(0);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
     }
 
     @Override
@@ -658,29 +597,7 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
     }
 
     /**
-     * Initiate a still image capture.
-     */
-    private void takePicture() {
-        lockFocus();
-    }
-
-    /**
-     * Lock the focus as the first step for a still image capture.
-     */
-    private void lockFocus() {
-        try {
-            // Tell #mCaptureCallback to wait for the lock.
-            mState = STATE_WAITING_LOCK;
-            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
-                    mBackgroundHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Capture a still picture. This method should be called when we get a response in
-     * {@link #mCaptureCallback} from both {@link #lockFocus()}.
      */
     private void captureStillPicture() {
         try {
@@ -697,47 +614,9 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
             int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
 
-            CameraCaptureSession.CaptureCallback CaptureCallback
-                    = new CameraCaptureSession.CaptureCallback() {
-
-                @Override
-                public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request,
-                                               TotalCaptureResult result) {
-                    //showToast("Saved: " + mFile);
-                    unlockFocus();
-                }
-            };
-
-            //mCaptureSession.stopRepeating();
-            //mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);
             mCaptureSession.capture(captureBuilder.build(), null, null);
-            mState = STATE_PREVIEW;
         } catch (CameraAccessException e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Unlock the focus. This method should be called when still image capture sequence is finished.
-     */
-    private void unlockFocus() {
-        try {
-            // After this, the camera will go back to the normal state of preview.
-            mState = STATE_PREVIEW;
-            mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback,
-                    mBackgroundHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.picture: {
-                takePicture();
-                break;
-            }
         }
     }
 
@@ -750,14 +629,9 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
          * The JPEG image
          */
         private final Image mImage;
-        /**
-         * The file we save the image into.
-         */
-        private final File mFile;
 
-        public ImageSaver(Image image, File file) {
+        public ImageSaver(Image image) {
             mImage = image;
-            mFile = file;
         }
 
         @Override

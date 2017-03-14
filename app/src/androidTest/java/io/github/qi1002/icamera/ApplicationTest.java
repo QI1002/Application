@@ -12,13 +12,12 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 }
 
-//TODO01: test other phone's sensors
-//TODO02: adjust screen size to full size (J4 and other camera)
-//TODO03: detect the TV box area
-//TODO04: review the camera code
-//TODO05: play file from http
-//TODO6: know the way to move videoview
-//TODO7: boot from landscape mode will not show sensor data
+//TODO01: detect the TV box area
+//TODO02: review the camera code
+//TODO03: play video file from http
+//TODO04: boot from landscape mode will not show sensor data
+//TODO05: detect the ROI from YUV420
+//TODO06: show other sensors' information
 
 /* SS J7 sensor list
 

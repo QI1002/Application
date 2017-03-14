@@ -61,6 +61,10 @@ public class CameraActivity extends Activity implements SensorEventListener {
                     .replace(R.id.container, fragment).commit();
         }
 
+        DetectionROI roi = new DetectionROI(1920, 1440);
+        roi.detectROI(null, null, null);
+        roi.release();
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
         // request camera access right

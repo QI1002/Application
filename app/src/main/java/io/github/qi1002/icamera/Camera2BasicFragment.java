@@ -237,9 +237,8 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
             captureCount++;
             showFrameCount(captureCount);
             Image img = reader.acquireNextImage();
-            Log.d("camerademo", "capture c = " + captureCount + " w = " + img.getWidth() + " h = " + img.getHeight());
+            //Log.d("camerademo", "capture c = " + captureCount + " w = " + img.getWidth() + " h = " + img.getHeight());
             mBackgroundHandler.post(new ImageSaver(img, mFile));
-            img.close();
         }
 
     };

@@ -6,21 +6,27 @@ extern "C" {
 #endif
 
 /*
+ * Class:     org_opencv_samples_fd_DetectionBasedTracker
  * Method:    nativeCreateObject
+ * Signature: (Ljava/lang/String;F)J
  */
 JNIEXPORT jlong JNICALL Java_io_github_qi1002_icamera_DetectionROI_nativeCreateObject
         (JNIEnv *, jclass, jint, jint);
 
 /*
+ * Class:     org_opencv_samples_fd_DetectionBasedTracker
  * Method:    nativeDestroyObject
-  */
+ * Signature: (J)V
+ */
 JNIEXPORT void JNICALL Java_io_github_qi1002_icamera_DetectionROI_nativeDestroyObject
 (JNIEnv *, jclass, jlong);
 
 /*
- * Method:    nativeDetectROI
+ * Class:     org_opencv_samples_fd_DetectionBasedTracker
+ * Method:    nativeSetFaceSize
+ * Signature: (JI)V
  */
-JNIEXPORT void JNICALL Java_io_github_qi1002_icamera_DetectionROI_nativeDetectROI
+JNIEXPORT jintArray JNICALL Java_io_github_qi1002_icamera_DetectionROI_nativeDetectROI
 (JNIEnv *, jclass, jlong, jbyteArray, jbyteArray, jbyteArray);
 
 #ifdef __cplusplus

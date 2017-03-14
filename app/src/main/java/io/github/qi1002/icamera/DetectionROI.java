@@ -6,8 +6,8 @@ public class DetectionROI {
         mNativeObj = nativeCreateObject(width, height);
     }
 
-    public void detectROI(byte[] yPlane, byte[] uPlane, byte[] vPlane) {
-        nativeDetectROI(mNativeObj, yPlane, uPlane, vPlane);
+    public int[] detectROI(byte[] yPlane, byte[] uPlane, byte[] vPlane) {
+        return nativeDetectROI(mNativeObj, yPlane, uPlane, vPlane);
     }
 
     public void release() {
@@ -23,5 +23,5 @@ public class DetectionROI {
 
     private static native long nativeCreateObject(int width, int height);
     private static native void nativeDestroyObject(long thiz);
-    private static native void nativeDetectROI(long thiz, byte[] yPlane, byte[] uPlane, byte[] vPlane);
+    private static native int[] nativeDetectROI(long thiz, byte[] yPlane, byte[] uPlane, byte[] vPlane);
 }

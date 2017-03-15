@@ -195,6 +195,11 @@ public class Camera2BasicFragment extends Fragment {
     private ImageReader mImageReader;
 
     /**
+     * This is the output directory for our capture picture.
+     */
+    private File mFile;
+
+    /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
      */
@@ -207,7 +212,7 @@ public class Camera2BasicFragment extends Fragment {
             showFrameCount(captureCount);
             Image img = reader.acquireNextImage();
             //Log.d("camerademo", "capture c = " + captureCount + " w = " + img.getWidth() + " h = " + img.getHeight());
-            mBackgroundHandler.post(new ImageSaver(img));
+            mBackgroundHandler.post(new ImageSaver(img, mFile));
         }
 
     };
@@ -354,6 +359,15 @@ public class Camera2BasicFragment extends Fragment {
         videoView = (VideoView)view.findViewById(R.id.videoview);
         videoView.setX(0); videoView.setY(0);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mFile = getActivity().getExternalFilesDir(null);
+        for(File file: mFile.listFiles())
+            if (!file.isDirectory())
+                file.delete();
     }
 
     @Override
@@ -629,9 +643,14 @@ public class Camera2BasicFragment extends Fragment {
          * The JPEG image
          */
         private final Image mImage;
+        /**
+         * The file we save the image into.
+         */
+        private final File mFile;
 
-        public ImageSaver(Image image) {
+        public ImageSaver(Image image, File file) {
             mImage = image;
+            mFile = file;
         }
 
         @Override
@@ -648,7 +667,7 @@ public class Camera2BasicFragment extends Fragment {
             byte[] bytes2 = new byte[buffer.remaining()];
             buffer.get(bytes2);
 
-            DetectionROI roi = new DetectionROI(mImage.getWidth(), mImage.getHeight());
+            DetectionROI roi = new DetectionROI(mImage.getWidth(), mImage.getHeight(), mFile.getPath());
             int[] rectROI = roi.detectROI(bytes0, bytes1, bytes2);
             Log.d("camerademo", "rect = " + rectROI[0] + " " + rectROI[1] + " " + rectROI[2] + " " + rectROI[3]);
             roi.release();

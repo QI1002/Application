@@ -1,9 +1,10 @@
 //
 // Created by MTK00544 on 2017/3/14.
 //
-#include <stdio.h>
 #include "detect_roi_jni.h"
 
+#include <stdio.h>
+#include <string.h>
 #include <android/log.h>
 
 #define LOG_TAG "camerademo"
@@ -14,23 +15,54 @@ class ROIDetection {
 private:
     int mWidth;
     int mHeight;
+    char mPath[128];
+
+    char* getTestFile(int count)
+    {
+        char temp[128];
+        char savePath[128];
+        strcpy(savePath, mPath);
+        sprintf(temp, "/test%d.yuv420", count);
+        strcat(savePath, temp);
+        return strdup(savePath);
+    }
 
 public:
 
-    ROIDetection(int width, int height)
+    ROIDetection(int width, int height, const char* path)
     {
         mWidth = width;
         mHeight = height;
+        strcpy(mPath, path);
     }
 
     int getWidth() { return mWidth; }
     int getHeight() { return mHeight; }
+    char* getPath() { return mPath; }
+
+    void saveFile(int count, unsigned char* yData, unsigned char* uData, unsigned char* vData)
+    {
+        char* savePath = getTestFile(count);
+        FILE* wf = fopen(savePath, "w");
+        free(savePath);
+        if (wf != NULL)
+        {
+            fwrite(yData, 1, mWidth * mHeight, wf);
+            fwrite(uData, 1, mWidth * mHeight/4, wf);
+            fwrite(vData, 1, mWidth * mHeight/4, wf);
+            fclose(wf);
+        }else
+        {
+            LOGD("Java_io_github_qi1002_icamera_DetectionROI_nativeDetectROI enter fail %s", savePath);
+        }
+    }
 };
 
 JNIEXPORT jlong JNICALL Java_io_github_qi1002_icamera_DetectionROI_nativeCreateObject
-        (JNIEnv * jenv, jclass, jint width, jint height) {
+        (JNIEnv * jenv, jclass, jint width, jint height, jstring path) {
+    const char* jpathstr = jenv->GetStringUTFChars(path, NULL);
     LOGD("Java_io_github_qi1002_icamera_DetectionROI_nativeCreateObject enter (%d,%d)", width, height);
-    jlong result = (jlong)(new ROIDetection(width, height));
+    jlong result = (jlong)(new ROIDetection(width, height, jpathstr));
     return result;
 }
 
@@ -63,23 +95,9 @@ JNIEXPORT jintArray JNICALL Java_io_github_qi1002_icamera_DetectionROI_nativeDet
     LOGD("Java_io_github_qi1002_icamera_DetectionROI_nativeDetectROI enter %d", detectCount);
 
     ROIDetection* detection = (ROIDetection*)thiz;
-    int width = detection->getWidth();
-    int height = detection->getHeight();
 
     if (detectCount == 33)
-    {
-        FILE* wf = fopen("/storage/emulated/0/Android/data/io.github.qi1002.icamera/files/test.yuv420", "w");
-        if (wf != NULL)
-        {
-            fwrite(yData, 1, width * height, wf);
-            fwrite(uData, 1, width * height/4, wf);
-            fwrite(vData, 1, width * height/4, wf);
-            fclose(wf);
-        }else
-        {
-            LOGD("Java_io_github_qi1002_icamera_DetectionROI_nativeDetectROI enter fail");
-        }
-    }
+        detection->saveFile(detectCount, yData, uData, vData);
 
     jenv->ReleaseByteArrayElements(yPlane, (jbyte*)yData, JNI_ABORT);
     jenv->ReleaseByteArrayElements(uPlane, (jbyte*)uData, JNI_ABORT);

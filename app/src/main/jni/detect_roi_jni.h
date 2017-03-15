@@ -11,7 +11,7 @@ extern "C" {
  * Signature: (Ljava/lang/String;F)J
  */
 JNIEXPORT jlong JNICALL Java_io_github_qi1002_icamera_DetectionROI_nativeCreateObject
-        (JNIEnv *, jclass, jint, jint);
+        (JNIEnv *, jclass, jint, jint, jstring path);
 
 /*
  * Class:     org_opencv_samples_fd_DetectionBasedTracker

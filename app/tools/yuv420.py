@@ -3,14 +3,17 @@ import sys
 from struct import *
 import array
  
-if len(sys.argv) != 4:
+if len(sys.argv) != 4 and len(sys.argv) != 5:
         print "***** Usage syntax Error!!!! *****\n"
         print "Usage:"
-        print "python <script> <.yuv file yuv420p> <width&gt> <height> "
+        print "python <script> <.yuv file yuv420p> <width&gt> <height> [black]"
         sys.exit(1) # exit
 else:
         pass
- 
+
+show_ROI = False
+if (len(sys.argv) == 5):
+    show_ROI = True
 image_name = sys.argv[1]
 width = int(sys.argv[2])
 height = int(sys.argv[3])
@@ -43,9 +46,16 @@ for i in range(0,height):
         Y_val = y[(i*width)+j]
         U_val = u[((i/2)*(width/2))+(j/2)]
         V_val = v[((i/2)*(width/2))+(j/2)]
-        B = 1.164 * (Y_val-16) + 2.018 * (U_val - 128)
-        G = 1.164 * (Y_val-16) - 0.813 * (V_val - 128) - 0.391 * (U_val - 128)
-        R = 1.164 * (Y_val-16) + 1.596*(V_val - 128)
+        if (show_ROI):
+            if (Y_val > 100 and U_val < 120 and V_val < 120):
+                B = G = R = 255;
+            else: 
+                B = G = R = 0;
+        else:
+            B = 1.164 * (Y_val-16) + 2.018 * (U_val - 128)
+            G = 1.164 * (Y_val-16) - 0.813 * (V_val - 128) - 0.391 * (U_val - 128)
+            R = 1.164 * (Y_val-16) + 1.596*(V_val - 128)
+
         pix[j, i] = int(R), int(G), int(B)
  
 ######################################################
@@ -54,5 +64,5 @@ for i in range(0,height):
 # R = 1.164(Y - 16) + 1.596(V - 128)
 ######################################################
  
-#image_out.save("out.bmp")
+#image_out.save("out.png")
 image_out.show()

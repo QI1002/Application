@@ -146,6 +146,11 @@ public class Camera2BasicFragment extends Fragment {
      */
 
     private Size mPreviewSize;
+    /**
+     * The {@link android.util.Size} of camera capture.
+     */
+
+    private Size mCaptureSize;
 
     /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
@@ -316,7 +321,7 @@ public class Camera2BasicFragment extends Fragment {
         int orientation = fragment.getResources().getConfiguration().orientation;
         for (Size option : choices) {
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                if (option.getHeight() == option.getWidth() * h / w &&
+                if (option.getHeight() <= option.getWidth() * height / width &&
                         option.getWidth() >= width && option.getHeight() >= height) {
                     bigEnough.add(option);
                 }
@@ -335,6 +340,20 @@ public class Camera2BasicFragment extends Fragment {
             Log.e(TAG, "Couldn't find any suitable preview size");
             return choices[0];
         }
+    }
+
+    private static Size chooseCaptureSize(Fragment fragment, Size[] choices, int width, int height) {
+        // Collect the supported resolutions that are at least as big as the preview Surface
+        Size lessEnough = new Size(width, height);
+        int orientation = fragment.getResources().getConfiguration().orientation;
+        for (Size option : choices) {
+            if (option.getHeight() <= option.getWidth() * height / width &&
+                    option.getWidth() < lessEnough.getWidth() && option.getHeight() < lessEnough.getHeight()) {
+                lessEnough = new Size(option.getWidth() , option.getHeight());
+            }
+        }
+
+        return lessEnough;
     }
 
     public static Camera2BasicFragment newInstance() {
@@ -427,17 +446,20 @@ public class Camera2BasicFragment extends Fragment {
                 mPreviewSize = chooseOptimalSize(this, map.getOutputSizes(SurfaceTexture.class),
                         width, height, largest);
 
+                // get less enough one as capture size
+                mCaptureSize = chooseCaptureSize(this, map.getOutputSizes(SurfaceTexture.class), mPreviewSize.getWidth(), mPreviewSize.getHeight());
+
                 // We fit the aspect ratio of TextureView to the size of preview we picked.
                 int orientation = getResources().getConfiguration().orientation;
                 if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     mTextureView.setAspectRatio(
                             mPreviewSize.getWidth(), mPreviewSize.getHeight());
-                    mImageReader = ImageReader.newInstance(mPreviewSize.getWidth(), mPreviewSize.getHeight(),
+                    mImageReader = ImageReader.newInstance(mCaptureSize.getWidth(), mCaptureSize.getHeight(),
                             ImageFormat.YUV_420_888, /*maxImages*/3);
                 } else {
                     mTextureView.setAspectRatio(
                             mPreviewSize.getHeight(), mPreviewSize.getWidth());
-                    mImageReader = ImageReader.newInstance(mPreviewSize.getHeight(), mPreviewSize.getWidth(),
+                    mImageReader = ImageReader.newInstance(mCaptureSize.getHeight(), mCaptureSize.getWidth(),
                             ImageFormat.YUV_420_888, /*maxImages*/3);
                 }
 

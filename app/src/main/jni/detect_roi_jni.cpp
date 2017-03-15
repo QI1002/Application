@@ -288,10 +288,10 @@ JNIEXPORT jintArray JNICALL Java_io_github_qi1002_icamera_DetectionROI_nativeDet
 
     jintArray rectROI = jenv->NewIntArray(4);
     jint* roiData = jenv->GetIntArrayElements(rectROI, (jboolean*)0);
-    roiData[0] = 100;
-    roiData[1] = 200;
-    roiData[2] = 300;
-    roiData[3] = 400;
+    roiData[0] = -1;
+    roiData[1] = -1;
+    roiData[2] = -1;
+    roiData[3] = -1;
     
     ROIDetection* detection = (ROIDetection*)thiz;
     char* path = detection->getPath();

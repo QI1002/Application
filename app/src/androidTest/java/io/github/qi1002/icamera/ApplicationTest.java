@@ -12,12 +12,12 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 }
 
-//TODO01: detect the TV box area
-//TODO02: review the camera code
-//TODO03: play video file from http
-//TODO04: boot from landscape mode will not show sensor data
-//TODO05: detect the ROI from YUV420
-//TODO06: show other sensors' information
+//TODO01: play video file from http
+//TODO02: boot from landscape mode will not show sensor data
+//TODO03: better way to detect the ROI from YUV420 ( have better background.jpg)
+//TODO04: show other sensors' information
+//TODO05: set video view dimension by ROI
+//TODO06:
 
 /* SS J7 sensor list
 

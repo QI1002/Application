@@ -129,6 +129,8 @@ public class Camera2BasicFragment extends Fragment {
     public TextView textinfo3;
     public TextView textinfo4;
     public TextView textinfo5;
+    public TextView textinfo6;
+    public TextView textinfo7;
     public VideoView videoView;
 
     /**
@@ -141,6 +143,11 @@ public class Camera2BasicFragment extends Fragment {
      */
 
     private CameraDevice mCameraDevice;
+    /**
+     * The {@link android.util.Size} of camera preview.
+     */
+
+    private Size mSurfaceSize;
     /**
      * The {@link android.util.Size} of camera preview.
      */
@@ -217,7 +224,7 @@ public class Camera2BasicFragment extends Fragment {
             showFrameCount(captureCount);
             Image img = reader.acquireNextImage();
             //Log.d("camerademo", "capture c = " + captureCount + " w = " + img.getWidth() + " h = " + img.getHeight());
-            mBackgroundHandler.post(new ImageSaver(img, mFile));
+            mBackgroundHandler.post(new ImageSaver(img, mFile, mMessageHandler));
         }
 
     };
@@ -277,6 +284,20 @@ public class Camera2BasicFragment extends Fragment {
                     Toast.makeText(activity, (String) msg.obj, Toast.LENGTH_SHORT).show();
                 if (msg.obj instanceof  Integer)
                     textinfo5.setText(((Integer)msg.obj).toString());
+                if (msg.obj instanceof int[])
+                {
+                    int[] roi = (int[])msg.obj;
+                    float xRatio = (float)mSurfaceSize.getWidth()/mCaptureSize.getHeight();
+                    float yRatio = (float)mSurfaceSize.getHeight()/mCaptureSize.getWidth();
+                    if (roi[0] != -1 && roi[1] != -1 && (xRatio == yRatio)) {
+                        float x = (float)mSurfaceSize.getWidth() - roi[3] * xRatio;
+                        float y = roi[0] * yRatio;
+                        videoView.setX((float) x);
+                        videoView.setY((float) y);
+                        textinfo6.setText(((Float) x).toString());
+                        textinfo7.setText(((Float) y).toString());
+                    }
+                }
             }
         }
     };
@@ -375,6 +396,8 @@ public class Camera2BasicFragment extends Fragment {
         textinfo3 = (TextView)view.findViewById(R.id.info3);
         textinfo4 = (TextView)view.findViewById(R.id.info4);
         textinfo5 = (TextView)view.findViewById(R.id.info5);
+        textinfo6 = (TextView)view.findViewById(R.id.info6);
+        textinfo7 = (TextView)view.findViewById(R.id.info7);
         videoView = (VideoView)view.findViewById(R.id.videoview);
         videoView.setX(0); videoView.setY(0);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
@@ -456,11 +479,13 @@ public class Camera2BasicFragment extends Fragment {
                             mPreviewSize.getWidth(), mPreviewSize.getHeight());
                     mImageReader = ImageReader.newInstance(mCaptureSize.getWidth(), mCaptureSize.getHeight(),
                             ImageFormat.YUV_420_888, /*maxImages*/3);
+                    mSurfaceSize = new Size(height*mPreviewSize.getWidth()/mPreviewSize.getHeight(), height);
                 } else {
                     mTextureView.setAspectRatio(
                             mPreviewSize.getHeight(), mPreviewSize.getWidth());
                     mImageReader = ImageReader.newInstance(mCaptureSize.getHeight(), mCaptureSize.getWidth(),
                             ImageFormat.YUV_420_888, /*maxImages*/3);
+                    mSurfaceSize = new Size(width, width*mPreviewSize.getWidth()/mPreviewSize.getHeight());
                 }
 
                 mImageReader.setOnImageAvailableListener(
@@ -670,9 +695,20 @@ public class Camera2BasicFragment extends Fragment {
          */
         private final File mFile;
 
-        public ImageSaver(Image image, File file) {
+        private final Handler mHandler;
+
+        private void moveROI(int[] roi) {
+            // We show a Toast by sending request message to mMessageHandler. This makes sure that the
+            // Toast is shown on the UI thread.
+            Message message = Message.obtain();
+            message.obj = roi;
+            mHandler.sendMessage(message);
+        }
+
+        public ImageSaver(Image image, File file, Handler handler) {
             mImage = image;
             mFile = file;
+            mHandler = handler;
         }
 
         @Override
@@ -693,7 +729,7 @@ public class Camera2BasicFragment extends Fragment {
             int[] rectROI = roi.detectROI(bytes0, bytes1, bytes2);
             Log.d("camerademo", "rect = " + rectROI[0] + " " + rectROI[1] + " " + rectROI[2] + " " + rectROI[3]);
             roi.release();
-
+            moveROI(rectROI);
             mImage.close();
         }
     }

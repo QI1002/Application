@@ -33,7 +33,6 @@ import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
-import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
@@ -52,6 +51,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -62,11 +62,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class Camera2BasicFragment extends Fragment {
+public class Camera2BasicFragment extends Fragment implements View.OnClickListener {
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -122,8 +123,11 @@ public class Camera2BasicFragment extends Fragment {
      * An {@link AutoFitTextureView} for camera preview.
      */
     private AutoFitTextureView mTextureView;
+    private boolean detectSwitch = true;
     private int frameCount = 0;
     private int captureCount = 0;
+    private long frameTime = 0;
+    private long captureTime = 0;
     public TextView textinfo1;
     public TextView textinfo2;
     public TextView textinfo3;
@@ -131,6 +135,10 @@ public class Camera2BasicFragment extends Fragment {
     public TextView textinfo5;
     public TextView textinfo6;
     public TextView textinfo7;
+    public TextView textinfo8;
+    public TextView textinfo9;
+    public TextView textinfo10;
+    public TextView textinfo11;
     public VideoView videoView;
 
     /**
@@ -211,6 +219,11 @@ public class Camera2BasicFragment extends Fragment {
      */
     private File mFile;
 
+    private final static int MESSAGE_SHOW_TOAST = 0;
+    private final static int MESSAGE_SHOW_FRAME_COUNT = 1;
+    private final static int MESSAGE_SHOW_CAPTURE_COUNT = 2;
+    private final static int MESSAGE_SHOW_ROI = 3;
+
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
@@ -221,10 +234,13 @@ public class Camera2BasicFragment extends Fragment {
         @Override
         public void onImageAvailable(ImageReader reader) {
             captureCount++;
-            showFrameCount(captureCount);
+            showCaptureCount(captureCount);
             Image img = reader.acquireNextImage();
             //Log.d("camerademo", "capture c = " + captureCount + " w = " + img.getWidth() + " h = " + img.getHeight());
-            mBackgroundHandler.post(new ImageSaver(img, mFile, mMessageHandler));
+            if (detectSwitch)
+                mBackgroundHandler.post(new ImageSaver(img, mFile, mMessageHandler, captureCount));
+            else
+                img.close();
         }
 
     };
@@ -252,10 +268,8 @@ public class Camera2BasicFragment extends Fragment {
 
         private void process(CaptureResult result) {
             frameCount++;
-            //showFrameCount(frameCount);
-            if ((frameCount % 5) == 1) {
-                captureStillPicture();
-            }
+            showFrameCount(frameCount);
+            captureStillPicture();
         }
 
         @Override
@@ -280,23 +294,44 @@ public class Camera2BasicFragment extends Fragment {
         public void handleMessage(Message msg) {
             Activity activity = getActivity();
             if (activity != null) {
-                if (msg.obj instanceof  String)
-                    Toast.makeText(activity, (String) msg.obj, Toast.LENGTH_SHORT).show();
-                if (msg.obj instanceof  Integer)
-                    textinfo5.setText(((Integer)msg.obj).toString());
-                if (msg.obj instanceof int[])
+                switch (msg.arg1)
                 {
-                    int[] roi = (int[])msg.obj;
-                    float xRatio = (float)mSurfaceSize.getWidth()/mCaptureSize.getHeight();
-                    float yRatio = (float)mSurfaceSize.getHeight()/mCaptureSize.getWidth();
-                    if (roi[0] != -1 && roi[1] != -1 && (xRatio == yRatio)) {
-                        float x = (float)mSurfaceSize.getWidth() - roi[3] * xRatio;
-                        float y = roi[0] * yRatio;
-                        videoView.setX((float) x);
-                        videoView.setY((float) y);
-                        textinfo6.setText(((Float) x).toString());
-                        textinfo7.setText(((Float) y).toString());
-                    }
+                    case MESSAGE_SHOW_TOAST:
+                        if (msg.obj instanceof String)
+                            Toast.makeText(activity, (String) msg.obj, Toast.LENGTH_SHORT).show();
+                        break;
+                    case MESSAGE_SHOW_FRAME_COUNT:
+                        if (msg.obj instanceof Float) {
+                            textinfo7.setText(((Integer) msg.arg2).toString());
+                            textinfo8.setText(((Float) msg.obj).toString());
+                        }
+                        break;
+                    case MESSAGE_SHOW_CAPTURE_COUNT:
+                        if (msg.obj instanceof Float) {
+                            textinfo9.setText(((Integer) msg.arg2).toString());
+                            textinfo10.setText(((Float) msg.obj).toString());
+                        }
+                        break;
+                    case MESSAGE_SHOW_ROI:
+                        if (msg.obj instanceof int[])
+                        {
+                            int fdiff, cdiff, count = msg.arg2;
+                            int[] roi = (int[])msg.obj;
+                            float xRatio = (float)mSurfaceSize.getWidth()/mCaptureSize.getHeight();
+                            float yRatio = (float)mSurfaceSize.getHeight()/mCaptureSize.getWidth();
+                            if (roi[0] != -1 && roi[1] != -1 && (xRatio == yRatio)) {
+                                float x = (float)mSurfaceSize.getWidth() - roi[3] * xRatio;
+                                float y = roi[0] * yRatio;
+                                videoView.setX((float) x);
+                                videoView.setY((float) y);
+                                textinfo5.setText(((Float) x).toString());
+                                textinfo6.setText(((Float) y).toString());
+                                fdiff = frameCount - count;
+                                cdiff = captureCount - count;
+                                textinfo11.setText("" + fdiff + "," + cdiff);
+                            }
+                        }
+                        break;
                 }
             }
         }
@@ -311,15 +346,44 @@ public class Camera2BasicFragment extends Fragment {
         // We show a Toast by sending request message to mMessageHandler. This makes sure that the
         // Toast is shown on the UI thread.
         Message message = Message.obtain();
+        message.arg1 = MESSAGE_SHOW_TOAST;
         message.obj = text;
         mMessageHandler.sendMessage(message);
     }
 
     private void showFrameCount(Integer count) {
-        // We show a Toast by sending request message to mMessageHandler. This makes sure that the
-        // Toast is shown on the UI thread.
+        float fps;
+        if (count == 1) {
+            frameTime = (new Date()).getTime();
+            fps = 0.0f;
+        }
+        else {
+            long diff = (new Date()).getTime() - frameTime;
+            fps = diff / ((frameCount - 1) * 10);
+        }
+
         Message message = Message.obtain();
-        message.obj = count;
+        message.arg1 = MESSAGE_SHOW_FRAME_COUNT;
+        message.arg2 = count;
+        message.obj = new Float(fps);
+        mMessageHandler.sendMessage(message);
+    }
+
+    private void showCaptureCount(Integer count) {
+        float fps;
+        if (count == 1) {
+            frameTime = (new Date()).getTime();
+            fps = 0.0f;
+        }
+        else {
+            long diff = (new Date()).getTime() - frameTime;
+            fps = diff / ((frameCount - 1) * 10);
+        }
+
+        Message message = Message.obtain();
+        message.arg1 = MESSAGE_SHOW_CAPTURE_COUNT;
+        message.arg2 = count;
+        message.obj = fps;
         mMessageHandler.sendMessage(message);
     }
 
@@ -391,6 +455,7 @@ public class Camera2BasicFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+        view.findViewById(R.id.detect_switch).setOnClickListener(this);
         textinfo1 = (TextView)view.findViewById(R.id.info1);
         textinfo2 = (TextView)view.findViewById(R.id.info2);
         textinfo3 = (TextView)view.findViewById(R.id.info3);
@@ -398,6 +463,10 @@ public class Camera2BasicFragment extends Fragment {
         textinfo5 = (TextView)view.findViewById(R.id.info5);
         textinfo6 = (TextView)view.findViewById(R.id.info6);
         textinfo7 = (TextView)view.findViewById(R.id.info7);
+        textinfo8 = (TextView)view.findViewById(R.id.info8);
+        textinfo9 = (TextView)view.findViewById(R.id.info9);
+        textinfo10 = (TextView)view.findViewById(R.id.info10);
+        textinfo11 = (TextView)view.findViewById(R.id.info11);
         videoView = (VideoView)view.findViewById(R.id.videoview);
         videoView.setX(0); videoView.setY(0);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
@@ -471,6 +540,9 @@ public class Camera2BasicFragment extends Fragment {
 
                 // get less enough one as capture size
                 mCaptureSize = chooseCaptureSize(this, map.getOutputSizes(SurfaceTexture.class), mPreviewSize.getWidth(), mPreviewSize.getHeight());
+
+                // use small resolution to preview also
+                mPreviewSize = mCaptureSize;
 
                 // We fit the aspect ratio of TextureView to the size of preview we picked.
                 int orientation = getResources().getConfiguration().orientation;
@@ -681,34 +753,46 @@ public class Camera2BasicFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.detect_switch: {
+                Button btn = (Button) view.findViewById(R.id.detect_switch);
+                detectSwitch = !detectSwitch;
+                if (detectSwitch)
+                    btn.setText(getString(R.string.detect_on));
+                else
+                    btn.setText(getString(R.string.detect_off));
+                break;
+            }
+        }
+    }
+
     /**
      * Saves a JPEG {@link Image} into the specified {@link File}.
      */
     private static class ImageSaver implements Runnable {
 
-        /**
-         * The JPEG image
-         */
         private final Image mImage;
-        /**
-         * The file we save the image into.
-         */
         private final File mFile;
-
         private final Handler mHandler;
+        private final int mCount;
 
         private void moveROI(int[] roi) {
             // We show a Toast by sending request message to mMessageHandler. This makes sure that the
             // Toast is shown on the UI thread.
             Message message = Message.obtain();
+            message.arg1 = Camera2BasicFragment.MESSAGE_SHOW_ROI;
+            message.arg2 = mCount;
             message.obj = roi;
             mHandler.sendMessage(message);
         }
 
-        public ImageSaver(Image image, File file, Handler handler) {
+        public ImageSaver(Image image, File file, Handler handler, int count) {
             mImage = image;
             mFile = file;
             mHandler = handler;
+            mCount = count;
         }
 
         @Override
@@ -727,7 +811,7 @@ public class Camera2BasicFragment extends Fragment {
 
             DetectionROI roi = new DetectionROI(mImage.getWidth(), mImage.getHeight(), mFile.getPath());
             int[] rectROI = roi.detectROI(bytes0, bytes1, bytes2);
-            Log.d("camerademo", "rect = " + rectROI[0] + " " + rectROI[1] + " " + rectROI[2] + " " + rectROI[3]);
+            //Log.d("camerademo", "rect = " + rectROI[0] + " " + rectROI[1] + " " + rectROI[2] + " " + rectROI[3]);
             roi.release();
             moveROI(rectROI);
             mImage.close();

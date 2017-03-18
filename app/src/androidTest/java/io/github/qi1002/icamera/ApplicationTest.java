@@ -16,8 +16,10 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //TODO02: boot from landscape mode will not show sensor data
 //TODO03: better way to detect the ROI from YUV420 ( have better background.jpg)
 //TODO04: show other sensors' information
-//TODO05: set video view dimension by ROI
-//TODO06:
+//TODO05: set video view dimension by ROI (and scaling it)
+//TODO06: disable video to speed up fps and connect to current video output. (use GLdraw command to draw it)
+//TODO07: find the max fps of camera
+//TODO08: video latency analysis
 
 /* SS J7 sensor list
 

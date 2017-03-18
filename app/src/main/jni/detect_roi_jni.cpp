@@ -297,7 +297,7 @@ JNIEXPORT jintArray JNICALL Java_io_github_qi1002_icamera_DetectionROI_nativeDet
     char* path = detection->getPath();
 
     detectCount++;
-    LOGD("Java_io_github_qi1002_icamera_DetectionROI_nativeDetectROI enter %d", detectCount);
+    //LOGD("Java_io_github_qi1002_icamera_DetectionROI_nativeDetectROI enter %d", detectCount);
 
     detection->detect(detectCount, yData, uData, vData, roiData);
     jenv->SetIntArrayRegion(rectROI, 0, 4, roiData);

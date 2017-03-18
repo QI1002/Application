@@ -14,6 +14,8 @@
  limitations under the License.
 -->
 <resources>
+    <string name="detect_on">On</string>
+    <string name="detect_off">Off</string>
     <string name="x_prompt">X: </string>
     <string name="y_prompt">Y: </string>
     <string name="z_prompt">Z: </string>

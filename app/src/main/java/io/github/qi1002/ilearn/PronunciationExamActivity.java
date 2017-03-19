@@ -96,7 +96,7 @@ public class PronunciationExamActivity extends AppCompatActivity {
             }
         });
 
-        // default to set foucs to WebView
+        // default to set focus to WebView
         focusWebView();
 
         // let apk use media volume

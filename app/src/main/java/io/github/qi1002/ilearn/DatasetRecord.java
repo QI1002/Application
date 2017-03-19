@@ -58,7 +58,7 @@ public class DatasetRecord {
     static final String ATTR_LOOKUP_CNT = "c";
     static final String ATTR_TIMESTAMP = "t";
     static private ArrayList<DatasetRecord> dataset = new ArrayList<DatasetRecord>();
-    static private IDictionaryProvider teachbase = new IchachaProvider();
+    static private IDictionaryProvider teachBase = new IchachaProvider();
 
     public static ArrayList<DatasetRecord> getDataset()
     {
@@ -67,7 +67,7 @@ public class DatasetRecord {
 
     public static IDictionaryProvider getDictionaryProvider()
     {
-        return teachbase;
+        return teachBase;
     }
 
     public static boolean isInitialized() {
@@ -118,9 +118,9 @@ public class DatasetRecord {
                     assert((inner_arguments != null) && (inner_arguments.length == 2));
                     // avoid exception "can't create handler inside thread that has not called looper.prepare()"
                     Looper.prepare();
-                    String urllink = (String)inner_arguments[0];
+                    String urlLink = (String)inner_arguments[0];
                     String filename = (String)inner_arguments[1];
-                    downloadDatasetImpl(inner_context, urllink, filename);
+                    downloadDatasetImpl(inner_context, urlLink, filename);
                     DatasetRecord.parseDataset(inner_context, filename);
                 } catch (Exception e) {
                     Helper.GenericExceptionHandler(inner_context, e);
@@ -131,10 +131,10 @@ public class DatasetRecord {
         downloadThread.start();
     }
 
-    private static void downloadDatasetImpl(Context context, String urllink, String filename)
+    private static void downloadDatasetImpl(Context context, String urlLink, String filename)
     {
         try {
-            URL url = new URL(urllink);
+            URL url = new URL(urlLink);
             File file = new File(Environment.getExternalStorageDirectory(), filename);
 
             long startTime = System.currentTimeMillis();
@@ -182,7 +182,7 @@ public class DatasetRecord {
         return record;
     }
 
-    public static void parseDataset(final Context context, String inputfile) {
+    public static void parseDataset(final Context context, String inputFile) {
 
         boolean dataset_check = Helper.getPreferenceBoolean(context, R.string.pref_key_dataset_check);
         String duplicateWords = "";
@@ -190,7 +190,7 @@ public class DatasetRecord {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            File filename = new File(Environment.getExternalStorageDirectory(), inputfile);
+            File filename = new File(Environment.getExternalStorageDirectory(), inputFile);
             Document doc = db.parse(filename);
             doc.getDocumentElement().normalize();
 
@@ -222,7 +222,7 @@ public class DatasetRecord {
 
          if (duplicateWords.length() != 0) {
 
-            DialogInterface.OnClickListener positiveListner =
+            DialogInterface.OnClickListener positiveListener =
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -232,14 +232,14 @@ public class DatasetRecord {
             };
 
             Helper.SelectionBox(context, "Duplicated words\n" + duplicateWords + "\nFound\nDo you want to reset dataset ?", "Reset", "Keep",
-                    "Dataset Check Selection Box", positiveListner, null);
+                    "Dataset Check Selection Box", positiveListener, null);
         }
     }
 
-    public static void mergeDataset(ArrayList<DatasetRecord> mergedData, ArrayList<DatasetRecord> appenedData)
+    public static void mergeDataset(ArrayList<DatasetRecord> mergedData, ArrayList<DatasetRecord> appendedData)
     {
-        for (int i = 0; i < appenedData.size(); i++) {
-            DatasetRecord newRecord = appenedData.get(i);
+        for (int i = 0; i < appendedData.size(); i++) {
+            DatasetRecord newRecord = appendedData.get(i);
             DatasetRecord record = checkWord(newRecord.name);
 
             if (record == null)
@@ -258,7 +258,7 @@ public class DatasetRecord {
         }
     }
 
-    public static ArrayList<DatasetRecord> parseECDICT(Context context, String inputpath, String inputfile) {
+    public static ArrayList<DatasetRecord> parseECDICT(Context context, String inputPath, String inputFile) {
 
         ArrayList<DatasetRecord> ecdictData = new ArrayList<DatasetRecord>();
         ArrayList<DatasetRecord> result = ecdictData;
@@ -266,7 +266,7 @@ public class DatasetRecord {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            File filename = new File(inputpath, inputfile);
+            File filename = new File(inputPath, inputFile);
             Document doc = db.parse(filename);
             doc.getDocumentElement().normalize();
 
@@ -292,7 +292,7 @@ public class DatasetRecord {
 
         return ecdictData;   }
 
-    public static void writeDataset(Context context, String outputfile) {
+    public static void writeDataset(Context context, String outputFile) {
 
         synchronized (dataset) {
             NumberFormat nf = DecimalFormat.getInstance();
@@ -300,8 +300,8 @@ public class DatasetRecord {
             nf.setGroupingUsed(false);
 
             try {
-                File filename = new File(Environment.getExternalStorageDirectory(), outputfile);
-                FileOutputStream fileos = new FileOutputStream(filename);
+                File filename = new File(Environment.getExternalStorageDirectory(), outputFile);
+                FileOutputStream fileOS = new FileOutputStream(filename);
                 XmlSerializer xmlSerializer = Xml.newSerializer();
                 xmlSerializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
                 StringWriter writer = new StringWriter();
@@ -320,8 +320,8 @@ public class DatasetRecord {
                 xmlSerializer.endTag(null, "collection");
                 xmlSerializer.endDocument();
                 xmlSerializer.flush();
-                fileos.write(writer.toString().getBytes());
-                fileos.close();
+                fileOS.write(writer.toString().getBytes());
+                fileOS.close();
             } catch (Exception e) {
                 Helper.GenericExceptionHandler(context, e);
             }
@@ -330,21 +330,27 @@ public class DatasetRecord {
         bDirty = false;
     }
 
-    public static void updateDataset(String outputfile, String inputfile)
+    public static void updateDataset(String outputFile, String inputFile, boolean bReplace)
     {
-        File output_file = new File(Environment.getExternalStorageDirectory(), outputfile);
+        File output_file = new File(Environment.getExternalStorageDirectory(), outputFile);
 
         if (output_file.exists())
         {
-            File dataset_file = new File(Environment.getExternalStorageDirectory(), inputfile);
+            File dataset_file = new File(Environment.getExternalStorageDirectory(), inputFile);
             if (dataset_file.exists()) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("-yy-MM-dd-HH-mm-ss");
-                String backupfile = inputfile.substring(0, inputfile.length() - 4)+dateFormat.format(new Date())+".xml";
-                File backup_file = new File(Environment.getExternalStorageDirectory(), backupfile);
-                dataset_file.renameTo(backup_file);
+                if (bReplace == false) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("-yy-MM-dd-HH-mm-ss");
+                    String backupFile = inputFile.substring(0, inputFile.length() - 4)+dateFormat.format(new Date())+".xml";
+                    File backup_File = new File(Environment.getExternalStorageDirectory(), backupFile);
+                    dataset_file.renameTo(backup_File);
+                }
+                else
+                {
+                    dataset_file.delete();
+                }
             }
 
-            File dataset2_file = new File(Environment.getExternalStorageDirectory(), inputfile);
+            File dataset2_file = new File(Environment.getExternalStorageDirectory(), inputFile);
             output_file.renameTo(dataset2_file);
         }
     }
@@ -396,9 +402,9 @@ public class DatasetRecord {
         }
     }
 
-    public static IEnumerable getEnumerator(ArrayList<DatasetRecord> dataset, String wayname)
+    public static IEnumerable getEnumerator(ArrayList<DatasetRecord> dataset, String wayName)
     {
-        EnumerableWay way = EnumerableWay.valueOf(wayname);
+        EnumerableWay way = EnumerableWay.valueOf(wayName);
         switch (way)
         {
             case Sequence:

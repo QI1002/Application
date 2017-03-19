@@ -88,7 +88,7 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
             }
         });
 
-        // default to set foucs to WebView
+        // default to set focus to WebView
         focusWebView();
 
         // let apk use media volume
@@ -201,5 +201,16 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
         MenuItem saveItem = contextMenu.findItem(R.id.action_save);
         saveItem.setCheckable(true);
         saveItem.setChecked(getSaveToXML());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (DatasetRecord.isDirty()) {
+            DatasetRecord.writeDataset(this, DatasetRecord.output_filename);
+            DatasetRecord.updateDataset(DatasetRecord.output_filename, DatasetRecord.dataset_filename, MainActivity.backupDataset);
+            Log.d("LookupInfo", "write xml " + MainActivity.backupDataset);
+            MainActivity.backupDataset = true;
+        }
     }
 }

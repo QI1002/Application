@@ -72,12 +72,12 @@ public class ScoreRecord {
         }
     }
 
-    public static void parseHistory(Context context, String inputfile) {
+    public static void parseHistory(Context context, String inputFile) {
 
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            File filename = new File(Environment.getExternalStorageDirectory(), inputfile);
+            File filename = new File(Environment.getExternalStorageDirectory(), inputFile);
             Document doc = db.parse(filename);
             doc.getDocumentElement().normalize();
 
@@ -97,7 +97,7 @@ public class ScoreRecord {
                 int score = (record.test_cnt == 0) ? 0 : correctCount * 100 / record.test_cnt;
 
                 scoreHistory.add(record);
-                Log.d("Test", "testitems = " + record.items + " scores = " + record.scores + " type = " + record.type
+                Log.d("Test", "test items = " + record.items + " scores = " + record.scores + " type = " + record.type
                         + " count = " + record.test_cnt + " stamp = " + new Date((long) record.timestamp));
             }
 
@@ -108,7 +108,7 @@ public class ScoreRecord {
         }
     }
 
-    public static void writeHistory(Context context, String outputfile) {
+    public static void writeHistory(Context context, String outputFile) {
 
         synchronized (scoreHistory) {
             NumberFormat nf = DecimalFormat.getInstance();
@@ -116,8 +116,8 @@ public class ScoreRecord {
             nf.setGroupingUsed(false);
 
             try {
-                File filename = new File(Environment.getExternalStorageDirectory(), outputfile);
-                FileOutputStream fileos = new FileOutputStream(filename);
+                File filename = new File(Environment.getExternalStorageDirectory(), outputFile);
+                FileOutputStream fileOS = new FileOutputStream(filename);
                 XmlSerializer xmlSerializer = Xml.newSerializer();
                 xmlSerializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
                 StringWriter writer = new StringWriter();
@@ -138,8 +138,8 @@ public class ScoreRecord {
                 xmlSerializer.endTag(null, "score");
                 xmlSerializer.endDocument();
                 xmlSerializer.flush();
-                fileos.write(writer.toString().getBytes());
-                fileos.close();
+                fileOS.write(writer.toString().getBytes());
+                fileOS.close();
             } catch (Exception e) {
                 Helper.GenericExceptionHandler(context, e);
             }

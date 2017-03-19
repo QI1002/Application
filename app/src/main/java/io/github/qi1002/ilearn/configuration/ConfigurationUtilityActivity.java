@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 import io.github.qi1002.ilearn.DatasetRecord;
 import io.github.qi1002.ilearn.Helper;
+import io.github.qi1002.ilearn.MainActivity;
 import io.github.qi1002.ilearn.R;
 
 public class ConfigurationUtilityActivity extends AppCompatActivity {
@@ -53,15 +55,15 @@ public class ConfigurationUtilityActivity extends AppCompatActivity {
     public void importEcdict()
     {
         final int id = View.generateViewId();
-        DialogInterface.OnClickListener positiveListner =
+        DialogInterface.OnClickListener positiveListener =
         new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 AlertDialog dlgAlert = (AlertDialog) dialog;
                 EditText input = (EditText)dlgAlert.findViewById(id);
-                String importedfile = input.getText().toString();
-                int index = importedfile.lastIndexOf("/");
-                String filename = importedfile.substring(index + 1);
-                String filepath = importedfile.substring(0, index);
+                String importedFile = input.getText().toString();
+                int index = importedFile.lastIndexOf("/");
+                String filename = importedFile.substring(index + 1);
+                String filepath = importedFile.substring(0, index);
                 File file = new File(filepath, filename);
                 if (file.exists() == true) {
                     ArrayList<DatasetRecord> result = DatasetRecord.parseECDICT(dlgAlert.getContext(), filepath, filename);
@@ -77,6 +79,17 @@ public class ConfigurationUtilityActivity extends AppCompatActivity {
         };
 
         //Helper.EditTextBox(this, "Enter Imported File", "/data/data/com.csst.ecdict/shared_prefs/history.xml");
-        Helper.EditTextBox(this, "Enter Imported File", Environment.getExternalStorageDirectory() + "/history.xml", id, positiveListner);
+        Helper.EditTextBox(this, "Enter Imported File", Environment.getExternalStorageDirectory() + "/history.xml", id, positiveListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (DatasetRecord.isDirty()) {
+            DatasetRecord.writeDataset(this, DatasetRecord.output_filename);
+            DatasetRecord.updateDataset(DatasetRecord.output_filename, DatasetRecord.dataset_filename, MainActivity.backupDataset);
+            Log.d("ConfigurationInfo", "write xml " + MainActivity.backupDataset);
+            MainActivity.backupDataset = true;
+        }
     }
 }

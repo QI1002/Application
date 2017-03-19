@@ -87,7 +87,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
             }
         });
 
-        // default to set foucs to WebView
+        // default to set focus to WebView
         focusWebView();
 
         // let apk use media volume
@@ -178,7 +178,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
 
         if (record == null) {
 
-            DialogInterface.OnClickListener positiveListner =
+            DialogInterface.OnClickListener positiveListener =
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -186,7 +186,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                         }
                     };
 
-            DialogInterface.OnClickListener negativeListner =
+            DialogInterface.OnClickListener negativeListener =
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -194,7 +194,7 @@ public class PracticeDatasetActivity extends AppCompatActivity {
                         }
                     };
 
-            Helper.SelectionBox(this, "Finish practicing all items in dataset...", "Repeat", "Return", "Practice Selection Box", positiveListner, negativeListner);
+            Helper.SelectionBox(this, "Finish practicing all items in dataset...", "Repeat", "Return", "Practice Selection Box", positiveListener, negativeListener);
         } else {
             practiceWord(record);
         }

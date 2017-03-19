@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class Helper {
 
-    static final ArrayList<String> PerferenceLists = new ArrayList<String>(Arrays.asList(
+    static final ArrayList<String> PreferenceLists = new ArrayList<String>(Arrays.asList(
             "pref_key_dataset_update", "pref_key_dataset_check", "pref_key_dataset_url_location","pref_key_behavior_wait_voice",
             "pref_key_lookup_save", "pref_key_lookup_speak",
             "pref_key_resume_practice", "pref_key_show_mean_dialog", "pref_key_practice_enumerate",
@@ -34,7 +34,7 @@ public class Helper {
             "pref_key_pronunciation_exam_count", "pref_key_pronunciation_exam_enumerate"
             ));
 
-    static final Map<String , String> PrefenceDefaults = new HashMap<String , String>();
+    static final Map<String , String> PreferenceDefaults = new HashMap<String , String>();
 
     public static String getStringByIdName(Context context, String name) {
         Resources res = context.getResources();
@@ -50,22 +50,22 @@ public class Helper {
         return res.getIdentifier(name, "string", context.getPackageName());
     }
 
-    public static void initialPerferenceDefault(Context context)
+    public static void initialPreferenceDefault(Context context)
     {
-        for (int i = 0; i< PerferenceLists.size(); i++) {
-            String Key = getStringByIdName(context, PerferenceLists.get(i));
-            String defaultValue = getStringByIdName(context, PerferenceLists.get(i).replace("pref_key", "pref_default"));
+        for (int i = 0; i< PreferenceLists.size(); i++) {
+            String Key = getStringByIdName(context, PreferenceLists.get(i));
+            String defaultValue = getStringByIdName(context, PreferenceLists.get(i).replace("pref_key", "pref_default"));
 
-            PrefenceDefaults.put(Key, defaultValue);
+            PreferenceDefaults.put(Key, defaultValue);
         }
     }
 
-    public static void restorePerferenceDefault(Context context)
+    public static void restorePreferenceDefault(Context context)
     {
-        for (int i = 0; i< PerferenceLists.size(); i++) {
-            int resId = getIdByName(context, PerferenceLists.get(i));
-            String Key = getStringByIdName(context, PerferenceLists.get(i));
-            String defaultValue = getStringByIdName(context, PerferenceLists.get(i).replace("pref_key", "pref_default"));
+        for (int i = 0; i< PreferenceLists.size(); i++) {
+            int resId = getIdByName(context, PreferenceLists.get(i));
+            String Key = getStringByIdName(context, PreferenceLists.get(i));
+            String defaultValue = getStringByIdName(context, PreferenceLists.get(i).replace("pref_key", "pref_default"));
             if (defaultValue.compareTo("true") == 0 || defaultValue.compareTo("false") == 0)
                 putPreferenceBoolean(context, resId, Boolean.valueOf(defaultValue));
             else
@@ -199,7 +199,7 @@ public class Helper {
     {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         String prefString = context.getString(resId);
-        boolean defaultValue = Boolean.valueOf(PrefenceDefaults.get(prefString));
+        boolean defaultValue = Boolean.valueOf(PreferenceDefaults.get(prefString));
         return settings.getBoolean(prefString, defaultValue);
     }
 
@@ -216,7 +216,7 @@ public class Helper {
     {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         String prefString = context.getString(resId);
-        String defaultValue = PrefenceDefaults.get(prefString);
+        String defaultValue = PreferenceDefaults.get(prefString);
         return settings.getString(prefString, defaultValue);
     }
 

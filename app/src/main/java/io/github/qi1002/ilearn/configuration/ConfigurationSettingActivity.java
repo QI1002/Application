@@ -110,7 +110,7 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
             {
                 if (boolValue && DatasetRecord.getDataset().size() == 0) {
 
-                    DialogInterface.OnClickListener positiveListner =
+                    DialogInterface.OnClickListener positiveListener =
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -119,7 +119,7 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
                             };
 
                     Helper.SelectionBox(preference.getContext(), "Download dataset now ?", "Yes", "No",
-                            "Dataset Update Selection Box", positiveListner, null);
+                            "Dataset Update Selection Box", positiveListener, null);
                 }
             }
 
@@ -369,17 +369,17 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
                     actionBar.setTitle(getString(R.string.pref_header_reset));
             }
 
-            DialogInterface.OnClickListener positiveListner =
+            DialogInterface.OnClickListener positiveListener =
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             Toast.makeText(getActivity(), "Rest all preferences", Toast.LENGTH_SHORT).show();
-                            Helper.restorePerferenceDefault(getActivity());
+                            Helper.restorePreferenceDefault(getActivity());
                             getActivity().onBackPressed();
                         }
                     };
 
-            DialogInterface.OnClickListener negativeListner =
+            DialogInterface.OnClickListener negativeListener =
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -387,7 +387,7 @@ public class ConfigurationSettingActivity extends AppCompatPreferenceActivity {
                         }
                     };
 
-            Helper.SelectionBox(getActivity(), "are you sure to reset all settings ?", "Yes", "No", "Reset Selection Box", positiveListner, negativeListner);
+            Helper.SelectionBox(getActivity(), "are you sure to reset all settings ?", "Yes", "No", "Reset Selection Box", positiveListener, negativeListener);
             //startActivity(new Intent(getActivity(), ConfigurationSettingActivity.class));
         }
 

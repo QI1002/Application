@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     // global settings
-    public static boolean switchActivity = false;
+    public static boolean backupDataset = false;
     public static IEnumerable practiceEnumerate = null;
 
     @Override
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         if (isNetworkAvailable() == false)
             Helper.ExitBox(this, "No Network is available now, please connect network and startup this APP");
 
-        Helper.initialPerferenceDefault(this);
+        Helper.initialPreferenceDefault(this);
 
         Button button;
 
@@ -92,9 +92,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //persmission method.
+    //permission method.
     //more step in android studio 0) generate sdcard image file by mksdcard.exe by android sdk
-    // 1) enable to use external SDcard in emulator.exe avd file by AVD manager (menu->tools->Android)
+    // 1) enable to use external SD card in emulator.exe avd file by AVD manager (menu->tools->Android)
     // 2) add below flow to verifyStoragePermission of this activity (refer: http://stackoverflow.com/questions/33030933/android-6-0-open-failed-eacces-permission-denied)
     public boolean verifyStoragePermissions() {
         // Check if we have read or write permission
@@ -185,25 +185,10 @@ public class MainActivity extends AppCompatActivity {
             }else {
                 Intent intent = new Intent(this, cls);
                 startActivity(intent);
-                switchActivity = true;
             }
         } else {
             Helper.MessageBox(this, "dataset is not initialized yet");
         }
-    }
-
-    @Override
-    public void onStop() {
-        // wait  checkHTMLSource function (thread join to avoid lrge data.xml)
-        // if we can check its really finalized not in the background , refer http://steveliles.github.io/is_my_android_app_currently_foreground_or_background.html
-        super.onStop();
-        if (DatasetRecord.isDirty() && switchActivity == false) {
-            DatasetRecord.writeDataset(this, DatasetRecord.output_filename);
-            DatasetRecord.updateDataset(DatasetRecord.output_filename, DatasetRecord.dataset_filename);
-            Log.d("LookupInfo", "write xml");
-        }
-
-        switchActivity = false;
     }
 }
 

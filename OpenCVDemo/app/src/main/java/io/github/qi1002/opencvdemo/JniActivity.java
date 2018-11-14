@@ -12,6 +12,7 @@ public class JniActivity extends AppCompatActivity implements View.OnClickListen
 
     static {//加载so库
         System.loadLibrary("native-lib");
+        System.loadLibrary("opencv_java3");
     }
 
     @Override

@@ -13,7 +13,7 @@ android {
             cmake {
                 cppFlags "-std=c++14 -frtti -fexceptions"
                 arguments '-DANDROID_STL=gnustl_shared'   //支持C++异常处理标准模板库
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
+                abiFilters "armeabi-v7a", "arm64-v8a"
             }
         }
     }
@@ -21,6 +21,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets { // not so necessary
+        main {
+            jniLibs.srcDirs = ["src/main/jniLibs", "$buildDir/native-libs"]
         }
     }
     externalNativeBuild {

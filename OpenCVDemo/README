@@ -1,5 +1,11 @@
 
 Some items shall be noticed 
+0. refer the android studio 3 + openCV teach link website 
+   => https://www.jianshu.com/p/6e16c0429044
+   refer how to strip the usage of OpenCV manager and build native opencv 
+   shared libraies in android studio 
+   => https://www.jianshu.com/p/b260ebb1c180
+
 1. if you use OpenCV 2.4.11 android SDK, then cmake of SDK will fail in 
 OpenCVConfig.cmake because ${ANDROID_NDK_ABI_NAME} in android studio 3.2.1
 may be "arm64-v8a"
@@ -16,7 +22,10 @@ app build.gradle although it support both but use libc++_static in default.
 4. use 'abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"' in app build.gradle 
  to support APK   support native architecture. 
 
+5. you can install OpenCV Manager APK in OpenCV SDK, but you shall install 
+the right version, ex: armeabi-v7a or arm64-v8a or ... 
+
 [TODO]
 1. how to get camera permission and reboot to use camera ? 
-2. how to retrieve the installation for openCV manager ?
-3. how to put face detection of openCV sample in android studio 3.2.1 ?
+2. how to put face detection of openCV sample in android studio 3.2.1 ?
+3. how to build openCV in android environment (by NDK?)

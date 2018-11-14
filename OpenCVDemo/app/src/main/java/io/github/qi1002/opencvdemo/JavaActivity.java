@@ -18,6 +18,12 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 
 public class JavaActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
+
+    private static final int REQUEST_ACCESS= 1;
+    private static String[] PERMISSIONS_REQUESTS = {
+            Manifest.permission.CAMERA,
+    };
+
     private static final String TAG = "JavaActivity";
     private JavaCameraView javaCameraView;
     private BaseLoaderCallback baseLoaderCallback = new BaseLoaderCallback(this) {
@@ -38,28 +44,34 @@ public class JavaActivity extends AppCompatActivity implements CameraBridgeViewB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // request camera access right
+        verifyCameraPermissions();
+
         //保持屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_java);
         javaCameraView = (JavaCameraView) findViewById(R.id.javaCameraView);
         javaCameraView.setVisibility(SurfaceView.VISIBLE);
         javaCameraView.setCvCameraViewListener(this);
-        checkForPermission();
     }
 
-    private void checkForPermission() {
-        int MY_PERMISSIONS_REQUEST_CAMERA = 0;
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Granted");
-        } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(JavaActivity.this, Manifest.permission.CAMERA)) {
-                Log.d(TAG, "Contacts Permission Required!!");
-            }
-            ActivityCompat.
-                    requestPermissions(JavaActivity.this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+    public boolean verifyCameraPermissions() {
+        // Check if we have read or write permission
+        int cameraPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
 
+        if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_REQUESTS,
+                    REQUEST_ACCESS
+            );
+
+            return true;
         }
+
+        return false;
     }
 
     @Override

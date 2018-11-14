@@ -21,7 +21,8 @@ endif(OpenCV_FOUND)
 
 add_library( native-lib
         SHARED
-        src/main/cpp/native-lib.cpp)
+        src/main/cpp/native-lib.cpp
+        src/main/cpp/DetectionBasedTracker_jni.cpp)
 
 target_link_libraries( native-lib
         ${OpenCV_LIBS}

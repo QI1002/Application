@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 public class JniActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "JniActivity";
     private ImageView imageView;
 
     static {//加载so库

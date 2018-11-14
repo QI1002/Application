@@ -1,9 +1,9 @@
 package io.github.qi1002.opencvdemo;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.WindowManager;
@@ -15,7 +15,7 @@ import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 
-public class JavaActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
+public class JavaActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     private static final int REQUEST_ACCESS= 1;
     private static String[] PERMISSIONS_REQUESTS = {

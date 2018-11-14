@@ -25,7 +25,12 @@ app build.gradle although it support both but use libc++_static in default.
 5. you can install OpenCV Manager APK in OpenCV SDK, but you shall install 
 the right version, ex: armeabi-v7a or arm64-v8a or ... 
 
+6. if you have the prebuilt shared libaries and hope to link it by jni, 
+please put it in app/src/main/jniLibs 
+
+7. java.lang.IllegalStateException: You need to use a Theme.AppCompat theme (or descendant) with this activity => you need to use a theme in app AndroidManifest.xml that is compatible to android.support.v7.app.AppCompatActivity
+
 [TODO]
-1. how to get camera permission and reboot to use camera ? 
-2. how to put face detection of openCV sample in android studio 3.2.1 ?
-3. how to build openCV in android environment (by NDK?)
+1. how to build openCV in android environment (by NDK?)
+2. how to let the face detection sample with menu ?
+3. how to use the CascadeClassifier & OclCascadeClassifier ? 

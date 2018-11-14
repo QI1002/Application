@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         <activity
             android:name=".JavaActivity"
             android:label="OpenCV Java">
@@ -37,7 +37,9 @@
         </activity>
         <activity
             android:name=".FaceDetectActivity"
-            android:label="OpenCV FaceDetect">
+            android:label="OpenCV FaceDetect"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

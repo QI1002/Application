@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin" android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:columnCount="1"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/bt_dictionary_lookup"
+            android:layout_column="0"
+            android:text="Lookup Dictionary"
+            style="@style/button_style_main"/>
+
+        <Button
+            android:id="@+id/bt_dataset_practice"
+            android:text="Practice Dataset"
+            style="@style/button_style_main"/>
+
+        <Button
+            android:id="@+id/bt_exam_vocabulary"
+            android:text="Vocabulary Exam"
+            style="@style/button_style_main"/>
+
+        <Button
+            android:id="@+id/bt_exam_pronunciation"
+            android:layout_column="0"
+            android:text="Pronunciation Exam"
+            style="@style/button_style_main"/>
+
+        <Button
+            android:id="@+id/bt_configuration"
+            android:layout_column="0"
+            android:text="Configuration"
+            style="@style/button_style_main"/>
+
+    </GridLayout>
+
+</RelativeLayout>

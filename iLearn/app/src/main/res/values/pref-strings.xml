@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The part of Preference keys and their default values in the settings -->
+    <string name="pref_key_dataset_update">dataset update</string>
+    <string name="pref_default_dataset_update">true</string>
+
+    <string name="pref_key_dataset_check">dataset check</string>
+    <string name="pref_default_dataset_check">true</string>
+
+    <string name="pref_key_dataset_url_location">dataset url location</string>
+    <string name="pref_default_dataset_url_location">https://raw.githubusercontent.com/QI1002/qi1002.github.io/master/data/data.xml</string>
+
+    <string name="pref_key_behavior_wait_voice">behavior wait voice</string>
+    <string name="pref_default_behavior_wait_voice">1</string>
+
+    <string name="pref_key_lookup_save">lookup save</string>
+    <string name="pref_default_lookup_save">true</string>
+
+    <string name="pref_key_lookup_speak">lookup speak</string>
+    <string name="pref_default_lookup_speak">false</string>
+
+    <string name="pref_key_resume_practice">resume practice</string>
+    <string name="pref_default_resume_practice">true</string>
+
+    <string name="pref_key_show_mean_dialog">show mean dialog</string>
+    <string name="pref_default_show_mean_dialog">false</string>
+
+    <string name="pref_key_practice_enumerate">practice enumerate</string>
+    <string name="pref_default_practice_enumerate">LookupCount</string>
+
+    <string name="pref_key_exam_speak">exam speak</string>
+    <string name="pref_default_exam_speak">false</string>
+
+    <string name="pref_key_vocabulary_exam_count">vocabulary exam count</string>
+    <string name="pref_default_vocabulary_exam_count">5</string>
+
+    <string name="pref_key_vocabulary_exam_enumerate">vocabulary exam enumerate</string>
+    <string name="pref_default_vocabulary_exam_enumerate">LookupCount</string>
+
+    <string name="pref_key_pronunciation_exam_count">pronunciation exam count</string>
+    <string name="pref_default_pronunciation_exam_count">5</string>
+
+    <string name="pref_key_pronunciation_exam_enumerate">pronunciation exam enumerate</string>
+    <string name="pref_default_pronunciation_exam_enumerate">LookupCount</string>
+
+    <!-- The part of Common strings in the settings -->
+    <string name="pref_title_enumerate">The Word Enumerate Way</string>
+    <string-array name="pref_list_enumerate">
+        <item>Sequence</item>
+        <item>Random</item>
+        <item>Shuffle</item>
+        <item>LookupCount</item>
+        <item>TimeStamp</item>
+        <item>MeanExamScore</item>
+        <item>MeanExamCount</item>
+        <item>VoiceExamScore</item>
+        <item>VoiceExamCount</item>
+        <item>AllExamScore</item>
+        <item>AllExamCount</item>
+    </string-array>
+
+    <string name="pref_title_exam_count">Total Exam Item Count</string>
+    <string-array name="pref_list_exam_count">
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>25</item>
+    </string-array>
+
+    <!-- The part of Global settings -->
+    <string name="pref_header_global">Global Settings</string>
+
+    <string name="dataset_update_preferences">Dataset Update</string>
+    <string name="pref_title_dataset_update">Enable Dataset Update</string>
+    <string name="pref_description_dataset_update">Recommendations to download dataset from
+        network if no dataset in default.
+    </string>
+    <string name="pref_title_dataset_check">Enable Dataset Validation</string>
+    <string name="pref_description_dataset_check">Recommendations to check current dataset is
+        valid or not.
+    </string>
+    <string name="pref_title_dataset_url_location">Dataset URL Location</string>
+
+    <string name="behavior_wait_voice_preferences">Behavior for Voice Waiting</string>
+    <string name="pref_title_behavior_wait_voice">do Next until voice up</string>
+    <string-array name="pref_list_behavior_wait_voice">
+        <item>Always</item>
+        <item>Practice Only</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_value_behavior_wait_voice">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- The part of Lookup settings -->
+    <string name="pref_header_lookup">Settings of Lookup</string>
+
+    <string name="pref_title_save_to_dataset">Save Lookup Word to Dataset</string>
+    <string name="pref_description_save_to_dataset">Save the lookup words
+        into dataset xml file.
+    </string>
+
+    <string name="pref_title_speak_when_lookup">Speak when Lookup Word</string>
+
+    <!-- The part of Practice settings -->
+    <string name="pref_header_practice">Settings of Practice</string>
+
+    <string name="pref_title_resume_practice">Resume Practice</string>
+    <string name="pref_description_resume_practice">Practice will resume although
+        activities are switched otherwise restart.
+    </string>
+
+    <string name="pref_title_show_mean_dialog">Extra mean and show it by Dialog</string>
+
+    <!-- The part of Vocabulary Exam settings -->
+    <string name="pref_header_vocabulary_exam">Settings of Vocabulary Exam</string>
+
+    <string name="pref_title_exam_speak">Speak when Vocabulary Exam</string>
+
+    <!-- The part of Pronunciation Exam settings -->
+    <string name="pref_header_pronunciation_exam">Settings of Pronunciation Exam</string>
+
+    <!-- The part of Pronunciation Exam settings -->
+    <string name="pref_header_reset">Reset All Settings</string>
+
+</resources>

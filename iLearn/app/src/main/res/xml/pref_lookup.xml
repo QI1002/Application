@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_header_lookup">
+
+        <SwitchPreference
+            android:key="@string/pref_key_lookup_save"
+            android:title="@string/pref_title_save_to_dataset"
+            android:summary="@string/pref_description_save_to_dataset"
+            android:defaultValue="@string/pref_default_lookup_save" />
+
+        <SwitchPreference
+            android:key="@string/pref_key_lookup_speak"
+            android:title="@string/pref_title_speak_when_lookup"
+            android:defaultValue="@string/pref_default_lookup_speak" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

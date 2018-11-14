@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="io.github.qi1002.ilearn.LookupDictionaryActivity">
+    <item android:id="@+id/action_return" android:title="@string/action_return"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_back" android:title="@string/action_back"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_next" android:title="@string/action_next"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_speak" android:title="@string/action_speak"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_save" android:title="@string/action_save"
+        android:orderInCategory="100" app:showAsAction="never" />
+</menu>

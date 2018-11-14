@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin" android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="io.github.qi1002.ilearn.ConfigurationActivity">
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:columnCount="1"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/bt_configuration_about"
+            android:layout_column="0"
+            android:text="@string/config_about"
+            style="@style/button_style_configuration"/>
+
+        <Button
+            android:id="@+id/bt_configuration_settings"
+            android:layout_column="0"
+            android:text="@string/config_settings"
+            style="@style/button_style_configuration"/>
+
+        <Button
+            android:id="@+id/bt_configuration_score"
+            android:layout_column="0"
+            android:text="@string/config_score"
+            style="@style/button_style_configuration"/>
+
+        <Button
+            android:id="@+id/bt_configuration_utility"
+            android:layout_column="0"
+            android:text="@string/config_utility"
+            style="@style/button_style_configuration"/>
+
+    </GridLayout>
+
+</RelativeLayout>

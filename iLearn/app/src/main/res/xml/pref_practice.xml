@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_header_practice">
+
+        <SwitchPreference
+            android:key="@string/pref_key_resume_practice"
+            android:title="@string/pref_title_resume_practice"
+            android:summary="@string/pref_description_resume_practice"
+            android:defaultValue="@string/pref_default_resume_practice" />
+
+        <SwitchPreference
+            android:key="@string/pref_key_show_mean_dialog"
+            android:title="@string/pref_title_show_mean_dialog"
+            android:defaultValue="@string/pref_default_show_mean_dialog" />
+
+        <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
+             dismiss it. -->
+        <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+        <ListPreference
+            android:key="@string/pref_key_practice_enumerate"
+            android:title="@string/pref_title_enumerate"
+            android:defaultValue="@string/pref_default_practice_enumerate"
+            android:entries="@array/pref_list_enumerate"
+            android:entryValues="@array/pref_list_enumerate"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

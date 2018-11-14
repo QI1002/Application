@@ -1,0 +1,22 @@
+
+Some items shall be noticed 
+1. if you use OpenCV 2.4.11 android SDK, then cmake of SDK will fail in 
+OpenCVConfig.cmake because ${ANDROID_NDK_ABI_NAME} in android studio 3.2.1
+may be "arm64-v8a"
+
+2. you can find the javah in android studio in path ./jre/bin   
+goto java class location (ex: app/src/main/java ) and type 
+~/android-studio/jre/bin/javah io.github.qi1002.opencvdemo.JniActivity 
+to get io_github_qi1002_opencvdemo_JniActivity.h to let JNI cpp use
+
+3. the ndk r18b not support gnustl, only libc++_static. so we shall rollback 
+to r16b and change to use gnustl by -DANDROID_STL=gnustl_shared in 
+app build.gradle although it support both but use libc++_static in default.
+
+4. use 'abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"' in app build.gradle 
+ to support APK   support native architecture. 
+
+[TODO]
+1. how to get camera permission and reboot to use camera ? 
+2. how to retrieve the installation for openCV manager ?
+3. how to put face detection of openCV sample in android studio 3.2.1 ?

@@ -14,7 +14,7 @@ public class IchachaProvider implements IDictionaryProvider {
 
     public String getWordMeanLink(String word)
     {
-        return "http://tw.ichacha.net/m/" + word + ".html";
+        return "http://tw.ichacha.net/m/" + word.trim() + ".html";
     }
 
     public String getWordVoiceCheck(String word)

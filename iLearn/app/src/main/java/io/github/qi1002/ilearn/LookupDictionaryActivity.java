@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -24,6 +25,7 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
 
     private String currentLookup = "";
     private WebView mWebView = null;
+    private WebViewClient mWebViewClient = null;
     private EditText mLookupWord = null;
     private Menu contextMenu = null;
     private boolean bPlayVoiceDone = true;
@@ -46,7 +48,7 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
         webSettings.setJavaScriptEnabled(true);
         mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(this), "app");
         // Force links and redirects to open in the WebView instead of in a browser
-        mWebView.setWebViewClient(new WebViewClient() {
+        mWebViewClient = new WebViewClient() {
             //refer: http://stackoverflow.com/questions/6199717/how-can-i-know-that-my-webview-is-loaded-100
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -72,6 +74,17 @@ public class LookupDictionaryActivity extends AppCompatActivity implements TextV
             public void onLoadResource(WebView view, String url) {
                 if (url.endsWith(".mp3"))
                     Log.d("LookupInfo", "Resource done " + url);
+            }
+        };
+
+        mWebView.setWebViewClient(mWebViewClient);
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                //Log.d("LookupInfo", "URL " + view.getUrl() + " progress: " + progress);
+                if (progress >= 95 && !bLoadPageDone) {
+                    // workaround for chrome 5.5 with A Parser-blocking, cross-origin script
+                    mWebViewClient.onPageFinished(view, view.getUrl());
+                }
             }
         });
 

@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             mFpsText.setText(mFpsPrefix + getProgress());
+            if (!mIsRun) return;
             stopTimer();
             startTimer();
         }
@@ -113,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 // TODO:
 // have a interface to switch default animation and game animation
 // consider frame not do on time
-// consider life game partial update
 // consider MVVM
 // consider how to test it ?
+// find the display fps
+// test diff size phone or tablet
+// sync protection

@@ -25,18 +25,11 @@ import static java.lang.Math.min;
  */
 public class PaintView extends View {
 
-    public static int PIXEL_SIZE = 16; // 90x140
-    public static final int DEFAULT_FG_COLOR = Color.BLACK;
-    public static final int DEFAULT_BG_COLOR = Color.WHITE;
-
-    private int width, height, count = 0;
-    private int foregroundColor = DEFAULT_FG_COLOR;
-    private int backgroundColor = DEFAULT_BG_COLOR;
-
     private Bitmap mBitmap = null;
     private Canvas mCanvas = null;
     private Paint mPaint;
-    private LifeGame mGame;
+    private GameViewModel mViewModel;
+    private int mWidth, mHeight;
 
     public PaintView(Context context) {
         this(context, null);
@@ -50,37 +43,8 @@ public class PaintView extends View {
         super(context, attrs, defStyle);
     }
 
-    public void update() {
-        count += 10;
-        if (count > height) count = 0;
-        postInvalidate();
-    }
-
-    private void readData(int data[][]) {
-        try {
-            int h = data.length, w = data[0].length;
-            // https://raw.githubusercontent.com/Peter-Slump/game-of-life/master/patterns/gosper-glider-gun.txt
-            InputStream input = getResources().openRawResource(R.raw.gosper_glider_gun);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            String str = null; int i, j, k;
-            for(i = 0; i < h; i++) {
-                str = reader.readLine();
-                if (str == null) break;
-                k = min(w, str.length());
-                for(j = 0; j < k; j++)
-                    if (str.charAt(j) == 'X') data[i][j] = 1;
-                for(; j < w; j++) data[i][j] = 0;
-            }
-            for(; i < h; i++) {
-                for(j = 0; j < w; j++) data[i][j] = 0;
-            }
-
-            reader.close();
-            input.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public void setViewModel(GameViewModel viewModel) {
+        mViewModel = viewModel;
     }
 
     @Override
@@ -88,41 +52,20 @@ public class PaintView extends View {
         super.onLayout(changed, l, t, r, b);
 
         if (mCanvas != null) return;
-        width = getWidth();
-        height = getHeight();
-        Log.d("LifeGame", "LifeGameInfo W = " + Integer.valueOf(width).toString() + " H = " + Integer.valueOf(height).toString());
-        mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        mWidth = getWidth();
+        mHeight = getHeight();
+        Log.d("LifeGame", "LifeGameInfo W = " + Integer.valueOf(mWidth).toString() + " H = " + Integer.valueOf(mHeight).toString());
+        mBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
         mPaint = new Paint(Paint.DITHER_FLAG);
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-        int data[][] = new int[height/PIXEL_SIZE][width/PIXEL_SIZE];
-        readData(data);
-        mGame = new LifeGame(data);
+        mViewModel.onLayout(mWidth, mHeight, mPaint, getResources());
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //mCanvas.drawColor(backgroundColor);
-        //mCanvas.drawRect(0, 0, width, count, mPaint);
-        Pair<HashSet<Integer>, HashSet<Integer>> q =
-            mGame.getNewResult();
-
-        mPaint.setColor(backgroundColor);
-        for(Integer i: q.second) {
-            Pair<Integer, Integer> p = LifeGame.getXY(i);
-            int y = p.first, x = p.second;
-            mCanvas.drawRect(x*PIXEL_SIZE, y*PIXEL_SIZE,
-                    (x+1)*PIXEL_SIZE, (y+1)*PIXEL_SIZE, mPaint);
-        }
-
-        mPaint.setColor(foregroundColor);
-        for(Integer i: q.first) {
-            Pair<Integer, Integer> p = LifeGame.getXY(i);
-            int y = p.first, x = p.second;
-            mCanvas.drawRect(x*PIXEL_SIZE, y*PIXEL_SIZE,
-                    (x+1)*PIXEL_SIZE, (y+1)*PIXEL_SIZE, mPaint);
-        }
+        mViewModel.onDraw(mCanvas, mPaint);
         canvas.drawBitmap(mBitmap, 0, 0, mPaint);
     }
 
@@ -133,9 +76,7 @@ public class PaintView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                //Log.d("LifeGame", "LifeGameInfo X = " + Float.valueOf(x).toString() + " Y = " + Float.valueOf(y).toString());
-                //count = Math.round(y) - 10;
-                mGame.add(Math.round(y/PIXEL_SIZE), Math.round(x/PIXEL_SIZE));
+                mViewModel.onTouch(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
                 break;

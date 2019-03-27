@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class LifeGame implements ILifeGame {
+public class LifeGameModel {
 
     private int mWidth;
     private int mHeight;
@@ -27,7 +27,7 @@ public class LifeGame implements ILifeGame {
         return new Pair<Integer, Integer>(i >> 16, i & 0xffff);
     }
 
-    public LifeGame (int[][] first) {
+    public LifeGameModel (int[][] first) {
         mHeight = first.length-1;
         mWidth = first[0].length-1;
         if (first != null) init(first);
@@ -96,7 +96,6 @@ public class LifeGame implements ILifeGame {
         }
     }
 
-    @Override
     public Pair<HashSet<Integer>, HashSet<Integer>> getNewResult() {
         mAdd.addAll(mAppend);
         mData.addAll(mAppend);
@@ -109,7 +108,6 @@ public class LifeGame implements ILifeGame {
         return p;
     }
 
-    @Override
     public void add(int y, int x) {
         mAppend.add(putXY(y, x));
     }

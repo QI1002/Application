@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.github.qi1002.mycontentprovidertesting">
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,12 +8,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <provider
-            android:name="MyContentProvider"
-            android:authorities="io.github.qi1002.mycontentprovidertesting"
-            android:readPermission="io.github.qi1002.mycontentprovidertesting.permission.READ_PERM"
-            android:writePermission="io.github.qi1002.mycontentprovidertesting.permission.WRITE_PERM"
-            android:exported="true"/>
         <activity android:name=".MyContentProviderTestingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
